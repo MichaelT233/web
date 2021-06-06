@@ -1,8 +1,8 @@
 /*
-ReactDOM.render(
-    <h1>Hello, world!</h1>,
-    document.getElementById('root')
+const element = (
+	<button type='button' onclick='getIP()'>click here to find your public IP</button>
 );
+ReactDOM.render(ipUI, document.getElementById('root'))
 */
 
 /* function that determines the current public IP address of host 
