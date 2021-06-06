@@ -19,5 +19,5 @@ app.get('/findip', (req, res) => {
 }) 
 
 app.listen(port, () => {
-  	console.log(`prototype listening at http://localhost:${port}`)
+  	console.log(`prototype listening at http://192.168.1.16:${port}`)
 })
