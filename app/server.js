@@ -28,5 +28,5 @@ app.get('/port', (req, res) => {
 
 //initializes web server
 app.listen(port, () => {
-  	console.log(`prototype listening at designated IP://localhost:${port}`)
+  	console.log(`prototype listening at designated IP:${port}`)
 })
