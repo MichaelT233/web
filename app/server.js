@@ -4,6 +4,7 @@ const port = 3000
 
 app.use(express.static('client'))
 
+//returns the client's public IP address
 app.get('/ip', (req, res) => {
     var publicIP = req.ip
     res.set('Access-Control-Allow-Origin', '*')
@@ -16,6 +17,7 @@ app.get('/ip', (req, res) => {
   	console.log(publicIP + ': checked IP')
 })
 
+//returns the client's public port
 app.get('/port', (req, res) => {
     var publicPort = req.socket.remotePort
 	publicPort = publicPort.toString()
@@ -24,6 +26,7 @@ app.get('/port', (req, res) => {
   	res.send(publicPort)
 })
 
+//initializes web server
 app.listen(port, () => {
   	console.log(`prototype listening at http://localhost:${port}`)
 })
