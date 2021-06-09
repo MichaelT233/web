@@ -8,7 +8,7 @@ header {
 }
 body{
     background-color: rgb(20, 20, 20);
-    padding-top: 80px;
+    padding-top: 90px;
 }
 footer {
     text-align:center;
@@ -23,8 +23,10 @@ h1{
 }
 p{
     color:darkgrey;
+    font-size: 20px;
 }
 button {
     color:darkgrey;
     background-color: rgb(10, 20, 70);
+    font-size: 15px;
 }

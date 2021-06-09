@@ -1,21 +1,19 @@
-/*
-const element = (
-	<button type='button' onclick='getIP()'>click here to find your public IP</button>
-);
-ReactDOM.render(ipUI, document.getElementById('root'))
-*/
+//needs general error handling
 
-/* function that determines the current public IP address of host 
-the ip address is then rendered in the DOM in the div 'root' on h1 */
-function getIP() {
+//REST API get call
+function get(url, callback, id) {
     var request = new XMLHttpRequest()
-    request.open("GET", 'findip')
+    request.open("GET", url)
     request.onreadystatechange = function ready() {
         if(request.readyState == XMLHttpRequest.DONE) {
-            var publicIP = request.responseText
-            console.log(publicIP)
-            ReactDOM.render( /*#__PURE__*/React.createElement("p", null, publicIP), document.getElementById('root'))
+            var text = request.responseText
+            callback(id, text)
         }
     }
     request.send()
+}
+
+//displays text in given HTML element id
+function displayText(id, text) {
+    ReactDOM.render( /*#__PURE__*/React.createElement("p", null, text), document.getElementById(id))
 }
