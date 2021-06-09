@@ -4,19 +4,25 @@ const port = 3000
 
 app.use(express.static('client'))
 
-/*
-app.get('/', (req, res) => {
-  	res.send('Hello World!')
-})
-*/
-
-app.get('/findip', (req, res) => {
+app.get('/ip', (req, res) => {
     var publicIP = req.ip
-  	publicIP = publicIP.slice(7,18)
+    res.set('Access-Control-Allow-Origin', '*')
+    if (publicIP.slice(0,6) == '::ffff:') {
+        publicIP = publicIP.slice(7)
+        res.send(publicIP)
+    } else {
+        res.send(publicIP)
+    }
   	console.log(publicIP + ': checked IP')
+})
+
+app.get('/port', (req, res) => {
+    var publicPort = req.socket.remotePort
+	publicPort = publicPort.toString()
+  	console.log(publicPort + ': checked port')
   	res.set('Access-Control-Allow-Origin', '*')
-  	res.send(publicIP)
-}) 
+  	res.send(publicPort)
+})
 
 app.listen(port, () => {
   	console.log(`prototype listening at http://localhost:${port}`)

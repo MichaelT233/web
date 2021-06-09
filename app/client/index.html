@@ -12,8 +12,14 @@
   		<header>
     		<h1>Web App Prototype</h1>
     	</header>
-		<button type='button' onclick='getIP()'>click here to find your public IP</button>  
-    	<div id='root'></div>
+		<button type='button' onclick="get('ip', displayText, 'showIP')">
+			click here to find your public IP
+		</button>  
+    	<p id='showIP'>|</p>
+		<button type='button' onclick="get('port', displayText, 'showPort')">
+			click here to find the public facing port you are connected to the server with
+		</button>
+		<p id ='showPort'>|</p>  
     	<footer>
       		<p>author: MT</p>
     	</footer>
