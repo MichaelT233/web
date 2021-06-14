@@ -17,9 +17,13 @@
 		</button>  
     	<p id='showIP'>|</p>
 		<button type='button' onclick="get('port', displayText, 'showPort')">
-			click here to find the public facing port you are connected to the server with
+			click here to find the public facing port number you are connected to the server with
 		</button>
-		<p id ='showPort'>|</p>  
+		<p id ='showPort'>|</p>
+		<button type='button' onclick="get('trace', displayText, 'showTrace')">
+			click here to find the network hops between you and the server
+		</button>
+		<p id ='showTrace'>|</p>
     	<footer>
       		<p>author: MT</p>
     	</footer>
