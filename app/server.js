@@ -5,17 +5,22 @@ const port = 3000
 //serves static files from 'client' directory
 app.use(express.static('client'))
 
+//determines whether given ip string is IPv6 or IPv4 and returns the address
+function parseIP(ip) {
+	if (ip.slice(0,7) == '::ffff:') {
+		ip = ip.slice(7)
+	} else {
+		ip = ip
+	}
+	return ip
+}
+
 //returns the client's public IP address
 app.get('/ip', (req, res) => {
-    var publicIP = req.ip
     res.set('Access-Control-Allow-Origin', '*')
-    if (publicIP.slice(0,7) == '::ffff:') {
-        publicIP = publicIP.slice(7)
-        res.send(publicIP + ' (IPv4)')
-    } else {
-        res.send(publicIP + ' (IPv6)')
-    }
+	var publicIP = parseIP(req.ip)
   	console.log(publicIP + ': checked IP')
+	res.send(publicIP)
 })
 
 //returns the client's public port
@@ -30,7 +35,7 @@ app.get('/port', (req, res) => {
 //returns traceroute stdout, needs to be changed to number of hops, hop addresses, and times
 app.get('/trace', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
-    var ip = req.ip.slice(7)
+    var ip = parseIP(req.ip)
     console.log(ip)	
     const { exec } = require('child_process')
     var cmd = `traceroute ${ip}`
