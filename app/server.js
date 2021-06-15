@@ -9,7 +9,7 @@ app.use(express.static('client'))
 app.get('/ip', (req, res) => {
     var publicIP = req.ip
     res.set('Access-Control-Allow-Origin', '*')
-    if (publicIP.slice(0,6) == '::ffff:') {
+    if (publicIP.slice(0,7) == '::ffff:') {
         publicIP = publicIP.slice(7)
         res.send(publicIP + ' (IPv4)')
     } else {
@@ -30,7 +30,8 @@ app.get('/port', (req, res) => {
 //returns traceroute stdout, needs to be changed to number of hops, hop addresses, and times
 app.get('/trace', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
-    var ip = req.ip
+    var ip = req.ip.slice(7)
+    console.log(ip)	
     const { exec } = require('child_process')
     var cmd = `traceroute ${ip}`
     exec(cmd, (error, stdout, stderr) => {
