@@ -15,6 +15,19 @@ function parseIP(ip) {
 	return ip
 }
 
+//function that parses traceroute's stdout into a more friendly format
+function parseTrace(str){
+    let regex0 = / \d /
+    i = 1
+    while (regex0.test(str) == true){
+        str = str.replace(regex0, `[hop #${i}] host = `) 
+        i++
+    }
+    let regex1 = /\) /g
+    str = str.replace(regex1, `), RTT time = `)
+	return str
+}
+
 //returns the client's public IP address
 app.get('/ip', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
@@ -36,12 +49,12 @@ app.get('/port', (req, res) => {
 app.get('/trace', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
     var ip = parseIP(req.ip)
-    console.log(ip)	
+    console.log(ip + ': checked trace')	
     const { exec } = require('child_process')
     var cmd = `traceroute ${ip}`
     exec(cmd, (error, stdout, stderr) => {
-        console.log(stdout)
-        res.send(stdout)
+		var trace = parseTrace(stdout)
+        res.send(trace)
     })
 })
 
