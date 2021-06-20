@@ -24,7 +24,7 @@ function parseTrace(str){
         i++
     }
     let regex1 = /\) /g
-    str = str.replace(regex1, `), RTT time = `)
+    str = str.replace(regex1, `), RTT times = `)
 	return str
 }
 
@@ -32,7 +32,7 @@ function parseTrace(str){
 app.get('/ip', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
 	var publicIP = parseIP(req.ip)
-  	console.log(publicIP + ': checked IP')
+  	console.log(publicIP + ' > checked IP')
 	res.send(publicIP)
 })
 
@@ -40,7 +40,8 @@ app.get('/ip', (req, res) => {
 app.get('/port', (req, res) => {
     var publicPort = req.socket.remotePort
 	publicPort = publicPort.toString()
-  	console.log(publicPort + ': checked port')
+    var publicIP = parseIP(req.ip)
+  	console.log(publicIP + ':' + publicPort + ' > checked port')
   	res.set('Access-Control-Allow-Origin', '*')
   	res.send(publicPort)
 })
@@ -49,7 +50,7 @@ app.get('/port', (req, res) => {
 app.get('/trace', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
     var ip = parseIP(req.ip)
-    console.log(ip + ': checked trace')	
+    console.log(ip + ' > checked trace')	
     const { exec } = require('child_process')
     var cmd = `traceroute ${ip}`
     exec(cmd, (error, stdout, stderr) => {
