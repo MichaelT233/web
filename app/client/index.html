@@ -12,18 +12,27 @@
   		<header>
     		<h1>Web App Prototype</h1>
     	</header>
-		<button type='button' onclick="get('ip', displayText, 'showIP')">
-			click here to find your public IP address
-		</button>  
-    	<p id='showIP'>|</p>
-		<button type='button' onclick="get('port', displayText, 'showPort')">
-			click here to find your port number on this connection
-		</button>
-		<p id ='showPort'>|</p>
-		<button type='button' onclick="get('trace', displayText, 'showTrace')">
-			click here to see a traceroute from the server to you
-		</button>
-		<p id ='showTrace'>|</p>
+
+		<div id = 'left'>
+			<button type='button' onclick="fingerprint()">
+				click here to see a digital fingerprint of your machine <br>
+				(NO DATA IS SAVED)
+			</button>  
+			<div id='showIP'></div>
+			<div id ='showPort'></div>
+			<div id ='showPlatform'></div>
+			<div id ='showBrowser'></div>
+			<div id ='showCores'></div>
+			<div id ='showMemory'></div>
+		</div>
+
+		<div id = 'right'>
+			<button type='button' onclick="get('trace', displayText, 'showTrace')">
+				click here to see a traceroute from the server to you
+			</button>
+			<div id ='showTrace'><br></div>
+		</div>
+
     	<footer>
       		<p>author: MT</p>
     	</footer>

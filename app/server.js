@@ -31,17 +31,17 @@ function parseTrace(str){
 //returns the client's public IP address
 app.get('/ip', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
-	var publicIP = parseIP(req.ip)
-  	console.log(publicIP + ' > checked IP')
+	var publicIP = 'IP Address = ' + parseIP(req.ip)
+  	//console.log(publicIP + ' > checked IP')
 	res.send(publicIP)
 })
 
 //returns the client's public port
 app.get('/port', (req, res) => {
     var publicPort = req.socket.remotePort
-	publicPort = publicPort.toString()
+	publicPort = 'Port Number = ' + publicPort.toString()
     var publicIP = parseIP(req.ip)
-  	console.log(publicIP + ':' + publicPort + ' > checked port')
+  	//console.log(publicIP + ':' + publicPort + ' > checked port')
   	res.set('Access-Control-Allow-Origin', '*')
   	res.send(publicPort)
 })
@@ -50,7 +50,7 @@ app.get('/port', (req, res) => {
 app.get('/trace', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
     var ip = parseIP(req.ip)
-    console.log(ip + ' > checked trace')	
+    //console.log(ip + ' > checked trace')	
     const { exec } = require('child_process')
     var cmd = `traceroute ${ip}`
     exec(cmd, (error, stdout, stderr) => {
@@ -61,5 +61,5 @@ app.get('/trace', (req, res) => {
 
 //initializes web server
 app.listen(port, () => {
-  	console.log(`prototype listening at designated IP:${port}`)
+  	console.log(`prototype listening on this machine:${port}`)
 })

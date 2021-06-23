@@ -31,3 +31,9 @@ button {
     background-color: rgb(10, 20, 70);
     font-size: 15px;
 }
+#left{
+    float: left;
+}
+#right{
+    float: right;
+}
