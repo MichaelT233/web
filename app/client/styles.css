@@ -25,6 +25,12 @@ p{
     color:darkgrey;
     font-size: 20px;
     white-space: pre-line;
+    padding: 0;
+    margin: 0;
+}
+label {
+    color:darkgrey;
+    font-size: 20px;
 }
 button {
     color:darkgrey;
@@ -33,7 +39,8 @@ button {
 }
 #left{
     float: left;
+    padding-right: 110px;
 }
 #right{
-    float: right;
+    float: left;
 }

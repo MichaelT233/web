@@ -14,23 +14,20 @@
     	</header>
 
 		<div id = 'left'>
-			<button type='button' onclick="fingerprint()">
-				click here to see a digital fingerprint of your machine <br>
-				(NO DATA IS SAVED)
-			</button>  
-			<div id='showIP'></div>
-			<div id ='showPort'></div>
-			<div id ='showPlatform'></div>
-			<div id ='showBrowser'></div>
-			<div id ='showCores'></div>
-			<div id ='showMemory'></div>
+			<label for = 'actions'>Choose an Action</label>
+			<select name = 'select an action' id = 'actions'>
+				<option value = 'fingerprint'>digital fingerprint</option>
+				<option value = 'traceroute'>traceroute</option>
+			</select>
+			<button type = 'button' onclick="selectCallback()">
+				Submit
+			</button>
 		</div>
 
 		<div id = 'right'>
-			<button type='button' onclick="get('trace', displayText, 'showTrace')">
-				click here to see a traceroute from the server to you
-			</button>
-			<div id ='showTrace'><br></div>
+			<div id = 'output0'></div>
+			<div id = 'output1'></div>
+			<div id = 'output2'></div>
 		</div>
 
     	<footer>

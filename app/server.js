@@ -31,7 +31,7 @@ function parseTrace(str){
 //returns the client's public IP address
 app.get('/ip', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
-	var publicIP = 'IP Address = ' + parseIP(req.ip)
+	var publicIP = parseIP(req.ip)
   	//console.log(publicIP + ' > checked IP')
 	res.send(publicIP)
 })
@@ -39,7 +39,7 @@ app.get('/ip', (req, res) => {
 //returns the client's public port
 app.get('/port', (req, res) => {
     var publicPort = req.socket.remotePort
-	publicPort = 'Port Number = ' + publicPort.toString()
+	publicPort = publicPort.toString()
     var publicIP = parseIP(req.ip)
   	//console.log(publicIP + ':' + publicPort + ' > checked port')
   	res.set('Access-Control-Allow-Origin', '*')
