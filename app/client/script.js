@@ -6,56 +6,32 @@ function selectCallback() {
     var selections = document.getElementById('actions')
     var value = selections.value
     switch (value){
-        case 'fingerprint':
-            fingerprint()
+        case 'socket':
+            get('socket', 'output')
             break
         case 'traceroute':
-            traceroute()
+            get('trace', 'output')
             break
         case 'map':
-            map()
+            get('map', 'output')
             break
     }
 }
 
-//REST API get call
-function get(url, callback) {
+// REST API get then save into an html element (currently text based)
+function get(url, element) {
     var request = new XMLHttpRequest()
     request.open("GET", url)
     request.onreadystatechange = function ready() {
         if(request.readyState == XMLHttpRequest.DONE) {
-            var text = request.responseText
-            callback(text)
+            var responseText = request.responseText
+            render(responseText, element)
         }
     }
     request.send()
+    render('Loading...', 'output')
 }
-
-//fingerprints client and renders results
-function fingerprint() {
-    function renderIP(ip) {
-      ReactDOM.render( /*#__PURE__*/React.createElement("p", null, "Public IP Address = ", ip), document.getElementById('output0'));
-    }
-    function renderPort(port) {
-      ReactDOM.render( /*#__PURE__*/React.createElement("p", null, "Port Number = ", port), document.getElementById('output1'));
-    }  
-    get('ip', renderIP)
-    get('port', renderPort)
-}
-
-//traceroutes client and renders the result
-function traceroute() {
-    function renderTrace(text) {
-        ReactDOM.render( /*#__PURE__*/React.createElement("p", null, text), document.getElementById('output0'))
-        ReactDOM.render( /*#__PURE__*/React.createElement("p", null, null), document.getElementById('output1'))
-    }
-    get('trace', renderTrace)
-}
-
-function map() {
-    function renderMap(text) {
-        ReactDOM.render( /*#__PURE__*/React.createElement("p", null, text), document.getElementById('output0'))
-        ReactDOM.render( /*#__PURE__*/React.createElement("p", null, null), document.getElementById('output1'))
-    }
-    get('map', renderMap)
+// simple function to render text in a given element
+function render(text, element) {
+    ReactDOM.render( /*#__PURE__*/React.createElement("p", null, text), document.getElementById(element))
 }

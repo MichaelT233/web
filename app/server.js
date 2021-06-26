@@ -2,20 +2,18 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-//serves static files from 'client' directory
+// serves static files from 'client' directory
 app.use(express.static('client'))
 
-//determines whether given ip string is IPv6 or IPv4 and returns the address
+// determines whether given ip string is IPv6 or IPv4 and returns the address
 function parseIP(ip) {
 	if (ip.slice(0,7) == '::ffff:') {
 		ip = ip.slice(7)
-	} else {
-		ip = ip
 	}
 	return ip
 }
 
-//function that parses traceroute's stdout into a more friendly format
+// function that parses traceroute's stdout into a more friendly format
 function parseTrace(str){
     let regex0 = / \d /
     i = 1
@@ -28,50 +26,43 @@ function parseTrace(str){
 	return str
 }
 
-//returns the client's public IP address
-app.get('/ip', (req, res) => {
+// returns the client's socket
+app.get('/socket', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
 	var publicIP = parseIP(req.ip)
-  	//console.log(publicIP + ' > checked IP')
-	res.send(publicIP)
+    var publicPort = req.socket.remotePort.toString()
+	res.send(publicIP + ':' + publicPort)
 })
 
-//returns the client's public port
-app.get('/port', (req, res) => {
-    var publicPort = req.socket.remotePort
-	publicPort = publicPort.toString()
-    var publicIP = parseIP(req.ip)
-  	//console.log(publicIP + ':' + publicPort + ' > checked port')
-  	res.set('Access-Control-Allow-Origin', '*')
-  	res.send(publicPort)
-})
-
-//returns traceroute stdout, needs to be changed to number of hops, hop addresses, and times
+// returns traceroute stdout
 app.get('/trace', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
-    var ip = parseIP(req.ip)
-    //console.log(ip + ' > checked trace')	
+    var ip = parseIP(req.ip)	
     const { exec } = require('child_process')
     var cmd = `traceroute ${ip}`
     exec(cmd, (error, stdout, stderr) => {
+        console.log(error)
+        console.log(stderr)
 		var trace = parseTrace(stdout)
         res.send(trace)
     })
 })
 
+// returns nmap stdout
 app.get('/map', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
     var ip = parseIP(req.ip)	
     const { exec } = require('child_process')
-    var cmd = `sudo nmap ${ip}`
+    var cmd = `nmap ${ip}`
     exec(cmd, (error, stdout, stderr) => {
 		var map = stdout
+        console.log(error)
         console.log(stderr)
         res.send(map)
     })
 })
 
-//initializes web server
+// initializes web server
 app.listen(port, () => {
   	console.log(`prototype listening on this machine:${port}`)
 })
