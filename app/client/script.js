@@ -12,6 +12,9 @@ function selectCallback() {
         case 'traceroute':
             traceroute()
             break
+        case 'map':
+            map()
+            break
     }
 }
 
@@ -36,17 +39,23 @@ function fingerprint() {
     function renderPort(port) {
       ReactDOM.render( /*#__PURE__*/React.createElement("p", null, "Port Number = ", port), document.getElementById('output1'));
     }  
-    get('ip', renderIP);
-    get('port', renderPort);
-    ReactDOM.render( /*#__PURE__*/React.createElement("p", null, "Platform = ", navigator.platform, /*#__PURE__*/React.createElement("br", null), "Browser = ", navigator.appCodeName, /*#__PURE__*/React.createElement("br", null), "Logical CPU Cores = ", navigator.hardwareConcurrency, /*#__PURE__*/React.createElement("br", null), "System Memory = ", navigator.deviceMemory, " GB"), document.getElementById('output2'));
-}  
+    get('ip', renderIP)
+    get('port', renderPort)
+}
 
 //traceroutes client and renders the result
 function traceroute() {
     function renderTrace(text) {
         ReactDOM.render( /*#__PURE__*/React.createElement("p", null, text), document.getElementById('output0'))
         ReactDOM.render( /*#__PURE__*/React.createElement("p", null, null), document.getElementById('output1'))
-        ReactDOM.render( /*#__PURE__*/React.createElement("p", null, null), document.getElementById('output2'))
     }
     get('trace', renderTrace)
+}
+
+function map() {
+    function renderMap(text) {
+        ReactDOM.render( /*#__PURE__*/React.createElement("p", null, text), document.getElementById('output0'))
+        ReactDOM.render( /*#__PURE__*/React.createElement("p", null, null), document.getElementById('output1'))
+    }
+    get('map', renderMap)
 }

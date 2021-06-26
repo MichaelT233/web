@@ -59,6 +59,18 @@ app.get('/trace', (req, res) => {
     })
 })
 
+app.get('/map', (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*')
+    var ip = parseIP(req.ip)	
+    const { exec } = require('child_process')
+    var cmd = `sudo nmap ${ip}`
+    exec(cmd, (error, stdout, stderr) => {
+		var map = stdout
+        console.log(stderr)
+        res.send(map)
+    })
+})
+
 //initializes web server
 app.listen(port, () => {
   	console.log(`prototype listening on this machine:${port}`)
