@@ -2,27 +2,37 @@ header {
     text-align:center;
     top:0;
     left:0;
-    position:fixed;
     width:100%;
     background-color:rgb(10, 20, 70);
 }
+html{
+    margin: 0 auto;
+    min-height: 100%;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-color: rgb(10, 20, 70);
+}
 body{
     background-color: rgb(20, 20, 20);
-    padding-top: 90px;
     text-align: center;
+    display: block;
+    margin: 0 auto;
+    min-height: 100%;
 }
 footer {
     text-align:center;
     bottom:0;
     left:0;
-    position:fixed;
     width:100%;
     background-color: rgb(10, 20, 70);
+    position: fixed;
 }
 h1{
+    margin: 0;
     color:darkgrey;
 }
 p{
+    margin: 0;
     color:darkgrey;
     font-size: 20px;
     white-space: pre-line;
@@ -45,13 +55,10 @@ select {
 }
 #top{
     margin: 0 auto;
-    border-style: solid;
-    padding: 20px;
+    border-bottom-style: solid;
     border-color: rgb(10, 20, 70);
 }
 #bottom{
     margin: 0 auto;
-    border-style: solid;
     border-color: rgb(10, 20, 70);
-    height: 450px;
 }

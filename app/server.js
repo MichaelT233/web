@@ -41,8 +41,8 @@ app.get('/trace', (req, res) => {
     const { exec } = require('child_process')
     var cmd = `traceroute ${ip}`
     exec(cmd, (error, stdout, stderr) => {
-        console.log(error)
-        console.log(stderr)
+        //console.log(error)
+        //console.log(stderr)
 		var trace = parseTrace(stdout)
         res.send(trace)
     })
@@ -55,10 +55,9 @@ app.get('/map', (req, res) => {
     const { exec } = require('child_process')
     var cmd = `nmap ${ip}`
     exec(cmd, (error, stdout, stderr) => {
-		var map = stdout
-        console.log(error)
-        console.log(stderr)
-        res.send(map)
+        //console.log(error)
+        //console.log(stderr)
+        res.send(stdout)
     })
 })
 
