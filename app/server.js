@@ -65,3 +65,19 @@ app.get('/map', (req, res) => {
 app.listen(port, () => {
   	console.log(`prototype listening on this machine:${port}`)
 })
+
+// testing postgres api
+const { Pool } = require('pg')
+const pool = new Pool({
+  user: 'postgres',
+  host: '127.0.0.1',
+  database: 'app',
+  password: 'rose1123',
+  port: 5432,
+})
+pool.query('SELECT * FROM products;', (err, res) => { 
+  console.log(res.rows[0].name)
+  console.log(res.rows[0].description)
+  console.log(res.rows[0].price)
+  pool.end() 
+})
