@@ -15,6 +15,9 @@ function selectCallback() {
         case 'map':
             get('map', 'output')
             break
+        case 'db':
+            get('db', 'output')
+            break
     }
 }
 

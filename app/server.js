@@ -68,16 +68,25 @@ app.listen(port, () => {
 
 // testing postgres api
 const { Pool } = require('pg')
-const pool = new Pool({
-  user: 'postgres',
-  host: '127.0.0.1',
-  database: 'postgres',
-  password: 'rose1123',
-  port: 5432,
-})
-pool.query('SELECT * FROM products;', (err, res) => { 
-  console.log(res.rows[0].name)
-  console.log(res.rows[0].description)
-  console.log(res.rows[0].price)
-  pool.end() 
+//
+app.get('/db', (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*')
+    const pool = new Pool({
+        user: 'postgres',
+        host: '127.0.0.1',
+        database: 'postgres',
+        password: 'rose1123',
+        port: 5432,
+    })
+    function sendData(text){
+        console.log(text)
+        res.send(text)
+    }
+    pool.query('SELECT * FROM products;', (err, res) => { 
+        var name = res.rows[0].name
+        var description = res.rows[0].description
+        var price = res.rows[0].price
+        pool.end()
+        sendData(name + description + price)
+    })
 })
