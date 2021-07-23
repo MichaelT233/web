@@ -73,9 +73,9 @@ app.get('/db', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
     const pool = new Pool({
         user: 'postgres',
-        host: '127.0.0.1',
+        host: '172.17.0.3',
         database: 'postgres',
-        password: 'rose1123',
+        password: 'x56hDCn76dW3R4s',
         port: 5432,
     })
     function sendData(text){
