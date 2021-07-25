@@ -1,9 +1,9 @@
 #!/bin/bash
-# requirments: git, docker
+# requirments: (git not needed if using dockerhub), docker
 
 # pull source from github
 # git pull https://github.com/MichaelT233/web
-# OR just pull images from dockerhub (need to do that now) 
+# OR just pull images from dockerhub (need to do write scripts once public) 
 
 # pull node image
 #sudo docker pull node:14
@@ -23,7 +23,7 @@ sudo docker run -d -p 5432:5432 -e POSTGRES_HOST_AUTH_METHOD=trust --name db pos
 echo 'initializing databse...'
 sleep 3
 # make default password for web server to use (change for produdction)
-sudo docker exec -u postgres db psql -U postgres -c "ALTER USER postgres PASSWORD 'x56hDCn76dW3R4s'"
+sudo docker exec -u postgres db psql -U postgres -c "ALTER USER postgres PASSWORD 'devPass'"
 # populates products table with test data
 value=$(<DB_Populate.sql)
 sudo docker exec -u postgres db psql -c "$value"
