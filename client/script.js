@@ -6,15 +6,6 @@ function selectCallback() {
     var selections = document.getElementById('actions')
     var value = selections.value
     switch (value){
-        case 'socket':
-            get('socket', 'output')
-            break
-        case 'traceroute':
-            get('trace', 'output')
-            break
-        case 'map':
-            get('map', 'output')
-            break
         case 'db':
             get('db', 'output')
             break

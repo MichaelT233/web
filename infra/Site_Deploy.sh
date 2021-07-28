@@ -1,14 +1,5 @@
 #!/bin/bash
-# requirments: (git not needed if using dockerhub), docker
 
-# pull source from github
-# git pull https://github.com/MichaelT233/web
-# OR just pull images from dockerhub (need to do write scripts once public) 
-
-# pull node image
-#sudo docker pull node:14
-# execute in directory with dockerfile, builds image
-#sudo docker build . -t michaelt23/web:server
 # starts container on port 3000, named server
 sudo docker run -d -p 3000:3000 --name server michaelt23/web:server
 # delay to allow web server to start
