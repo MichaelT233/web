@@ -51,10 +51,13 @@ app.get('/db', (req, res) => {
         res.send(text)
     }
     pool.query('SELECT * FROM products;', (err, res) => { 
-        var name = res.rows[0].name
-        var description = res.rows[0].description
-        var price = res.rows[0].price
+        var name0 = res.rows[0].name
+        var description0 = res.rows[0].description
+        var price0 = res.rows[0].price
+        var name1 = res.rows[1].name
+        var description1 = res.rows[1].description
+        var price1 = res.rows[1].price
         pool.end()
-        sendData(name + description + price)
+        sendData(name0 + description0 + price0 + '\n' + name1 + description1 + price1)
     })
 })

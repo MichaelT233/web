@@ -5,4 +5,5 @@ CREATE TABLE products
 INSERT INTO products 
     (name, description, price)
 VALUES 
-    ('p0 name ', 'p0 desctription ', 'p0 price ');
+    ('p0 name ', 'p0 description ', 'p0 price '),
+    ('p1 name ', 'p1 description ', 'p1 price ');

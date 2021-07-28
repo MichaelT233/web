@@ -37,28 +37,8 @@ p{
     font-size: 20px;
     white-space: pre-line;
 }
-label {
-    color:darkgrey;
-    font-size: 20px;
-    margin-right: 15px;
-}
 button {
     color:darkgrey;
     background-color: rgb(10, 20, 70);
     font-size: 15px;
-}
-select {
-    color:darkgrey;
-    background-color: rgb(10, 20, 70);
-    font-size: 15px;
-    margin-right: 15px;
-}
-#top{
-    margin: 0 auto;
-    border-bottom-style: solid;
-    border-color: rgb(10, 20, 70);
-}
-#bottom{
-    margin: 0 auto;
-    border-color: rgb(10, 20, 70);
 }
