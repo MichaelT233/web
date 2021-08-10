@@ -1,4 +1,5 @@
 header {
+    position: fixed;
     text-align:center;
     top:0;
     left:0;
@@ -15,22 +16,25 @@ html{
 body{
     background-color: rgb(20, 20, 20);
     text-align: center;
-    display: block;
+    /*display: block;*/
     margin: 0 auto;
     min-height: 100%;
 }
 footer {
-    text-align:center;
-    bottom:0;
-    left:0;
-    width:100%;
+    display: inline;
+    text-align: center;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     background-color: rgb(10, 20, 70);
     position: fixed;
 }
+/*
 h1{
     margin: 0;
     color:darkgrey;
 }
+*/
 p{
     margin: 0;
     color:darkgrey;
@@ -41,4 +45,32 @@ button {
     color:darkgrey;
     background-color: rgb(10, 20, 70);
     font-size: 15px;
+}
+/*
+select {
+    display: inline;
+    float: left;
+}
+*/
+#header {
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+h1 {
+    font-size: 30px;
+    text-align: center;
+    margin: 0;
+}
+select {
+    position: absolute;
+    left: 0;
+    height: 100%;
+    color:darkgrey;
+    background-color: rgb(10, 20, 70);
+    font-size: 17px;
+}
+#store_view {
+    padding-top: 40px;
 }

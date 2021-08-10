@@ -2,8 +2,9 @@ const express = require('express')
 const app = express()
 const port = 3000
 const fs = require('fs')
+const { Pool } = require('pg')
 
-// uses home directory as base reference for app logic (js) and css styling, possible by bundling
+// uses home directory as base reference for app logic (js), css styling, favicon, possible by bundling
 app.use(express.static('client'))
 
 // initializes web server
@@ -15,10 +16,10 @@ app.listen(port, () => {
 app.get('/', (req, res) => {
     fs.readFile('home/index0.html', 'utf8' , (err, data) => {
         if (err) {
-          console.error(err)
-          return
+            console.error(err)
+            return
         }
-        res.set('html')
+        res.type('html')
         res.send(data)
     })
 })
@@ -27,16 +28,15 @@ app.get('/', (req, res) => {
 app.get('/route', (req, res) => {
     fs.readFile('testRoute/index1.html', 'utf8' , (err, data) => {
         if (err) {
-          console.error(err)
-          return
+            console.error(err)
+            return
         }
-        res.set('html')
+        res.type('html')
         res.send(data)
     })
 })
 
 // testing postgres api
-const { Pool } = require('pg')
 app.get('/db', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
     const pool = new Pool({
@@ -46,18 +46,28 @@ app.get('/db', (req, res) => {
         password: 'devPass',
         port: 5432,
     })
-    function sendData(text){
-        console.log(text)
-        res.send(text)
+    function sendData(data){
+        console.log(data)
+        res.send(data)
     }
-    pool.query('SELECT * FROM products;', (err, res) => { 
-        var name0 = res.rows[0].name
-        var description0 = res.rows[0].description
-        var price0 = res.rows[0].price
-        var name1 = res.rows[1].name
-        var description1 = res.rows[1].description
-        var price1 = res.rows[1].price
+    pool.query('SELECT * FROM products;', (err, res) => {
+        /* 
+        const title = res.rows[0].name
+        const products = []
+        const rowQuantity = res.rows.length
+        const rowCount = 0
+        while (rowQuantity != rowCount){
+            products[rowCount][0] = res.rows[0].name
+            products[rowCount][1] = res.rows[1].description
+            products[rowCount][2] = res.rows[2].price
+        }
         pool.end()
-        sendData(name0 + description0 + price0 + '\n' + name1 + description1 + price1)
+        const response = JSON.stringify()
+        sendData(response)
+        */
+        const products = JSON.stringify(res.rows)
+        const response = '{"products":' + products + "}" 
+        console.log(response)
+        sendData(response)
     })
 })

@@ -1,7 +1,7 @@
 //needs general error handling
 //needs anti-spam mechanism
 
-// AJAX API - GET then save into an html element (currently text based)
+// AJAX API - GET then save into an html element
 function get(url, element) {
     var request = new XMLHttpRequest()
     request.open("GET", url)
@@ -9,6 +9,8 @@ function get(url, element) {
         if(request.readyState == XMLHttpRequest.DONE) {
             var responseText = request.responseText
             console.log(responseText)
+            const obj = JSON.parse(responseText)
+            console.log(obj.products)
         }
     }
     request.send()
