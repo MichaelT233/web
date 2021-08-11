@@ -2,7 +2,7 @@
 //needs anti-spam mechanism
 
 // AJAX API - GET then save into an html element
-function get(url, element) {
+function get(url, callback) {
     var request = new XMLHttpRequest()
     request.open("GET", url)
     request.onreadystatechange = function ready() {
@@ -10,7 +10,8 @@ function get(url, element) {
             var responseText = request.responseText
             console.log(responseText)
             const obj = JSON.parse(responseText)
-            console.log(obj.products)
+            console.log(obj.products[0].name)
+            console.log(obj.products[1].price)
         }
     }
     request.send()

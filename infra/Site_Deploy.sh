@@ -1,10 +1,8 @@
 #!/bin/bash
 
-# requirments: (git not needed if using dockerhub), docker
-
-# pull source from github
-# git pull https://github.com/MichaelT233/web
-# OR just pull images from dockerhub (need to do write scripts) 
+# only requirment, docker on linux
+# windows version of script to come soon
+# uncomment lines as needed
 
 # pull node image
 #sudo docker pull node:14
@@ -14,7 +12,7 @@ sudo docker build .. -t michaelt23/web:server
 # starts container on port 3000, named server
 sudo docker run -d -p 3000:3000 --name server michaelt23/web:server
 # delay to allow web server to start
-echo 'initiazling web server...'
+echo 'allowing web server to initialize...'
 sleep 3
 
 # pull postgres image
@@ -22,7 +20,7 @@ sleep 3
 # start postgres container on port 5432, named db
 sudo docker run -d -p 5432:5432 -e POSTGRES_HOST_AUTH_METHOD=trust --name db postgres:13
 # delay to allow database to start
-echo 'initializing databse...'
+echo 'allowing database server to initialize...'
 sleep 3
 # make default password for web server to use (change for produdction)
 sudo docker exec -u postgres db psql -U postgres -c "ALTER USER postgres PASSWORD 'devPass'"

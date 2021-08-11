@@ -25,8 +25,8 @@ app.get('/', (req, res) => {
 })
 
 // testing routing
-app.get('/route', (req, res) => {
-    fs.readFile('testRoute/index1.html', 'utf8' , (err, data) => {
+app.get('/about', (req, res) => {
+    fs.readFile('about/index1.html', 'utf8' , (err, data) => {
         if (err) {
             console.error(err)
             return
@@ -47,27 +47,12 @@ app.get('/db', (req, res) => {
         port: 5432,
     })
     function sendData(data){
-        console.log(data)
+        res.type('json')
         res.send(data)
     }
     pool.query('SELECT * FROM products;', (err, res) => {
-        /* 
-        const title = res.rows[0].name
-        const products = []
-        const rowQuantity = res.rows.length
-        const rowCount = 0
-        while (rowQuantity != rowCount){
-            products[rowCount][0] = res.rows[0].name
-            products[rowCount][1] = res.rows[1].description
-            products[rowCount][2] = res.rows[2].price
-        }
-        pool.end()
-        const response = JSON.stringify()
-        sendData(response)
-        */
         const products = JSON.stringify(res.rows)
-        const response = '{"products":' + products + "}" 
-        console.log(response)
+        const response = '{"products": ' + products + "}" 
         sendData(response)
     })
 })
