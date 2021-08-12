@@ -11,7 +11,10 @@ function get(url, callback) {
             const obj = JSON.parse(responseText)
             //initital draft of a react component that renders a single element in what will be a grid view store
             function Store(props) {
-                return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", null, props.title), /*#__PURE__*/React.createElement("div", null, props.description), /*#__PURE__*/React.createElement("div", null, props.price));
+                return /*#__PURE__*/React.createElement("div", null, 
+                /*#__PURE__*/React.createElement("div", null, props.title), 
+                /*#__PURE__*/React.createElement("div", null, props.description), 
+                /*#__PURE__*/React.createElement("div", null, props.price));
             } 
             //calling react component to create view with valued props
             view = /*#__PURE__*/React.createElement(Store, {

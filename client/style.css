@@ -1,3 +1,10 @@
+html {
+    margin: 0 auto;
+    min-height: 100%;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-color: rgb(10, 20, 70);
+}
 header {
     position: fixed;
     text-align:center;
@@ -6,17 +13,9 @@ header {
     width:100%;
     background-color:rgb(10, 20, 70);
 }
-html{
-    margin: 0 auto;
-    min-height: 100%;
-    border-left-style: solid;
-    border-right-style: solid;
-    border-color: rgb(10, 20, 70);
-}
-body{
+body {
     background-color: rgb(20, 20, 20);
     text-align: center;
-    /*display: block;*/
     margin: 0 auto;
     min-height: 100%;
 }
@@ -29,13 +28,12 @@ footer {
     background-color: rgb(10, 20, 70);
     position: fixed;
 }
-/*
-h1{
+h1 {
+    font-size: 30px;
+    text-align: center;
     margin: 0;
-    color:darkgrey;
 }
-*/
-p{
+p {
     margin: 0;
     color:darkgrey;
     font-size: 20px;
@@ -46,23 +44,6 @@ button {
     background-color: rgb(10, 20, 70);
     font-size: 15px;
 }
-/*
-select {
-    display: inline;
-    float: left;
-}
-*/
-#header {
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    position: relative;
-}
-h1 {
-    font-size: 30px;
-    text-align: center;
-    margin: 0;
-}
 select {
     position: absolute;
     left: 0;
@@ -70,6 +51,12 @@ select {
     color:darkgrey;
     background-color: rgb(10, 20, 70);
     font-size: 17px;
+}
+#head {
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    position: relative;
 }
 #store_view {
     padding-top: 40px;
