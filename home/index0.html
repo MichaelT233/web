@@ -12,22 +12,22 @@
   		<header>
             <div id="head">
                 <h1>Web App Prototype</h1>
-                <select>
-                    <option value='menu'>Menu</option>
-                    <option value='about'>About</option>
-                    <option value='cart'>Cart</option>
-                </select>
-            </div>
+                <div class="dropdown">
+                    <h1>Menu</h1>
+                    <div class="dropdown-content">
+                        <p><a href='/cart'>Cart</a></p>
+                        <p><a href='/about'>About</a></p>
+                    </div>
+                </div>
+            </div>    
     	</header>
         <div id="store_view">
 		<button type = 'button' onclick="get('db', null)">Database Test</button>
         </div>
     	<footer>
-      		<p>author: MT
-			<nobr>Source Code - Github: <a href = 'https://github.com/MichaelT233/web' target = '_blank'>https://github.com/MichaelT233/web</a></nobr>
-			<nobr>Docker Image - Dockerhub: <a href = 'https://hub.docker.com/repository/docker/michaelt23/web' target = '_blank'>https://hub.docker.com/repository/docker/michaelt23/web</a></nobr>
-			<nobr><a href='/about'>about route test</a></nobr>
-			</p>
+      		<p>author: MT</p>
+			<p>Source Code - Github: <a href = 'https://github.com/MichaelT233/web' target = '_blank'>https://github.com/MichaelT233/web</a></p>
+			<p>Docker Image - Dockerhub: <a href = 'https://hub.docker.com/repository/docker/michaelt23/web' target = '_blank'>https://hub.docker.com/repository/docker/michaelt23/web</a></p>
     	</footer>
 	</body>
 </html>

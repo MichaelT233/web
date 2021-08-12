@@ -1,9 +1,12 @@
 html {
     margin: 0 auto;
     min-height: 100%;
-    border-left-style: solid;
-    border-right-style: solid;
-    border-color: rgb(10, 20, 70);
+}
+body {
+    background-color: rgb(20, 20, 20);
+    text-align: center;
+    margin: 0 auto;
+    min-height: 100%;
 }
 header {
     position: fixed;
@@ -13,20 +16,13 @@ header {
     width:100%;
     background-color:rgb(10, 20, 70);
 }
-body {
-    background-color: rgb(20, 20, 20);
-    text-align: center;
-    margin: 0 auto;
-    min-height: 100%;
-}
 footer {
-    display: inline;
+    display: block;
     text-align: center;
     bottom: 0;
     left: 0;
     width: 100%;
     background-color: rgb(10, 20, 70);
-    position: fixed;
 }
 h1 {
     font-size: 30px;
@@ -35,7 +31,7 @@ h1 {
 }
 p {
     margin: 0;
-    color:darkgrey;
+    color: darkgrey;
     font-size: 20px;
     white-space: pre-line;
 }
@@ -43,14 +39,6 @@ button {
     color:darkgrey;
     background-color: rgb(10, 20, 70);
     font-size: 15px;
-}
-select {
-    position: absolute;
-    left: 0;
-    height: 100%;
-    color:darkgrey;
-    background-color: rgb(10, 20, 70);
-    font-size: 17px;
 }
 #head {
     height: 40px;
@@ -60,4 +48,30 @@ select {
 }
 #store_view {
     padding-top: 40px;
+}
+#store_view div {
+    color: darkgrey;
+}
+
+.dropdown {
+    position: absolute;
+    left: 0;
+    display: inline-block;
+    height: 100%;
+    font-size: 30px;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: darkgrey;
+    width: 100%;
+    text-align: left;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown h1 {
+    color:darkgrey;
+    border-style: solid;
+    border-color: black;
 }
