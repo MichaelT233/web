@@ -1,28 +1,36 @@
 html {
-    margin: 0 auto;
     min-height: 100%;
 }
 body {
-    background-color: rgb(20, 20, 20);
-    text-align: center;
-    margin: 0 auto;
+    margin: 0;
     min-height: 100%;
 }
 header {
     position: fixed;
-    text-align:center;
     top:0;
     left:0;
-    width:100%;
-    background-color:rgb(10, 20, 70);
+    background-color: orangered;
+    display: flex;
+    justify-content: center;
+    height: 40px;
+    padding: 0;
+    width: 100%;
+    border-style: solid;
+    border-color: black;
+    border-width: thin;
+    box-sizing: border-box;
 }
 footer {
-    display: block;
+    position: absolute;
     text-align: center;
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: rgb(10, 20, 70);
+    background-color: orangered;
+    border-style: solid;
+    border-color: black;
+    border-width: thin;
+    box-sizing: border-box;
 }
 h1 {
     font-size: 30px;
@@ -31,26 +39,15 @@ h1 {
 }
 p {
     margin: 0;
-    color: darkgrey;
     font-size: 20px;
-    white-space: pre-line;
 }
 button {
-    color:darkgrey;
-    background-color: rgb(10, 20, 70);
+    background-color: orangered;
     font-size: 15px;
 }
-#head {
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    position: relative;
-}
+
 #store_view {
-    padding-top: 40px;
-}
-#store_view div {
-    color: darkgrey;
+    margin-top: 40px;
 }
 
 .dropdown {
@@ -59,19 +56,29 @@ button {
     display: inline-block;
     height: 100%;
     font-size: 30px;
+    border-right-style: solid;
+    border-right-color: black;
+    border-right-width: thin;
 }
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: darkgrey;
+    background-color: orangered;
     width: 100%;
     text-align: left;
 }
 .dropdown:hover .dropdown-content {
     display: block;
 }
-.dropdown h1 {
-    color:darkgrey;
+.dropdown-content p {
     border-style: solid;
     border-color: black;
+    border-width: thin;
+}
+.dropdown h1 {
+    height: 100%;
+}
+.dropdown-content a{
+    color: inherit;
+    text-decoration: none;
 }
