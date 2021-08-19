@@ -12,7 +12,7 @@ header {
     background-color: orangered;
     display: flex;
     justify-content: center;
-    height: 40px;
+    height: 6vh;
     padding: 0;
     width: 100%;
     border-style: solid;
@@ -33,21 +33,34 @@ footer {
     box-sizing: border-box;
 }
 h1 {
-    font-size: 30px;
+    font-size: 20px;
     text-align: center;
+    margin: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+h2 {
     margin: 0;
 }
 p {
     margin: 0;
-    font-size: 20px;
+    font-size: 15px;
 }
 button {
     background-color: orangered;
     font-size: 15px;
 }
+input {
+    width: 3vw;
+}
 
 #store_view {
-    margin-top: 40px;
+    margin-top: 6vh;
+}
+.store_item {
+    display: inline-block;
+    border-style: solid;
+    border-color: black;
+    border-width: thin;
 }
 
 .dropdown {
@@ -81,4 +94,9 @@ button {
 .dropdown-content a{
     color: inherit;
     text-decoration: none;
+}
+.product_image {
+    height: 15vw;
+    width: 20vw;
+    padding: 0 4vw;
 }
