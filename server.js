@@ -41,7 +41,8 @@ app.get('/db', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
     const pool = new Pool({
         user: 'postgres',
-        host: '172.17.0.3',
+        host: '172.17.0.2', //for only db docker build
+        //host: '172.17.0.3', //for full docker build
         database: 'postgres',
         password: 'devPass',
         port: 5432,
