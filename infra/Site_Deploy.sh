@@ -29,5 +29,5 @@ value=$(<DB_Populate.sql)
 sudo docker exec -u postgres db psql -c "$value"
 
 #ONLY IF RUNNING NODE LOCALLY AND NOT IN A CONTAINER
-cd ..
-node server.js
+#just run
+#node server.js in web directory as needed, db will still be up
