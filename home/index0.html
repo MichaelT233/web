@@ -4,12 +4,16 @@
 		<meta charset="UTF-8">
     	<title>prototype</title>
     	<link rel='stylesheet' href='style.css'>
+        <!--react libraries-->
     	<script crossorigin src='https://unpkg.com/react@17/umd/react.development.js'></script>
     	<script crossorigin src='https://unpkg.com/react-dom@17/umd/react-dom.development.js'></script>
+        <!--local scripts-->
     	<script src='script.js'></script>
   	</head>
 	<body>
+        <!--floating header with site nav menu and search bar-->
   		<header>
+            <!--dropdown menu component, used for site nav, displays on mouse hover-->
             <div class="dropdown">
                 <h1>Menu</h1>
                 <div class="dropdown-content">
@@ -18,11 +22,14 @@
                 </div>
             </div>
             <h1>Web App Prototype</h1>
+            <!--search bar to be used for searching product names-->
             <input type="text" id="search">
     	</header>
+        <!--viewport for all store items-->
         <div id="store_view">
 		    <button type = 'button' onclick="loadProducts()">Database Test</button>
         </div>
+        <!--non-floating footer for information and external links-->
     	<footer>
       		<p>author: MT</p>
 			<p>Source Code - Github: <a href = 'https://github.com/MichaelT233/web' target = '_blank'>https://github.com/MichaelT233/web</a></p>
