@@ -1,5 +1,3 @@
-// config file for babel, used for tanspiling react jsx into plain javascript for client use
 {
-    // presets for react and typescript
     "presets": ["@babel/preset-react", "@babel/preset-typescript"]
 }
