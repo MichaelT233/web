@@ -1,20 +1,25 @@
+// node web server
 // load the express module
 const express = require('express')
 // create express application object
 const app = express()
-// port number variable, to listen for HTTP on port 3000
-const port = 3000
+// port number that the http web server will listen on
+const web_port = 3000
 // load file system (acesss) module
 const fs = require('fs')
 // load postgreSQL driver module and create constructor for the pg Pool class
 const { Pool } = require('pg')
+// password that will be used for queries to the database
+const db_password = 'devPass'
+// port number that the database will listen on
+const db_port = 5432
 
 // uses home directory as base reference for js scripts, css styling, favicon, bundling to be required
 app.use(express.static('client'))
 
 // application object listen on port value
-app.listen(port, () => {
-  	console.log(`prototype listening on this machine:${port}`)
+app.listen(web_port, () => {
+  	console.log(`prototype listening on port ${web_port}`)
 })
 
 // callback to be executed when the / directory is requested
@@ -60,8 +65,8 @@ app.get('/db', (req, res) => {
         //host: '172.17.0.3',
         // psql database defined in /infra/Site_Deploy.sh
         database: 'postgres',
-        password: 'devPass',
-        port: 5432,
+        password: db_password,
+        port: db_port,
     })
     // callback for sending reponse
     function sendResponse(data) {

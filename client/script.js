@@ -1,5 +1,4 @@
-//needs general error handling
-
+// client scripts
 // function for making AJAX requests for JSON objects from a given URL and then executes a given callback with access to said JSON data
 function getJSON(url, callback) {
     // creating AJAX request object
@@ -42,7 +41,7 @@ function loadProducts() {
             dangerouslySetInnerHTML: {
             __html: container
             }
-        });
+        })
         // rendering the react jsx into the store viewport
         ReactDOM.render(container_jsx, document.getElementById('store_view'))
         // react component for each store item
@@ -55,7 +54,7 @@ function loadProducts() {
             /*#__PURE__*/React.createElement("label", {htmlFor: "quantity"}, "Qty:"), 
             /*#__PURE__*/React.createElement("input", {type: "number", name: "quantity", min: "1"}), 
             /*#__PURE__*/React.createElement("button", {type: "button"}, "Add to Cart")
-            );
+            )
         }
         // loop for populating the previously rendered divs with store items/products
         i = 0
