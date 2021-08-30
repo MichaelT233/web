@@ -1,59 +1,82 @@
+// load the express module
 const express = require('express')
+// create express application object
 const app = express()
+// port number variable, to listen for HTTP on port 3000
 const port = 3000
+// load file system (acesss) module
 const fs = require('fs')
+// load postgreSQL driver module and create constructor for the pg Pool class
 const { Pool } = require('pg')
 
-// uses home directory as base reference for app logic (js), css styling, favicon, possible by bundling
+// uses home directory as base reference for js scripts, css styling, favicon, bundling to be required
 app.use(express.static('client'))
 
-// initializes web server
+// application object listen on port value
 app.listen(port, () => {
   	console.log(`prototype listening on this machine:${port}`)
 })
 
-// serves home page
+// callback to be executed when the / directory is requested
 app.get('/', (req, res) => {
+    // read html file to be served
     fs.readFile('home/index0.html', 'utf8' , (err, data) => {
         if (err) {
             console.error(err)
             return
         }
+        // set response type to HTML
         res.type('html')
+        // serve HTML file
         res.send(data)
     })
 })
 
-// testing routing
+// callback to be executed when the /about directory is requested
 app.get('/about', (req, res) => {
+    // read html file to be served
     fs.readFile('about/index1.html', 'utf8' , (err, data) => {
         if (err) {
             console.error(err)
             return
         }
+        // set response type to HTML
         res.type('html')
+        // serve HTML file
         res.send(data)
     })
 })
 
-// testing postgres api
+// callback to be executed when the /db directory is requested
 app.get('/db', (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*')
-    const pool = new Pool({
+    // create new instance of Pool object
+    const psql = new Pool({
+        // building object properties
+        // local docker env user defined in /infra/Site_Deploy.sh
         user: 'postgres',
-        host: '172.17.0.2', //for only db docker build
-        //host: '172.17.0.3', //for full docker build
+        // default first IP assigned by docker to containers
+        host: '172.17.0.2',
+        // default second IP assigned by docker to containers
+        //host: '172.17.0.3',
+        // psql database defined in /infra/Site_Deploy.sh
         database: 'postgres',
         password: 'devPass',
         port: 5432,
     })
-    function sendData(data){
-        res.type('json')
+    // callback for sending reponse
+    function sendResponse(data) {
+        // set response type to text/html
+        res.type('html')
+        // send response
         res.send(data)
     }
-    pool.query('SELECT * FROM products;', (err, res) => {
+    // using Pool instance to query postgreSQL database
+    psql.query('SELECT * FROM products;', (err, res) => {
+        // converting JSON object into a string in order to edit and transfer
         const products = JSON.stringify(res.rows)
-        const response = '{"products": ' + products + "}" 
-        sendData(response)
+        // encapsulating JSON string into a "products" object
+        const response = '{"products": ' + products + "}"
+        // send response
+        sendResponse(response)
     })
 })

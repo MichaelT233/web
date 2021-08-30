@@ -1,7 +1,7 @@
--- initializes products table
+-- initializes products table and it's columns
 CREATE TABLE products 
     (name varchar(50), description varchar(300), price varchar(10), image_path varchar(50));
--- populates products with data
+-- populates products with test data
 INSERT INTO products 
     (name, description, price, image_path)
 VALUES 
