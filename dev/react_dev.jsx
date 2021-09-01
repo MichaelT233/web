@@ -1,10 +1,13 @@
+// file containing all react jsx code
+// dependency requirment, also a flag for webpack
+import getJSON from './script.js'
 // function made to load product data and render into elements in the store viewport 
 function loadProducts() {
     // wrapping this code as a callback to use later in this function, takes JSON response from product database as it's argument
     function build_store(obj) {
         // loop that generates the necessary html divs based on product quantity, for react to plug into
         // initial string
-        container = `<div class='item_wrapper' id='store_item0'></div>`;
+        var container = `<div class='item_wrapper' id='store_item0'></div>`;
         // creating a counter value            
         var i = 1
         // loops as many times as their are products in the JSON response
@@ -15,7 +18,7 @@ function loadProducts() {
             i ++
         }
         // converting the jsx string into an actual react jsx reference
-        container_jsx = (<div id='store_wrapper' dangerouslySetInnerHTML={{__html: container}}/>)
+        var container_jsx = (<div id='store_wrapper' dangerouslySetInnerHTML={{__html: container}}/>)
         // rendering the react jsx into the store viewport
         ReactDOM.render(container_jsx, document.getElementById('store_view'))
         // react component for each store item
@@ -42,7 +45,7 @@ function loadProducts() {
         i = 0
         while (i < obj.products.length) { 
             // calling react component to create store items with product data from the database
-            item = <Store_Item title = {obj.products[i].name}
+            var item = <Store_Item title = {obj.products[i].name}
                 description = {obj.products[i].description}
                 price = {obj.products[i].price}
                 image_path = {obj.products[i].image_path}/>
@@ -55,3 +58,5 @@ function loadProducts() {
     // call AJAX JSON get request to product database URL and giving the above function as callback
     getJSON('db', build_store)
 }
+// set the loadProducts function to global browser scope so it can be accessed from the DOM
+window.loadProducts = loadProducts

@@ -9,8 +9,7 @@
     	<script crossorigin src='https://unpkg.com/react@17/umd/react.development.js'></script>
     	<script crossorigin src='https://unpkg.com/react-dom@17/umd/react-dom.development.js'></script>
         <!--local scripts-->
-    	<script src='script.js'></script>
-        <script src='react.js'></script>
+    	<script src='bundle.js'></script>
   	</head>
 	<body>
         <!--floating header with site nav menu and search bar-->
@@ -29,7 +28,7 @@
     	</header>
         <!--viewport for all store items-->
         <div id="store_view">
-		    <button type = 'button' onclick="loadProducts()">Database Test</button>
+		    <button type = 'button' onclick="window.loadProducts()">Database Test</button>
         </div>
         <!--non-floating footer for information and external links-->
     	<footer>

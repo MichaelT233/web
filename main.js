@@ -14,8 +14,8 @@ const db_password = 'devPass'
 // port number that the database will listen on
 const db_port = 5432
 
-// use source directory as working directory for client resources
-app.use(express.static('source'))
+// use src directory as working directory for client resources
+app.use(express.static('src'))
 
 // application object listen on port value
 app.listen(web_port, () => {

@@ -1,6 +1,6 @@
 // client scripts
 // function for making AJAX requests for JSON objects from a given URL and then executes a given callback with access to said JSON data
-function getJSON(url, callback) {
+export default function getJSON(url, callback) {
     // creating AJAX request object
     var request = new XMLHttpRequest()
     // calling open method, creating connection

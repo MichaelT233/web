@@ -1,6 +1,8 @@
+import getJSON from './script.js';
+
 function loadProducts() {
   function build_store(obj) {
-    container = `<div class='item_wrapper' id='store_item0'></div>`;
+    var container = `<div class='item_wrapper' id='store_item0'></div>`;
     var i = 1;
 
     while (i < obj.products.length) {
@@ -8,7 +10,7 @@ function loadProducts() {
       i++;
     }
 
-    container_jsx = React.createElement("div", {
+    var container_jsx = React.createElement("div", {
       id: "store_wrapper",
       dangerouslySetInnerHTML: {
         __html: container
@@ -18,13 +20,13 @@ function loadProducts() {
 
     function Store_Item(props) {
       return React.createElement("div", {
-        className: "store_item"
+        class: "store_item"
       }, React.createElement("h2", null, props.title), React.createElement("img", {
         src: props.image_path,
         alt: "test image",
-        className: "product_image"
+        class: "product_image"
       }), React.createElement("p", null, props.price), React.createElement("p", null, props.description), React.createElement("label", {
-        htmlFor: "quantity"
+        for: "quantity"
       }, "Qty:"), React.createElement("input", {
         type: "number",
         name: "quantity",
@@ -37,7 +39,7 @@ function loadProducts() {
     i = 0;
 
     while (i < obj.products.length) {
-      item = React.createElement(Store_Item, {
+      var item = React.createElement(Store_Item, {
         title: obj.products[i].name,
         description: obj.products[i].description,
         price: obj.products[i].price,
@@ -50,3 +52,5 @@ function loadProducts() {
 
   getJSON('db', build_store);
 }
+
+window.loadProducts = loadProducts;
