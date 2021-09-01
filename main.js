@@ -14,8 +14,8 @@ const db_password = 'devPass'
 // port number that the database will listen on
 const db_port = 5432
 
-// uses home directory as base reference for js scripts, css styling, favicon, bundling to be required
-app.use(express.static('client'))
+// use source directory as working directory for client resources
+app.use(express.static('source'))
 
 // application object listen on port value
 app.listen(web_port, () => {
@@ -25,7 +25,7 @@ app.listen(web_port, () => {
 // callback to be executed when the / directory is requested
 app.get('/', (req, res) => {
     // read html file to be served
-    fs.readFile('home/index0.html', 'utf8' , (err, data) => {
+    fs.readFile('html/store.html', 'utf8' , (err, data) => {
         if (err) {
             console.error(err)
             return
@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
 // callback to be executed when the /about directory is requested
 app.get('/about', (req, res) => {
     // read html file to be served
-    fs.readFile('about/index1.html', 'utf8' , (err, data) => {
+    fs.readFile('html/about.html', 'utf8' , (err, data) => {
         if (err) {
             console.error(err)
             return
