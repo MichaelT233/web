@@ -1,151 +1,170 @@
 /*fit html to whole page*/
 html {
-    min-height: 100%;
+  min-height: 100%;
 }
+
 /*remove body margin*/
 body {
-    margin: 0;
+  margin: 0;
 }
+
 /*floating header*/
 header {
-    /*position header at top of page and fix it*/
-    position: fixed;
-    top:0;
-    left:0;
-    /*background color*/
-    background-color: orangered;
-    /*fixed height so exact top margin can be used by element below*/
-    height: 6vh;
-    /*fit full page width*/
-    width: 100%;
-    /*solid black border*/
-    border-style: solid;
-    border-color: black;
-    border-width: thin;
-    /*make the border included in the element width and height*/
-    box-sizing: border-box;
+  /*position header at top of page and fix it*/
+  position: fixed;
+  top: 0;
+  left: 0;
+  /*background color*/
+  background-color: orangered;
+  /*fixed height so exact top margin can be used by element below*/
+  height: 6vh;
+  /*fit full page width*/
+  width: 100%;
+  /*solid black border*/
+  border-style: solid;
+  border-color: black;
+  border-width: thin;
+  /*make the border included in the element width and height*/
+  box-sizing: border-box;
 }
+
 /*non-floating footer*/
 footer {
-    /*align text in center*/
-    text-align: center;
-    /*position at bottom of page*/
-    bottom: 0;
-    left: 0;
-    /*fit full page width*/
-    width: 100%;
-    /*background color*/
-    background-color: orangered;
-    /*solid black border*/
-    border-style: solid;
-    border-color: black;
-    border-width: thin;
-    /*make the border included in the element width and height*/
-    box-sizing: border-box;
+  /*align text in center*/
+  text-align: center;
+  /*position at bottom of page*/
+  bottom: 0;
+  left: 0;
+  /*fit full page width*/
+  width: 100%;
+  /*background color*/
+  background-color: orangered;
+  /*solid black border*/
+  border-style: solid;
+  border-color: black;
+  border-width: thin;
+  /*make the border included in the element width and height*/
+  box-sizing: border-box;
 }
+
 /*font styling of main title in header*/
 h1 {
-    font-size: 20px;
-    /*center heading in header*/
-    text-align: center;
-    margin: 0;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 20px;
+  /*center heading in header*/
+  text-align: center;
+  margin: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+
 /*font styling of titles of store items*/
 h2 {
-    margin: 0;
+  margin: 0;
 }
+
 /*font styling for all paragraph elements*/
 p {
-    margin: 0;
-    font-size: 15px;
+  margin: 0;
+  font-size: 15px;
 }
+
 /*simple button styling*/
 button {
-    background-color: orangered;
-    font-size: 15px;
+  background-color: orangered;
+  font-size: 15px;
 }
+
 /*store item quantity selector*/
 input {
-    width: 3vw;
+  width: 3vw;
 }
+
 /*store viewport div*/
 #store_view {
-    /*set top margin to floating header height as to not have overlap*/
-    margin-top: 6vh;
+  /*set top margin to floating header height as to not have overlap*/
+  margin-top: 6vh;
 }
+
 /*wrapper div for store items*/
 .item_wrapper {
-    /*display store items inline*/
-    display: inline;
+  /*display store items inline*/
+  display: inline;
 }
+
 /*individual store item class*/
 .store_item {
-    /*set the store item divs to the width of their content*/
-    display: inline-block;
-    /*solid black border*/
-    border-style: solid;
-    border-color: black;
-    border-width: thin;
+  /*set the store item divs to the width of their content*/
+  display: inline-block;
+  /*solid black border*/
+  border-style: solid;
+  border-color: black;
+  border-width: thin;
 }
+
 /*dropdown menu class*/
 .dropdown {
-    /*position the dropdown menu in the top left corner of the header*/
-    position: absolute;
-    left: 0;
-    /*fit div size to content*/
-    display: inline-block;
-    /*make height fit to full height of header*/
-    height: 100%;
-    /*font styling*/
-    font-size: 30px;
-    /*solid black border*/
-    border-right-style: solid;
-    border-right-color: black;
-    border-right-width: thin;
+  /*position the dropdown menu in the top left corner of the header*/
+  position: absolute;
+  left: 0;
+  /*fit div size to content*/
+  display: inline-block;
+  /*make height fit to full height of header*/
+  height: 100%;
+  /*font styling*/
+  font-size: 30px;
+  /*solid black border*/
+  border-right-style: solid;
+  border-right-color: black;
+  border-right-width: thin;
 }
+
 /*class for content within dropdown menu*/
 .dropdown-content {
-    /*hidden while mouse is not hovering over element*/
-    display: none;
-    /*background color*/
-    background-color: orangered;
-    /*fit width to width of dropdown menu*/
-    width: 100%;
-    /*align text items to the left*/
-    text-align: left;
+  /*hidden while mouse is not hovering over element*/
+  display: none;
+  /*background color*/
+  background-color: orangered;
+  /*fit width to width of dropdown menu*/
+  width: 100%;
+  /*align text items to the left*/
+  text-align: left;
 }
+
 /*on mouse hover the dropdown content class will display underneath the dropdown menu class*/
 .dropdown:hover .dropdown-content {
-    display: block;
+  display: block;
 }
+
 /*dropdown content text styling*/
 .dropdown-content p {
-    border-style: solid;
-    border-color: black;
-    border-width: thin;
+  border-style: solid;
+  border-color: black;
+  border-width: thin;
 }
+
 /*dropdown menu title styling*/
 .dropdown h1 {
-    height: 100%;
+  height: 100%;
 }
+
 /*removing the blue highlighting from the dropdown content hyperlinks*/
-.dropdown-content a{
-    color: inherit;
-    text-decoration: none;
+.dropdown-content a {
+  color: inherit;
+  text-decoration: none;
 }
+
 /*search bar in header*/
 #search {
-    /*position in bottom right and leave space on the left for dropdown menu*/
-    display: block;
-    float: right;
-    width: 90%;
+  /*position in bottom right and leave space on the left for dropdown menu*/
+  display: block;
+  float: right;
+  width: 90%;
 }
+
 /*store item images*/
 .product_image {
-    /*sets size of image*/
-    height: 15vw;
-    width: 20vw;
-    /*remove top padding and pad sides to fit in with other elementss*/
-    padding: 0 4vw;
+  /*sets size of image*/
+  height: 15vw;
+  width: 20vw;
+  /*remove top padding and pad sides to fit in with other elementss*/
+  padding: 0 4vw;
 }
