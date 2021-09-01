@@ -1,6 +1,6 @@
 // file containing all react jsx code
 // dependency requirment, also a flag for webpack
-import getJSON from './script.js'
+import getJSON from './utility.js'
 // function made to load product data and render into elements in the store viewport 
 function loadProducts() {
     // wrapping this code as a callback to use later in this function, takes JSON response from product database as it's argument

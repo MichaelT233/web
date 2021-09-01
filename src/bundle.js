@@ -2,10 +2,10 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./script.js":
-/*!*******************!*\
-  !*** ./script.js ***!
-  \*******************/
+/***/ "./utility.js":
+/*!********************!*\
+  !*** ./utility.js ***!
+  \********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -98,7 +98,7 @@ var __webpack_exports__ = {};
   !*** ./react.js ***!
   \******************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _script_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./script.js */ "./script.js");
+/* harmony import */ var _utility_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utility.js */ "./utility.js");
 
 
 function loadProducts() {
@@ -151,7 +151,7 @@ function loadProducts() {
     }
   }
 
-  (0,_script_js__WEBPACK_IMPORTED_MODULE_0__.default)('db', build_store);
+  (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.default)('db', build_store);
 }
 
 window.loadProducts = loadProducts;
