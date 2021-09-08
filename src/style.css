@@ -1,4 +1,4 @@
-/*SASS*/
+/*SCSS*/
 /*fit html to whole page*/
 html {
   min-height: 100%;
@@ -29,27 +29,8 @@ header {
   box-sizing: border-box;
 }
 
-/*non-floating footer*/
-footer {
-  /*align text in center*/
-  text-align: center;
-  /*position at bottom of page*/
-  bottom: 0;
-  left: 0;
-  /*fit full page width*/
-  width: 100%;
-  /*background color*/
-  background-color: orangered;
-  /*solid black border*/
-  border-style: solid;
-  border-color: black;
-  border-width: thin;
-  /*make the border included in the element width and height*/
-  box-sizing: border-box;
-}
-
 /*font styling of main title in header*/
-h1 {
+header h1 {
   font-size: 20px;
   /*center heading in header*/
   text-align: center;
@@ -57,48 +38,16 @@ h1 {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-/*font styling of titles of store items*/
-h2 {
-  margin: 0;
-}
-
-/*font styling for all paragraph elements*/
+/*global paragraph styling*/
 p {
   margin: 0;
   font-size: 15px;
 }
 
-/*simple button styling*/
+/*global button styling*/
 button {
   background-color: orangered;
   font-size: 15px;
-}
-
-/*store item quantity selector*/
-input {
-  width: 3vw;
-}
-
-/*store viewport div*/
-#store_view {
-  /*set top margin to floating header height as to not have overlap*/
-  margin-top: 6vh;
-}
-
-/*wrapper div for store items*/
-.item_wrapper {
-  /*display store items inline*/
-  display: inline;
-}
-
-/*individual store item class*/
-.store_item {
-  /*set the store item divs to the width of their content*/
-  display: inline-block;
-  /*solid black border*/
-  border-style: solid;
-  border-color: black;
-  border-width: thin;
 }
 
 /*dropdown menu class*/
@@ -113,9 +62,9 @@ input {
   /*font styling*/
   font-size: 30px;
   /*solid black border*/
-  border-right-style: solid;
-  border-right-color: black;
-  border-right-width: thin;
+  border-style: solid;
+  border-color: black;
+  border-width: thin;
 }
 
 /*class for content within dropdown menu*/
@@ -161,6 +110,41 @@ input {
   width: 90%;
 }
 
+/*store containing div*/
+#store_view {
+  /*set top margin to floating header height as to not have overlap*/
+  margin-top: 6vh;
+}
+
+/*wrapper div for store items*/
+.item_wrapper {
+  /*display store items inline*/
+  display: inline;
+}
+
+/*individual store item class*/
+.store_item {
+  /*set the store item divs to the width of their content*/
+  display: inline-block;
+  /*solid black border*/
+  border-style: solid;
+  border-color: black;
+  border-width: thin;
+  /**/
+  width: 33%;
+  box-sizing: border-box;
+}
+
+/*font styling of titles of store items*/
+.store_item h2 {
+  margin: 0;
+}
+
+/*store item quantity selector*/
+.store_item input {
+  width: 3vw;
+}
+
 /*store item images*/
 .product_image {
   /*sets size of image*/
@@ -168,4 +152,23 @@ input {
   width: 20vw;
   /*remove top padding and pad sides to fit in with other elementss*/
   padding: 0 4vw;
+}
+
+/*non-floating footer*/
+footer {
+  /*align text in center*/
+  text-align: center;
+  /*position at bottom of page*/
+  bottom: 0;
+  left: 0;
+  /*fit full page width*/
+  width: 100%;
+  /*background color*/
+  background-color: orangered;
+  /*solid black border*/
+  border-style: solid;
+  border-color: black;
+  border-width: thin;
+  /*make the border included in the element width and height*/
+  box-sizing: border-box;
 }

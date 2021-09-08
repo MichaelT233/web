@@ -1,7 +1,21 @@
-/*SASS*/
+/*Main Webpage Stylesheet*/
 
+/*SCSS declarations*/
+/***********************************/
+/*main web page color*/ 
 $primary_color: orangered;
+/*vertical space taken by floating header*/
+$header_space: 6vh;
+/*declaration for a solid black border*/
+@mixin black_border {
+    border-style: solid;
+    border-color: black;
+    border-width: thin;
+}
+/***********************************/
 
+/*global styling*/
+/***********************************/
 /*fit html to whole page*/
 html {
     min-height: 100%;
@@ -10,7 +24,21 @@ html {
 body {
     margin: 0;
 }
+/*global paragraph styling*/
+p {
+    margin: 0;
+    font-size: 15px;
+}
+/*global button styling*/
+button {
+    background-color: $primary_color;
+    font-size: 15px;
+}
+/***********************************/
+
 /*floating header*/
+/***********************************/
+/*the containing header element*/
 header {
     /*position header at top of page and fix it*/
     position: fixed;
@@ -19,78 +47,21 @@ header {
     /*background color*/
     background-color: $primary_color;
     /*fixed height so exact top margin can be used by element below*/
-    height: 6vh;
+    height: $header_space;
     /*fit full page width*/
     width: 100%;
     /*solid black border*/
-    border-style: solid;
-    border-color: black;
-    border-width: thin;
-    /*make the border included in the element width and height*/
-    box-sizing: border-box;
-}
-/*non-floating footer*/
-footer {
-    /*align text in center*/
-    text-align: center;
-    /*position at bottom of page*/
-    bottom: 0;
-    left: 0;
-    /*fit full page width*/
-    width: 100%;
-    /*background color*/
-    background-color: $primary_color;
-    /*solid black border*/
-    border-style: solid;
-    border-color: black;
-    border-width: thin;
+    @include black_border();
     /*make the border included in the element width and height*/
     box-sizing: border-box;
 }
 /*font styling of main title in header*/
-h1 {
+header h1 {
     font-size: 20px;
     /*center heading in header*/
     text-align: center;
     margin: 0;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-/*font styling of titles of store items*/
-h2 {
-    margin: 0;
-}
-/*font styling for all paragraph elements*/
-p {
-    margin: 0;
-    font-size: 15px;
-}
-/*simple button styling*/
-button {
-    background-color: $primary_color;
-    font-size: 15px;
-}
-/*store item quantity selector*/
-input {
-    width: 3vw;
-}
-/*store viewport div*/
-#store_view {
-    /*set top margin to floating header height as to not have overlap*/
-    margin-top: 6vh;
-}
-/*wrapper div for store items*/
-.item_wrapper {
-    /*display store items inline*/
-    display: inline;
-}
-/*individual store item class*/
-.store_item {
-    /*set the store item divs to the width of their content*/
-    display: inline-block;
-    /*solid black border*/
-    border-style: solid;
-    border-color: black;
-    border-width: thin;
 }
 /*dropdown menu class*/
 .dropdown {
@@ -104,9 +75,7 @@ input {
     /*font styling*/
     font-size: 30px;
     /*solid black border*/
-    border-right-style: solid;
-    border-right-color: black;
-    border-right-width: thin;
+    @include black_border();
 }
 /*class for content within dropdown menu*/
 .dropdown-content {
@@ -125,9 +94,7 @@ input {
 }
 /*dropdown content text styling*/
 .dropdown-content p {
-    border-style: solid;
-    border-color: black;
-    border-width: thin;
+    @include black_border();
 }
 /*dropdown menu title styling*/
 .dropdown h1 {
@@ -145,6 +112,38 @@ input {
     float: right;
     width: 90%;
 }
+/***********************************/
+
+/*web store styling*/
+/***********************************/
+/*store containing div*/
+#store_view {
+    /*set top margin to floating header height as to not have overlap*/
+    margin-top: $header_space;
+}
+/*wrapper div for store items*/
+.item_wrapper {
+    /*display store items inline*/
+    display: inline;
+}
+/*individual store item class*/
+.store_item {
+    /*set the store item divs to the width of their content*/
+    display: inline-block;
+    /*solid black border*/
+    @include black_border();
+    /**/
+    width: 33%;
+    box-sizing: border-box;
+}
+/*font styling of titles of store items*/
+.store_item h2 {
+    margin: 0;
+}
+/*store item quantity selector*/
+.store_item input {
+    width: 3vw;
+}
 /*store item images*/
 .product_image {
     /*sets size of image*/
@@ -153,3 +152,23 @@ input {
     /*remove top padding and pad sides to fit in with other elementss*/
     padding: 0 4vw;
 }
+/***********************************/
+
+/*non-floating/absolute footer*/
+/***********************************/
+footer {
+    /*align text in center*/
+    text-align: center;
+    /*position at bottom of page*/
+    bottom: 0;
+    left: 0;
+    /*fit full page width*/
+    width: 100%;
+    /*background color*/
+    background-color: $primary_color;
+    /*solid black border*/
+    @include black_border();
+    /*make the border included in the element width and height*/
+    box-sizing: border-box;
+}
+/***********************************/
