@@ -1,4 +1,12 @@
-/*SCSS*/
+/*Main Webpage Stylesheet*/
+/*SCSS declarations*/
+/***********************************/
+/*main web page color*/
+/*vertical space taken by floating header*/
+/*declaration for a solid black border*/
+/***********************************/
+/*global styling*/
+/***********************************/
 /*fit html to whole page*/
 html {
   min-height: 100%;
@@ -9,7 +17,22 @@ body {
   margin: 0;
 }
 
+/*global paragraph styling*/
+p {
+  margin: 0;
+  font-size: 15px;
+}
+
+/*global button styling*/
+button {
+  background-color: orangered;
+  font-size: 15px;
+}
+
+/***********************************/
 /*floating header*/
+/***********************************/
+/*the containing header element*/
 header {
   /*position header at top of page and fix it*/
   position: fixed;
@@ -36,18 +59,6 @@ header h1 {
   text-align: center;
   margin: 0;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-/*global paragraph styling*/
-p {
-  margin: 0;
-  font-size: 15px;
-}
-
-/*global button styling*/
-button {
-  background-color: orangered;
-  font-size: 15px;
 }
 
 /*dropdown menu class*/
@@ -110,6 +121,9 @@ button {
   width: 90%;
 }
 
+/***********************************/
+/*web store styling*/
+/***********************************/
 /*store containing div*/
 #store_view {
   /*set top margin to floating header height as to not have overlap*/
@@ -154,7 +168,9 @@ button {
   padding: 0 4vw;
 }
 
-/*non-floating footer*/
+/***********************************/
+/*non-floating/absolute footer*/
+/***********************************/
 footer {
   /*align text in center*/
   text-align: center;
@@ -172,3 +188,5 @@ footer {
   /*make the border included in the element width and height*/
   box-sizing: border-box;
 }
+
+/***********************************/
