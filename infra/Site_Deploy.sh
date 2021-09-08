@@ -1,5 +1,5 @@
 #!/bin/bash
-# uncomment lines as needed
+# comment/uncomment lines as needed
 # execute from /infra directory
 # port for the node web server to use
 web_port="3000"

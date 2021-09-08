@@ -1,5 +1,5 @@
 #!/bin/bash
-# uncomment lines as needed
+# comment/uncomment lines as needed
 # stops and removes the site's containers, and erases the node web server image (if needed for development)
 # stop and remove node web server container
 #sudo docker stop server
