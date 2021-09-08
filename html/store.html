@@ -11,7 +11,8 @@
         <!--local scripts-->
     	<script src='bundle.js'></script>
   	</head>
-	<body>
+    <!--once body has finished loading call js function to load products into store from database-->
+	<body onload="loadProducts()">
         <!--floating header with site nav menu and search bar-->
   		<header>
             <!--dropdown menu component, used for site nav, displays on mouse hover-->
@@ -24,11 +25,10 @@
             </div>
             <h1>Web App Prototype</h1>
             <!--search bar to be used for searching product names-->
-            <input type="text" id="search">
+            <input type="text" id="search_bar" placeholder="Search Products">
     	</header>
         <!--viewport for all store items-->
         <div id="store_view">
-		    <button type = 'button' onclick="window.loadProducts()">Database Test</button>
         </div>
         <!--non-floating footer for information and external links-->
     	<footer>
