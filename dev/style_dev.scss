@@ -51,7 +51,7 @@ header {
 }
 /*font styling of main title in header*/
 header h1 {
-    font-size: 20px;
+    font-size: 3vh;
     /*center heading in header*/
     text-align: center;
     margin: 0;
@@ -66,34 +66,34 @@ header h1 {
     display: inline-block;
     /*set full height and partial width*/
     height: 100%;
-    width: 8%;
-    /*font styling*/
-    font-size: 30px;
-    /*solid black border*/
-    @include black_border();
 }
 /*class for content within dropdown menu*/
 .dropdown-content {
     /*hidden while mouse is not hovering over element*/
     display: none;
-    /*background color*/
-    background-color: $primary_color;
     /*fit width to width of dropdown menu*/
     width: 100%;
     /*align text items to the left*/
     text-align: left;
+    /*background color*/
+    background-color: $primary_color;
 }
 /*on mouse hover the dropdown content class will display underneath the dropdown menu class*/
 .dropdown:hover .dropdown-content {
     display: block;
 }
 /*dropdown content text styling*/
-.dropdown-content p {
+.dropdown-content h2 {
+    font-size: 4vh;
+    margin: 0;
+    width: 100%;
+    /*solid black border*/
     @include black_border();
 }
-/*dropdown menu title styling*/
-.dropdown h1 {
-    height: 100%;
+/*dropdown menu icon styling*/
+#menu_icon {
+    height: 96%;
+    margin-left: 5%;
 }
 /*removing the blue highlighting from the dropdown content hyperlinks*/
 .dropdown-content a{
@@ -106,7 +106,7 @@ header h1 {
     position: absolute;
     right: 0;
     bottom: 0;
-    width: 90%;
+    width: 80%;
     height: 35%;
 }
 /***********************************/
@@ -130,7 +130,6 @@ header h1 {
     /*solid black border*/
     @include black_border();
     /**/
-    width: 33%;
 }
 /*font styling of titles of store items*/
 .store_item h2 {
@@ -138,7 +137,7 @@ header h1 {
 }
 /*store item quantity selector*/
 .store_item input {
-    width: 3vw;
+    width: 5%;
 }
 /*store item add to cart button*/
 .store_item button {
@@ -148,8 +147,8 @@ header h1 {
 /*store item images*/
 .product_image {
     /*sets size of image*/
-    height: 15vw;
-    width: 20vw;
+    height: 15vh;
+    width: 60%;
     /*remove top padding and pad sides to fit in with other elementss*/
     padding: 0 4vw;
 }
@@ -171,3 +170,11 @@ footer {
     @include black_border();
 }
 /***********************************/
+
+
+@media screen and (max-width : 980px) {
+    .store_item {
+        /**/
+        width: 100%;
+    }
+}
