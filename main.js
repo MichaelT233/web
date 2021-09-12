@@ -4,7 +4,7 @@ const express = require('express')
 // create express application object
 const app = express()
 // port number that the http web server will listen on
-const web_port = 3000
+const web_port = 80
 // load file system (acesss) module
 const fs = require('fs')
 // load postgreSQL driver module and create constructor for the pg Pool class
@@ -19,7 +19,7 @@ app.use(express.static('src'))
 
 // application object listen on port value
 app.listen(web_port, () => {
-  	console.log(`prototype listening on port ${web_port}`)
+  	console.log(`web application listening on port ${web_port}...\nCtrl+C to exit, stdout->:`)
 })
 
 // callback to be executed when the / directory is requested
