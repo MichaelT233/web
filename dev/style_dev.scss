@@ -5,7 +5,7 @@
 /*main web page color*/ 
 $primary_color: orangered;
 /*vertical space taken by floating header*/
-$header_space: 7vh;
+$header_space: 3.125rem;
 /*declaration for a solid black border and removes margins*/
 @mixin black_border {
     border-style: solid;
@@ -172,7 +172,7 @@ footer {
 /***********************************/
 
 
-@media screen and (max-width : 980px) {
+@media screen and (max-width : 61.25em) {
     .store_item {
         /**/
         width: 100%;
