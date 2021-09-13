@@ -61,8 +61,6 @@ app.get('/db', (req, res) => {
         user: 'postgres',
         // default first IP assigned by docker to containers
         host: '172.17.0.2',
-        // default second IP assigned by docker to containers
-        //host: '172.17.0.3',
         // psql database defined in /infra/Site_Deploy.sh
         database: 'postgres',
         password: db_password,
