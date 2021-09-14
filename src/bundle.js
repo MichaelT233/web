@@ -145,7 +145,7 @@ function loadProducts() {
     }
   }
 
-  (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.default)('db', build_store);
+  (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__["default"])('db', build_store);
 }
 
 window.loadProducts = loadProducts;
