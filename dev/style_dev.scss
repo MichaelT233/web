@@ -48,14 +48,14 @@ header {
     width: 100%;
     /*solid black border*/
     @include black_border();
-}
-/*font styling of main title in header*/
-header h1 {
-    font-size: 3vh;
-    /*center heading in header*/
-    text-align: center;
-    margin: 0;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    /*font styling of main title in header*/
+    h1 {
+        font-size: 1em;
+        /*center heading in header*/
+        text-align: center;
+        margin: 0;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
 }
 /*dropdown menu class*/
 .dropdown {
@@ -77,28 +77,28 @@ header h1 {
     text-align: left;
     /*background color*/
     background-color: $primary_color;
+    /*dropdown content text styling*/
+    h2 {
+        font-size: 4vh;
+        margin: 0;
+        width: 100%;
+        /*solid black border*/
+        @include black_border();
+    }
+    /*removing the blue highlighting from the dropdown content hyperlinks*/
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
 }
 /*on mouse hover the dropdown content class will display underneath the dropdown menu class*/
 .dropdown:hover .dropdown-content {
     display: block;
 }
-/*dropdown content text styling*/
-.dropdown-content h2 {
-    font-size: 4vh;
-    margin: 0;
-    width: 100%;
-    /*solid black border*/
-    @include black_border();
-}
 /*dropdown menu icon styling*/
 #menu_icon {
     height: 96%;
     margin-left: 5%;
-}
-/*removing the blue highlighting from the dropdown content hyperlinks*/
-.dropdown-content a{
-    color: inherit;
-    text-decoration: none;
 }
 /*search bar in header*/
 #search_bar {
@@ -129,20 +129,19 @@ header h1 {
     display: inline-block;
     /*solid black border*/
     @include black_border();
-    /**/
-}
-/*font styling of titles of store items*/
-.store_item h2 {
-    margin: 0;
-}
-/*store item quantity selector*/
-.store_item input {
-    width: 5%;
-}
-/*store item add to cart button*/
-.store_item button {
-    background-color: $primary_color;
-    font-size: 15px;
+    /*font styling of titles of store items*/
+    h2 {
+        margin: 0;
+    }
+    /*store item quantity selector*/
+    input {
+        width: 5%;
+    }
+    /*store item add to cart button*/
+    button {
+        background-color: $primary_color;
+        font-size: 15px;
+    }
 }
 /*store item images*/
 .product_image {
