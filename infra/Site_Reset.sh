@@ -8,9 +8,6 @@ if [ "$mode" == "p" ]; then
     # stop and remove node web server container
     echo 'stopping and removing the following container...'
     docker stop web_server
-    # remove node web server image
-    echo 'removing web server image...'
-    docker rmi michaelt23/web:server
     # stop and remove postgreSQL container
     echo 'stopping and removing the following container...'
     docker stop database
