@@ -3,7 +3,7 @@
 # meant for automated configuration of production environment only
 
 # name of the built node web application image on dockerhub
-node_app_image="michaelt23/web:server"
+node_app_image="michaelt23/web_app:node"
 # name of the postgreSQL database image on dockerhub
 postgres_image="postgres:13"
 
@@ -35,6 +35,8 @@ sudo usermod -aG docker $USER
 # update group status
 newgrp docker
 
+# login to dockerhub in order to pull images
+docker login
 # pull postgreSQL image, current version 13
 echo 'pulling postgreSQL image...'
 docker pull ${postgres_image}
