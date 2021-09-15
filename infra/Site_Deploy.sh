@@ -8,23 +8,6 @@ db_password="devPass"
 # port for the database to listen on
 db_port="5432"
 
-# function to perform the initial configuration of the system
-function init_config {
-    # following block for first time setup only
-    # create docker group
-    echo 'creating docker group and adding current user...' 
-    sudo groupadd docker
-    # add current user to docker group for privilege level, so docker commands can be run without sudo
-    sudo usermod -aG docker $USER
-    # update group status
-    newgrp docker 
-    # pull node image curruent version 14
-    echo 'pulling node image...'
-    docker pull node:14
-    # pull postgreSQL image, current version 13
-    echo 'pulling postgreSQL image...'
-    docker pull postgres:13
-}
 # function to deploy the database container
 function deploy_database {
     # explanation of docker daemon output of the following commands in terminal
@@ -58,38 +41,20 @@ function deploy_web_server {
     echo 'web application listening on port 80...'
 }
 
-# ask if this is a first time setup
-read -p "is this a first time setup?(enter y or n): " response
-# if yes
-if [ "$response" == "y" ]; then
-    # call function to perform initial configuration 
-    init_config
-fi
-if [ "$response" == "y" ] || [ "$response" == "n" ]; then
-    # ask what mode the web application is to be run in
-    read -p "run web application in production or development mode?(enter p or d): " mode
-    # if production mode
-    if [ "$mode" == "p" ]; then
-        # call function to deploy database container
-        deploy_database
-        # build node web server image from source code according to dockerfile configuration, name is michaelt23/web:server
-        echo 'building web server image...'
-        docker build .. -t michaelt23/web:server
-        # call function to deploy web server container
-        deploy_web_server
-    # if development mode
-    elif [ "$mode" == "d" ]; then
-        # call function to deploy database container
-        deploy_database
-        # run node locally for convenience when developing server side
-        cd ..
-        echo 'root privelege required to listen on port 80...'
-        sudo node main.js
-    # invalid mode
-    else
-        echo "invalid input"
-    fi
-# invalid response
+# ask what mode the web application is to be run in
+read -p "run web application in production or development mode?(enter p or d): " mode
+# if production mode
+if [ "$mode" == "p" ]; then
+    deploy_database
+    deploy_web_server
+# if development mode
+elif [ "$mode" == "d" ]; then
+    deploy_database
+    # run node locally for convenience when developing server side
+    cd ..
+    echo 'root privelege required to listen on port 80...'
+    sudo node main.js
+# invalid mode
 else
     echo "invalid input"
 fi
