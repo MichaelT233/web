@@ -1,6 +1,7 @@
 #!/bin/bash
 # script for transpiling and bundling client resources
 
+# transpile jsx and bundle javascript files into src folder
 function build_js {
     # transpile react_dev.jsx into plain javascript as react.js, also include vanilla js files in order to remove comments
     npx babel ./react_dev.jsx --out-file ./react.js
@@ -15,7 +16,7 @@ function build_js {
     rm react.js
     rm utility.js
 }
-# transpile style_dev.scss into plain css and save in /client/style.css (omitting source map file creation and comments (compressed))
+# transpile style_dev.scss into plain css and save in src folder (omitting source map file creation and comments (compressed))
 function build_css {
     npx sass --style=compressed --no-source-map style_dev.scss ../src/style.css
     echo 'sass transpile complete'
@@ -23,16 +24,16 @@ function build_css {
 
 read -p "enter 1 to build js, enter 2 to build css, enter 3 to do both: " response
 # build js
-if [ "$response" == "1" ]; then
+if [ $1 == "-js" ]; then
     build_js
 # build css
-elif [ "$response" == "2" ]; then
+elif [ $1 == "-css" ]; then
     build_css
 # build js and css
-elif [ "$response" == "3" ]; then
+elif [ $1 == "-all" ]; then
     build_js
     build_css
-# invalid respose
+# invalid option
 else
-    echo "invalid input"
+    echo "invalid option"
 fi
