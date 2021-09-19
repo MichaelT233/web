@@ -22,7 +22,7 @@ function build_css {
     echo 'sass transpile complete'
 }
 
-read -p "enter 1 to build js, enter 2 to build css, enter 3 to do both: " response
+# command line options
 # build js
 if [ $1 == "-js" ]; then
     build_js
@@ -35,5 +35,5 @@ elif [ $1 == "-all" ]; then
     build_css
 # invalid option
 else
-    echo "invalid option"
+    echo "invalid option: $1"
 fi
