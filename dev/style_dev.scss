@@ -5,7 +5,7 @@
 /*main web page color*/ 
 $primary_color: orangered;
 /*vertical space taken by floating header*/
-$header_space: 3.125rem;
+$header_space: 4em;
 /*declaration for a solid black border and removes margins*/
 @mixin black_border {
     border-style: solid;
@@ -24,11 +24,6 @@ html {
 /*remove body margin*/
 body {
     margin: 0;
-}
-/*global paragraph styling*/
-p {
-    margin: 0;
-    font-size: 15px;
 }
 /***********************************/
 
@@ -50,7 +45,7 @@ header {
     @include black_border();
     /*font styling of main title in header*/
     h1 {
-        font-size: 1em;
+        font-size: 1.6em;
         /*center heading in header*/
         text-align: center;
         margin: 0;
@@ -79,7 +74,7 @@ header {
     background-color: $primary_color;
     /*dropdown content text styling*/
     h2 {
-        font-size: 4vh;
+        font-size: 1.3em;
         margin: 0;
         width: 100%;
         /*solid black border*/
@@ -133,6 +128,12 @@ header {
     h2 {
         margin: 0;
     }
+    /*price and description styling*/
+    p {
+        margin: 0;
+        font-size: 1em;
+        text-align: left;
+    }
     /*store item quantity selector*/
     input {
         width: 5%;
@@ -140,16 +141,15 @@ header {
     /*store item add to cart button*/
     button {
         background-color: $primary_color;
-        font-size: 15px;
+        font-size: 1em;
     }
+    text-align: center;
 }
 /*store item images*/
 .product_image {
     /*sets size of image*/
-    height: 15vh;
+    height: 10em;
     width: 60%;
-    /*remove top padding and pad sides to fit in with other elementss*/
-    padding: 0 4vw;
 }
 /***********************************/
 
@@ -167,6 +167,11 @@ footer {
     background-color: $primary_color;
     /*solid black border*/
     @include black_border();
+    /*footer paragraph styling*/
+    p {
+        margin: 0;
+        font-size: 1em;
+    }
 }
 /***********************************/
 
@@ -175,5 +180,6 @@ footer {
     .store_item {
         /**/
         width: 100%;
+        height: 40em;
     }
 }
