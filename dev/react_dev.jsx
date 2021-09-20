@@ -33,7 +33,7 @@ function loadProducts() {
                 {/*products title heading*/}
                 <h2>{props.title}</h2>
                 {/*product price*/}
-                <p>{props.price}</p>
+                <h2>{props.price}</h2>
                 {/*product description*/}
                 <p>{props.description}</p>
                 {/*product quantity selector*/}

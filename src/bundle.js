@@ -118,11 +118,10 @@ function loadProducts() {
         class: "store_item"
       }, React.createElement("img", {
         src: props.image_path,
-        alt: "test image",
         class: "product_image"
       }), React.createElement("div", {
         class: "product_text"
-      }, React.createElement("h2", null, props.title), React.createElement("p", null, props.price), React.createElement("p", null, props.description), React.createElement("label", {
+      }, React.createElement("h2", null, props.title), React.createElement("h2", null, props.price), React.createElement("p", null, props.description), React.createElement("label", {
         for: "quantity"
       }, "Qty:"), React.createElement("input", {
         type: "number",

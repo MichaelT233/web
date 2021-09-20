@@ -62,7 +62,6 @@ header {
     display: inline-block;
     /*set height*/
     height: 3.8em;
-    width: 40%;
 }
 /*class for content within dropdown menu*/
 .dropdown-content {
@@ -74,11 +73,14 @@ header {
     text-align: left;
     /*background color*/
     background-color: $primary_color;
+    @include black_border();
     /*dropdown content text styling*/
     h2 {
         font-size: 4em;
         margin: 0 0 1em 0;
         width: 100%;
+        /*em used for horizontal spacing in special case where the width required is greater than it's parent (>%100)*/
+        padding-right: 5em;
         /*solid black border*/
         @include black_border();
     }
@@ -87,14 +89,14 @@ header {
         color: inherit;
         text-decoration: none;
     }
+    z-index: 1;
 }
 /*dropdown menu icon styling*/
 #menu_icon {
     height: 6.5em;
-    margin-left: 5%;
 }
 /*on mouse hover the dropdown content class will display underneath the dropdown menu class*/
-#menu_icon:hover + .dropdown-content {
+.dropdown:hover .dropdown-content {
     display: block;
 }
 /*search bar in header*/
@@ -106,7 +108,7 @@ header {
     right: 0;
     bottom: 0;
     width: 90%;
-    margin: 0 5% 0.3em 5%;
+    margin: 0 5% 0.4em 5%;
     z-index: -1;
     touch-action: none;
 }
@@ -134,30 +136,27 @@ header {
     /*font styling of titles of store items*/
     h2 {
         font-size: 3em;
-        margin: 0;
-        text-align: left;
-        padding-left: 5%;
-        padding-top: 0.8em;
+        margin: 1em 0;
     }
     /*price and description styling*/
     p {
-        margin: 0;
+        margin: 0 0 6em 0;
         font-size: 1.6em;
-        text-align: left;
-        padding-left: 2.5%;
     }
     label {
-        font-size: 1.4em;
+        font-size: 2em;
     }
     /*store item quantity selector*/
     input {
-        width: 38%;
-
+        font-size: 2em;
+        width: 15%;
+        touch-action: none;
     }
     /*store item add to cart button*/
     button {
         background-color: $primary_color;
-        font-size: 1.6em;
+        font-size: 2em;
+        margin-left: 10%;
     }
 }
 /*store item images*/
@@ -171,6 +170,10 @@ header {
 .product_text {
     display: inline-block;
     vertical-align: top;
+    text-align: left;
+    width: 57%;
+    padding-top: 1em;
+    padding-left: 2%;
 }
 /***********************************/
 
@@ -184,6 +187,7 @@ footer {
     left: 0;
     /*fit full page width*/
     width: 100%;
+    padding-bottom: 0.8em;
     /*background color*/
     background-color: $primary_color;
     /*solid black border*/
