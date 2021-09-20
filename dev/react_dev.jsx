@@ -26,10 +26,12 @@ function loadProducts() {
             return (
             // creation of store item class instance
             <div class="store_item">
+                {/*product image source*/}
+                <img src={props.image_path} class="product_image"/>
+                {/*wrapper for non-image content of a store item*/}
+                <div class="product_text">
                 {/*products title heading*/}
                 <h2>{props.title}</h2>
-                {/*product image source*/}
-                <img src={props.image_path} alt="test image" class="product_image"/>
                 {/*product price*/}
                 <p>{props.price}</p>
                 {/*product description*/}
@@ -39,6 +41,7 @@ function loadProducts() {
                 <input type="number" name="quantity" min="1"/>
                 {/*an add to cart button*/}
                 <button type="button">Add to Cart</button>
+                </div>
             </div>)
         }
         // loop for populating the previously rendered divs with store items/products

@@ -116,11 +116,13 @@ function loadProducts() {
     function Store_Item(props) {
       return React.createElement("div", {
         class: "store_item"
-      }, React.createElement("h2", null, props.title), React.createElement("img", {
+      }, React.createElement("img", {
         src: props.image_path,
         alt: "test image",
         class: "product_image"
-      }), React.createElement("p", null, props.price), React.createElement("p", null, props.description), React.createElement("label", {
+      }), React.createElement("div", {
+        class: "product_text"
+      }, React.createElement("h2", null, props.title), React.createElement("p", null, props.price), React.createElement("p", null, props.description), React.createElement("label", {
         for: "quantity"
       }, "Qty:"), React.createElement("input", {
         type: "number",
@@ -128,7 +130,7 @@ function loadProducts() {
         min: "1"
       }), React.createElement("button", {
         type: "button"
-      }, "Add to Cart"));
+      }, "Add to Cart")));
     }
 
     i = 0;

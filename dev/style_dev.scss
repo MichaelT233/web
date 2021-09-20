@@ -1,11 +1,11 @@
-/*Main Webpage Stylesheet*/
+/*Main Stylesheet*/
 
 /*SCSS declarations*/
 /***********************************/
 /*main web page color*/ 
 $primary_color: orangered;
 /*vertical space taken by floating header*/
-$header_space: 4em;
+$header_space: 14em;
 /*declaration for a solid black border and removes margins*/
 @mixin black_border {
     border-style: solid;
@@ -45,7 +45,8 @@ header {
     @include black_border();
     /*font styling of main title in header*/
     h1 {
-        font-size: 1.6em;
+        font-size: 4.2em;
+        padding-top: 0.2em;
         /*center heading in header*/
         text-align: center;
         margin: 0;
@@ -59,8 +60,9 @@ header {
     left: 0;
     /*fit div size to content*/
     display: inline-block;
-    /*set full height and partial width*/
-    height: 100%;
+    /*set height*/
+    height: 3.8em;
+    width: 40%;
 }
 /*class for content within dropdown menu*/
 .dropdown-content {
@@ -74,8 +76,8 @@ header {
     background-color: $primary_color;
     /*dropdown content text styling*/
     h2 {
-        font-size: 1.3em;
-        margin: 0;
+        font-size: 4em;
+        margin: 0 0 1em 0;
         width: 100%;
         /*solid black border*/
         @include black_border();
@@ -86,23 +88,27 @@ header {
         text-decoration: none;
     }
 }
-/*on mouse hover the dropdown content class will display underneath the dropdown menu class*/
-.dropdown:hover .dropdown-content {
-    display: block;
-}
 /*dropdown menu icon styling*/
 #menu_icon {
-    height: 96%;
+    height: 6.5em;
     margin-left: 5%;
+}
+/*on mouse hover the dropdown content class will display underneath the dropdown menu class*/
+#menu_icon:hover + .dropdown-content {
+    display: block;
 }
 /*search bar in header*/
 #search_bar {
     /*position in bottom right and leave space on the left for dropdown menu*/
+    font-size: 3em;
     position: absolute;
+    height: 1.8em;
     right: 0;
     bottom: 0;
-    width: 80%;
-    height: 35%;
+    width: 90%;
+    margin: 0 5% 0.3em 5%;
+    z-index: -1;
+    touch-action: none;
 }
 /***********************************/
 
@@ -111,12 +117,12 @@ header {
 /*store containing div*/
 #store_view {
     /*set top margin to floating header height as to not have overlap*/
-    margin-top: $header_space;
+    margin-top: $header_space + 1em;
 }
 /*wrapper div for store items*/
 .item_wrapper {
-    /*display store items inline*/
-    display: inline;
+    display: block;
+    margin: 1em 2%;
 }
 /*individual store item class*/
 .store_item {
@@ -124,32 +130,47 @@ header {
     display: inline-block;
     /*solid black border*/
     @include black_border();
+    width: 100%;
     /*font styling of titles of store items*/
     h2 {
+        font-size: 3em;
         margin: 0;
+        text-align: left;
+        padding-left: 5%;
+        padding-top: 0.8em;
     }
     /*price and description styling*/
     p {
         margin: 0;
-        font-size: 1em;
+        font-size: 1.6em;
         text-align: left;
+        padding-left: 2.5%;
+    }
+    label {
+        font-size: 1.4em;
     }
     /*store item quantity selector*/
     input {
-        width: 5%;
+        width: 38%;
+
     }
     /*store item add to cart button*/
     button {
         background-color: $primary_color;
-        font-size: 1em;
+        font-size: 1.6em;
     }
-    text-align: center;
 }
 /*store item images*/
 .product_image {
     /*sets size of image*/
-    height: 10em;
-    width: 60%;
+    height: 42em;
+    width: 39%;
+    display: inline;
+    margin: 0.25em 0.6% 0 0.6%;
+}
+.product_text {
+    display: inline-block;
+    vertical-align: top;
 }
 /***********************************/
 
@@ -170,16 +191,7 @@ footer {
     /*footer paragraph styling*/
     p {
         margin: 0;
-        font-size: 1em;
+        font-size: 2.3em;
     }
 }
 /***********************************/
-
-
-@media screen and (max-width : 61.25em) {
-    .store_item {
-        /**/
-        width: 100%;
-        height: 40em;
-    }
-}
