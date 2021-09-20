@@ -45,20 +45,19 @@ function deploy_web_server {
     echo 'web application listening on port 80...'
 }
 
-# ask what mode the web application is to be run in
-read -p "run web application in production or development mode?(enter p or d): " mode
+# command line options
 # if production mode
-if [ "$mode" == "p" ]; then
+if [ $1 == "-prod" ]; then
     deploy_database
     deploy_web_server
 # if development mode
-elif [ "$mode" == "d" ]; then
+elif [ $1 == "-dev" ]; then
     deploy_database
     # run node locally for convenience when developing server side
     cd ..
     echo 'root privelege required to listen on port 80...'
     sudo node main.js
-# invalid mode
+# invalid option
 else
-    echo "invalid input"
+    echo "invalid option: $1"
 fi
