@@ -1,6 +1,7 @@
 // client side react jsx scripts
 // dependency requirment, also a flag for webpack
-import getJSON from './utility.js'
+import {getJSON} from './utility.js'
+import {add_cart} from './utility.js'
 // function made to load product data and render into elements in the store viewport 
 function loadProducts() {
     // wrapping this code as a callback to use later in this function, takes JSON response from product database as it's argument
@@ -25,33 +26,35 @@ function loadProducts() {
         function Store_Item(props) {
             return (
             // creation of store item class instance
-            <div class="store_item">
+            <div className="store_item">
                 {/*product image source*/}
-                <img src={props.image_path} class="product_image"/>
+                <img src={props.image_path} className="product_image"/>
                 {/*wrapper for non-image content of a store item*/}
-                <div class="product_text">
+                <div className="product_text">
                 {/*products title heading*/}
-                <h2>{props.title}</h2>
+                <h2 id={"title" + props.index}>{props.title}</h2>
                 {/*product price*/}
-                <h2>{props.price}</h2>
+                <h2 id={"price" + props.index}>{props.price}</h2>
                 {/*product description*/}
-                <p>{props.description}</p>
+                <p id={"description" + props.index}>{props.description}</p>
                 {/*product quantity selector*/}
-                <label for="quantity">Qty:</label>
-                <input type="number" name="quantity" min="1"/>
+                <label htmlFor="quantity">Qty:</label>
+                <input id={"quantity" + props.index} type="number" name="quantity" min="1"/>
                 {/*an add to cart button*/}
-                <button type="button">Add to Cart</button>
+                <button type="button" onClick={ () => add_cart(props.index)}>Add to Cart</button>
                 </div>
             </div>)
         }
         // loop for populating the previously rendered divs with store items/products
         i = 0
-        while (i < obj.products.length) { 
+        while (i < obj.products.length) {
+            var index = `${i}`
             // calling react component to create store items with product data from the database
             var item = <Store_Item title = {obj.products[i].name}
                 description = {obj.products[i].description}
                 price = {obj.products[i].price}
-                image_path = {obj.products[i].image_path}/>
+                image_path = {obj.products[i].image_path}
+                index = {index}/>
             // rendering finished item into it's div
             ReactDOM.render(item, document.getElementById('store_item' + i));
             // increment counter value

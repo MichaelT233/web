@@ -10,7 +10,8 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ getJSON)
+/* harmony export */   "getJSON": () => (/* binding */ getJSON),
+/* harmony export */   "add_cart": () => (/* binding */ add_cart)
 /* harmony export */ });
 function getJSON(url, callback) {
   var request = new XMLHttpRequest();
@@ -24,6 +25,16 @@ function getJSON(url, callback) {
   };
 
   request.send();
+}
+function add_cart(product_index) {
+  const title = document.getElementById(`title${product_index}`).innerText;
+  console.log(title);
+  const price = document.getElementById(`price${product_index}`).innerText;
+  console.log(price);
+  const description = document.getElementById(`description${product_index}`).innerText;
+  console.log(description);
+  const quantity = document.getElementById(`quantity${product_index}`).value;
+  console.log(quantity);
 }
 
 
@@ -95,6 +106,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utility_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utility.js */ "./utility.js");
 
 
+
 function loadProducts() {
   function build_store(obj) {
     var container = `<div class='item_wrapper' id='store_item0'></div>`;
@@ -115,38 +127,48 @@ function loadProducts() {
 
     function Store_Item(props) {
       return React.createElement("div", {
-        class: "store_item"
+        className: "store_item"
       }, React.createElement("img", {
         src: props.image_path,
-        class: "product_image"
+        className: "product_image"
       }), React.createElement("div", {
-        class: "product_text"
-      }, React.createElement("h2", null, props.title), React.createElement("h2", null, props.price), React.createElement("p", null, props.description), React.createElement("label", {
-        for: "quantity"
+        className: "product_text"
+      }, React.createElement("h2", {
+        id: "title" + props.index
+      }, props.title), React.createElement("h2", {
+        id: "price" + props.index
+      }, props.price), React.createElement("p", {
+        id: "description" + props.index
+      }, props.description), React.createElement("label", {
+        htmlFor: "quantity"
       }, "Qty:"), React.createElement("input", {
+        id: "quantity" + props.index,
         type: "number",
         name: "quantity",
         min: "1"
       }), React.createElement("button", {
-        type: "button"
+        type: "button",
+        onClick: () => (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.add_cart)(props.index)
       }, "Add to Cart")));
     }
 
     i = 0;
 
     while (i < obj.products.length) {
+      var index = `${i}`;
       var item = React.createElement(Store_Item, {
         title: obj.products[i].name,
         description: obj.products[i].description,
         price: obj.products[i].price,
-        image_path: obj.products[i].image_path
+        image_path: obj.products[i].image_path,
+        index: index
       });
       ReactDOM.render(item, document.getElementById('store_item' + i));
       i++;
     }
   }
 
-  (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__["default"])('db', build_store);
+  (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.getJSON)('db', build_store);
 }
 
 window.loadProducts = loadProducts;
