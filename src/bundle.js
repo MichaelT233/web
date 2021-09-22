@@ -31,16 +31,16 @@ function add_cart(product_index) {
   const title = document.getElementById(`title${product_index}`).innerText;
   const price = document.getElementById(`price${product_index}`).innerText;
   const description = document.getElementById(`description${product_index}`).innerText;
+  const image_path = document.getElementById(`image_path${product_index}`).alt;
   const quantity = document.getElementById(`quantity${product_index}`).value;
-  var item_data = [title, price, description, quantity];
+  var item_data = [title, price, description, image_path, quantity];
   var cart_item_string = JSON.stringify(item_data);
   var cookie_array = document.cookie.split("; ");
   var cart_key = cookie_array[cookie_array.length - 1];
   var cart_count = Number(cart_key.split("=")[1]);
   document.cookie = `cart_item${cart_count}=${cart_item_string}`;
-  cart_count = ++cart_count;
+  ++cart_count;
   document.cookie = `cart_count=${cart_count}`;
-  console.log(document.cookie);
 }
 
 
@@ -135,6 +135,8 @@ function loadProducts() {
       return React.createElement("div", {
         className: "store_item"
       }, React.createElement("img", {
+        id: `image_path${props.index}`,
+        alt: props.image_path,
         src: props.image_path,
         className: "product_image"
       }), React.createElement("div", {
@@ -179,6 +181,86 @@ function loadProducts() {
 }
 
 window.loadProducts = loadProducts;
+
+function load_cart() {
+  var cart_array = document.cookie.split(";");
+  cart_array.splice(-1);
+  var i = 0;
+
+  while (i < cart_array.length) {
+    var j = 0;
+
+    while (cart_array[i][j] != "[") {
+      ++j;
+    }
+
+    cart_array[i] = JSON.parse(cart_array[i].slice(j));
+    ++i;
+  }
+
+  console.log(cart_array);
+  var container = `<div class='item_wrapper' id='store_item0'></div>`;
+  var i = 1;
+
+  while (i < cart_array.length) {
+    container = container + `<div class='item_wrapper' id='store_item${i}'></div>`;
+    i++;
+  }
+
+  var container_jsx = React.createElement("div", {
+    id: "store_wrapper",
+    dangerouslySetInnerHTML: {
+      __html: container
+    }
+  });
+  ReactDOM.render(container_jsx, document.getElementById('store_view'));
+
+  function Cart_Item(props) {
+    return React.createElement("div", {
+      className: "store_item"
+    }, React.createElement("img", {
+      id: `image_path${props.index}`,
+      alt: props.image_path,
+      src: props.image_path,
+      className: "product_image"
+    }), React.createElement("div", {
+      className: "product_text"
+    }, React.createElement("h2", {
+      id: "title" + props.index
+    }, props.title), React.createElement("h2", {
+      id: "price" + props.index
+    }, props.price), React.createElement("p", {
+      id: "description" + props.index
+    }, props.description), React.createElement("label", {
+      htmlFor: "quantity"
+    }, "Qty:"), React.createElement("input", {
+      id: "quantity" + props.index,
+      type: "number",
+      name: "quantity",
+      min: "1",
+      defaultValue: "1"
+    }), React.createElement("button", {
+      type: "button",
+      onClick: () => (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.add_cart)(props.index)
+    }, "Add to Cart")));
+  }
+
+  i = 0;
+
+  while (i < cart_array.length) {
+    var item = React.createElement(Cart_Item, {
+      title: cart_array[i][0],
+      price: cart_array[i][1],
+      description: cart_array[i][2],
+      image_path: cart_array[i][3],
+      index: i
+    });
+    ReactDOM.render(item, document.getElementById('store_item' + i));
+    i++;
+  }
+}
+
+window.load_cart = load_cart;
 
 })();
 

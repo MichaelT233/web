@@ -37,10 +37,10 @@ app.get('/', (req, res) => {
     })
 })
 
-// callback to be executed when the /about directory is requested
-app.get('/about', (req, res) => {
+// callback to be executed when the /cart directory is requested
+app.get('/cart', (req, res) => {
     // read html file to be served
-    fs.readFile('html/about.html', 'utf8' , (err, data) => {
+    fs.readFile('html/cart.html', 'utf8' , (err, data) => {
         if (err) {
             console.error(err)
             return

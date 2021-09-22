@@ -26,9 +26,10 @@ export function add_cart(product_index) {
     const title = document.getElementById(`title${product_index}`).innerText
     const price = document.getElementById(`price${product_index}`).innerText
     const description = document.getElementById(`description${product_index}`).innerText
+    const image_path = document.getElementById(`image_path${product_index}`).alt
     const quantity = document.getElementById(`quantity${product_index}`).value
     // save product data into array and convert to string
-    var item_data = [title, price, description, quantity]
+    var item_data = [title, price, description, image_path, quantity]
     var cart_item_string = JSON.stringify(item_data)
     // create cookie array
     var cookie_array = document.cookie.split("; ")
@@ -38,7 +39,6 @@ export function add_cart(product_index) {
     // save product data array as a cookie with an index
     document.cookie = `cart_item${cart_count}=${cart_item_string}`
     // increment cart count
-    cart_count = ++cart_count
+    ++cart_count
     document.cookie = `cart_count=${cart_count}`
-    console.log(document.cookie)
 }
