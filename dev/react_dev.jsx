@@ -83,8 +83,11 @@ function load_cart() {
         }
         return query
     }
-    // call AJAX JSON get request to product database URL and giving the above function as callback
-    getJSON('cart-data' + build_query(), build_store)
+    const cart_count = window.localStorage.getItem('cart-count')
+    if (cart_count != null && cart_count != 0) {
+        // call AJAX JSON get request to product database URL and giving the above function as callback
+        getJSON('cart-data' + build_query(), build_store)
+    }
 }
 // set the loadProducts function to global browser scope so it can be accessed from the DOM
 window.load_cart = load_cart

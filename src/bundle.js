@@ -33,12 +33,23 @@ function add_cart(id_num) {
     client_storage.setItem('cart-count', '1');
     client_storage.setItem('id0', id_num);
   } else {
+    for (const key in client_storage) {
+      if (client_storage[key] == id_num) {
+        console.log(Object.keys(client_storage));
+        console.log(client_storage['cart-count']);
+        return;
+      }
+    }
+
     var count = client_storage.getItem('cart-count');
     client_storage.setItem(`id${count}`, id_num);
     count = Number(count);
     ++count;
     client_storage.setItem('cart-count', "" + count);
   }
+
+  console.log(Object.keys(client_storage));
+  console.log(client_storage['cart-count']);
 }
 function remove_cart(id_num) {
   for (const key in client_storage) {
@@ -47,9 +58,14 @@ function remove_cart(id_num) {
       var count = Number(client_storage.getItem('cart-count'));
       --count;
       client_storage.setItem('cart-count', "" + count);
+      console.log(Object.keys(client_storage));
+      console.log(client_storage['cart-count']);
       return;
     }
   }
+
+  console.log(Object.keys(client_storage));
+  console.log(client_storage['cart-count']);
 }
 
 
@@ -204,7 +220,11 @@ function load_cart() {
     return query;
   }
 
-  (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.getJSON)('cart-data' + build_query(), build_store);
+  const cart_count = window.localStorage.getItem('cart-count');
+
+  if (cart_count != null && cart_count != 0) {
+    (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.getJSON)('cart-data' + build_query(), build_store);
+  }
 }
 
 window.load_cart = load_cart;

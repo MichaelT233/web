@@ -27,12 +27,21 @@ export function add_cart(id_num) {
         client_storage.setItem('id0', id_num)
     }
     else {
+        for (const key in client_storage) {
+            if (client_storage[key] == id_num) {
+                console.log(Object.keys(client_storage))
+                console.log(client_storage['cart-count'])
+                return
+            }
+        }
         var count = client_storage.getItem('cart-count')
-        client_storage.setItem(`id${count}`, id_num)
-        count = Number(count)
-        ++count
-        client_storage.setItem('cart-count', "" + count)
-    }
+                client_storage.setItem(`id${count}`, id_num)
+                count = Number(count)
+                ++count
+                client_storage.setItem('cart-count', "" + count)
+        }
+    console.log(Object.keys(client_storage))
+    console.log(client_storage['cart-count'])
 }
 export function remove_cart(id_num) {
     for (const key in client_storage) {
@@ -41,7 +50,11 @@ export function remove_cart(id_num) {
             var count = Number(client_storage.getItem('cart-count'))
             --count
             client_storage.setItem('cart-count', "" + count)
+            console.log(Object.keys(client_storage))
+            console.log(client_storage['cart-count'])
             return
         }
     }
+    console.log(Object.keys(client_storage))
+    console.log(client_storage['cart-count'])
 }
