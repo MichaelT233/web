@@ -39,7 +39,7 @@ function loadProducts() {
                 <p id={"description" + props.index}>{props.description}</p>
                 {/*product quantity selector*/}
                 <label htmlFor="quantity">Qty:</label>
-                <input id={"quantity" + props.index} type="number" name="quantity" min="1"/>
+                <input id={"quantity" + props.index} type="number" name="quantity" min="1" defaultValue="1"/>
                 {/*an add to cart button*/}
                 <button type="button" onClick={ () => add_cart(props.index)}>Add to Cart</button>
                 </div>

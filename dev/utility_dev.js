@@ -18,13 +18,27 @@ export function getJSON(url, callback) {
     // request being sent to server, executes before async callback above
     request.send()
 }
+// count of items in cart
+document.cookie = "cart_count=0"
+// function add item to cart
 export function add_cart(product_index) {
+    // fetch product data from DOM
     const title = document.getElementById(`title${product_index}`).innerText
-    console.log(title)
     const price = document.getElementById(`price${product_index}`).innerText
-    console.log(price)
     const description = document.getElementById(`description${product_index}`).innerText
-    console.log(description)
     const quantity = document.getElementById(`quantity${product_index}`).value
-    console.log(quantity)
+    // save product data into array and convert to string
+    var item_data = [title, price, description, quantity]
+    var cart_item_string = JSON.stringify(item_data)
+    // create cookie array
+    var cookie_array = document.cookie.split("; ")
+    // fetch cart count
+    var cart_key = cookie_array[cookie_array.length-1]
+    var cart_count = Number(cart_key.split("=")[1])
+    // save product data array as a cookie with an index
+    document.cookie = `cart_item${cart_count}=${cart_item_string}`
+    // increment cart count
+    cart_count = ++cart_count
+    document.cookie = `cart_count=${cart_count}`
+    console.log(document.cookie)
 }

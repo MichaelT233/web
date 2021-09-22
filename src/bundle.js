@@ -26,15 +26,21 @@ function getJSON(url, callback) {
 
   request.send();
 }
+document.cookie = "cart_count=0";
 function add_cart(product_index) {
   const title = document.getElementById(`title${product_index}`).innerText;
-  console.log(title);
   const price = document.getElementById(`price${product_index}`).innerText;
-  console.log(price);
   const description = document.getElementById(`description${product_index}`).innerText;
-  console.log(description);
   const quantity = document.getElementById(`quantity${product_index}`).value;
-  console.log(quantity);
+  var item_data = [title, price, description, quantity];
+  var cart_item_string = JSON.stringify(item_data);
+  var cookie_array = document.cookie.split("; ");
+  var cart_key = cookie_array[cookie_array.length - 1];
+  var cart_count = Number(cart_key.split("=")[1]);
+  document.cookie = `cart_item${cart_count}=${cart_item_string}`;
+  cart_count = ++cart_count;
+  document.cookie = `cart_count=${cart_count}`;
+  console.log(document.cookie);
 }
 
 
@@ -145,7 +151,8 @@ function loadProducts() {
         id: "quantity" + props.index,
         type: "number",
         name: "quantity",
-        min: "1"
+        min: "1",
+        defaultValue: "1"
       }), React.createElement("button", {
         type: "button",
         onClick: () => (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.add_cart)(props.index)
