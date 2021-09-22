@@ -34,3 +34,14 @@ export function add_cart(id_num) {
         client_storage.setItem('cart-count', "" + count)
     }
 }
+export function remove_cart(id_num) {
+    for (const key in client_storage) {
+        if (client_storage[key] == id_num) {
+            client_storage.removeItem(key)
+            var count = Number(client_storage.getItem('cart-count'))
+            --count
+            client_storage.setItem('cart-count', "" + count)
+            return
+        }
+    }
+}

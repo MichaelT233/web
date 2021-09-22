@@ -1,7 +1,7 @@
 // client side react jsx scripts
 // dependency requirment, also a flag for webpack
 import {getJSON} from './utility.js'
-import {add_cart} from './utility.js'
+import {add_cart, remove_cart} from './utility.js'
 
 // populate store with products, take postgresql rows object from product database as input
 function build_store(obj) {
@@ -40,14 +40,15 @@ function build_store(obj) {
             <label htmlFor="quantity">Qty:</label>
             <input id={"quantity" + props.index} type="number" name="quantity" min="1" defaultValue="1"/>
             {/*an add to cart button*/}
-            <button type="button" onClick={ () => add_cart(props.id)}>Add to Cart</button>
+            <button className="add_cart" type="button" onClick={ () => add_cart(props.id)}>Add to Cart</button>
+            {/*a remove from cart button*/}
+            <button className="remove_cart" type="button" onClick={ () => remove_cart(props.id)}>Remove from Cart</button>
             </div>
         </div>)
     }
     // loop for populating the previously rendered divs with store items/products
     i = 0
     while (i < obj.products.length) {
-        var index = `${i}`
         // calling react component to create store items with product data from the database
         var item = <Store_Item title = {obj.products[i].title}
             price = {obj.products[i].price}

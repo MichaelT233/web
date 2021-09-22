@@ -154,10 +154,15 @@ header {
         touch-action: none;
     }
     /*store item add to cart button*/
-    button {
+    .add_cart {
         background-color: $primary_color;
         font-size: 2em;
         margin-left: 10%;
+    }
+    .remove_cart {
+        background-color: $primary_color;
+        font-size: 2em;
+        display: block;
     }
 }
 /*store item images*/

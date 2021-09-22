@@ -11,7 +11,8 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "getJSON": () => (/* binding */ getJSON),
-/* harmony export */   "add_cart": () => (/* binding */ add_cart)
+/* harmony export */   "add_cart": () => (/* binding */ add_cart),
+/* harmony export */   "remove_cart": () => (/* binding */ remove_cart)
 /* harmony export */ });
 function getJSON(url, callback) {
   var request = new XMLHttpRequest();
@@ -37,6 +38,17 @@ function add_cart(id_num) {
     count = Number(count);
     ++count;
     client_storage.setItem('cart-count', "" + count);
+  }
+}
+function remove_cart(id_num) {
+  for (const key in client_storage) {
+    if (client_storage[key] == id_num) {
+      client_storage.removeItem(key);
+      var count = Number(client_storage.getItem('cart-count'));
+      --count;
+      client_storage.setItem('cart-count', "" + count);
+      return;
+    }
   }
 }
 
@@ -145,15 +157,19 @@ function build_store(obj) {
       min: "1",
       defaultValue: "1"
     }), React.createElement("button", {
+      className: "add_cart",
       type: "button",
       onClick: () => (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.add_cart)(props.id)
-    }, "Add to Cart")));
+    }, "Add to Cart"), React.createElement("button", {
+      className: "remove_cart",
+      type: "button",
+      onClick: () => (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.remove_cart)(props.id)
+    }, "Remove from Cart")));
   }
 
   i = 0;
 
   while (i < obj.products.length) {
-    var index = `${i}`;
     var item = React.createElement(Store_Item, {
       title: obj.products[i].title,
       price: obj.products[i].price,
