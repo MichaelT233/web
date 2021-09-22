@@ -26,21 +26,18 @@ function getJSON(url, callback) {
 
   request.send();
 }
-document.cookie = "cart_count=0";
-function add_cart(product_index) {
-  const title = document.getElementById(`title${product_index}`).innerText;
-  const price = document.getElementById(`price${product_index}`).innerText;
-  const description = document.getElementById(`description${product_index}`).innerText;
-  const image_path = document.getElementById(`image_path${product_index}`).alt;
-  const quantity = document.getElementById(`quantity${product_index}`).value;
-  var item_data = [title, price, description, image_path, quantity];
-  var cart_item_string = JSON.stringify(item_data);
-  var cookie_array = document.cookie.split("; ");
-  var cart_key = cookie_array[cookie_array.length - 1];
-  var cart_count = Number(cart_key.split("=")[1]);
-  document.cookie = `cart_item${cart_count}=${cart_item_string}`;
-  ++cart_count;
-  document.cookie = `cart_count=${cart_count}`;
+var client_storage = window.localStorage;
+function add_cart(id_num) {
+  if (client_storage.getItem('cart-count') == null) {
+    client_storage.setItem('cart-count', '1');
+    client_storage.setItem('id0', id_num);
+  } else {
+    var count = client_storage.getItem('cart-count');
+    client_storage.setItem(`id${count}`, id_num);
+    count = Number(count);
+    ++count;
+    client_storage.setItem('cart-count', "" + count);
+  }
 }
 
 
@@ -113,140 +110,85 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function loadProducts() {
-  function build_store(obj) {
-    var container = `<div class='item_wrapper' id='store_item0'></div>`;
-    var i = 1;
+function build_store(obj) {
+  var container = `<div class='item_wrapper' id='store_item0'></div>`;
+  var i = 1;
 
-    while (i < obj.products.length) {
-      container = container + `<div class='item_wrapper' id='store_item${i}'></div>`;
-      i++;
-    }
-
-    var container_jsx = React.createElement("div", {
-      id: "store_wrapper",
-      dangerouslySetInnerHTML: {
-        __html: container
-      }
-    });
-    ReactDOM.render(container_jsx, document.getElementById('store_view'));
-
-    function Store_Item(props) {
-      return React.createElement("div", {
-        className: "store_item"
-      }, React.createElement("img", {
-        id: `image_path${props.index}`,
-        alt: props.image_path,
-        src: props.image_path,
-        className: "product_image"
-      }), React.createElement("div", {
-        className: "product_text"
-      }, React.createElement("h2", {
-        id: "title" + props.index
-      }, props.title), React.createElement("h2", {
-        id: "price" + props.index
-      }, props.price), React.createElement("p", {
-        id: "description" + props.index
-      }, props.description), React.createElement("label", {
-        htmlFor: "quantity"
-      }, "Qty:"), React.createElement("input", {
-        id: "quantity" + props.index,
-        type: "number",
-        name: "quantity",
-        min: "1",
-        defaultValue: "1"
-      }), React.createElement("button", {
-        type: "button",
-        onClick: () => (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.add_cart)(props.index)
-      }, "Add to Cart")));
-    }
-
-    i = 0;
-
-    while (i < obj.products.length) {
-      var index = `${i}`;
-      var item = React.createElement(Store_Item, {
-        title: obj.products[i].title,
-        price: obj.products[i].price,
-        description: obj.products[i].descr,
-        image_path: obj.products[i].image_path,
-        index: index
-      });
-      ReactDOM.render(item, document.getElementById('store_item' + i));
-      i++;
-    }
+  while (i < obj.products.length) {
+    container = container + `<div class='item_wrapper' id='store_item${i}'></div>`;
+    i++;
   }
 
+  var container_jsx = React.createElement("div", {
+    id: "store_wrapper",
+    dangerouslySetInnerHTML: {
+      __html: container
+    }
+  });
+  ReactDOM.render(container_jsx, document.getElementById('store_view'));
+
+  function Store_Item(props) {
+    return React.createElement("div", {
+      className: "store_item"
+    }, React.createElement("img", {
+      alt: props.image_path,
+      src: props.image_path,
+      className: "product_image"
+    }), React.createElement("div", {
+      className: "product_text"
+    }, React.createElement("h2", null, props.title), React.createElement("h2", null, props.price), React.createElement("p", null, props.description), React.createElement("label", {
+      htmlFor: "quantity"
+    }, "Qty:"), React.createElement("input", {
+      id: "quantity" + props.index,
+      type: "number",
+      name: "quantity",
+      min: "1",
+      defaultValue: "1"
+    }), React.createElement("button", {
+      type: "button",
+      onClick: () => (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.add_cart)(props.id)
+    }, "Add to Cart")));
+  }
+
+  i = 0;
+
+  while (i < obj.products.length) {
+    var index = `${i}`;
+    var item = React.createElement(Store_Item, {
+      title: obj.products[i].title,
+      price: obj.products[i].price,
+      description: obj.products[i].descr,
+      image_path: obj.products[i].image_path,
+      id: obj.products[i].id
+    });
+    ReactDOM.render(item, document.getElementById('store_item' + i));
+    i++;
+  }
+}
+
+function load_all() {
   (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.getJSON)('all', build_store);
 }
 
-window.loadProducts = loadProducts;
+window.load_all = load_all;
 
 function load_cart() {
-  function build_store(obj) {
-    var container = `<div class='item_wrapper' id='store_item0'></div>`;
-    var i = 1;
+  function build_query() {
+    const count = Number(window.localStorage.getItem('cart-count'));
+    var query = "?";
+    var i = 0;
 
-    while (i < obj.products.length) {
-      container = container + `<div class='item_wrapper' id='store_item${i}'></div>`;
-      i++;
+    while (i < count) {
+      query += `id${i}=`;
+      query += window.localStorage.getItem(`id${i}`);
+      query += "&";
+      ++i;
     }
 
-    var container_jsx = React.createElement("div", {
-      id: "store_wrapper",
-      dangerouslySetInnerHTML: {
-        __html: container
-      }
-    });
-    ReactDOM.render(container_jsx, document.getElementById('store_view'));
-
-    function Store_Item(props) {
-      return React.createElement("div", {
-        className: "store_item"
-      }, React.createElement("img", {
-        id: `image_path${props.index}`,
-        alt: props.image_path,
-        src: props.image_path,
-        className: "product_image"
-      }), React.createElement("div", {
-        className: "product_text"
-      }, React.createElement("h2", {
-        id: "title" + props.index
-      }, props.title), React.createElement("h2", {
-        id: "price" + props.index
-      }, props.price), React.createElement("p", {
-        id: "description" + props.index
-      }, props.description), React.createElement("label", {
-        htmlFor: "quantity"
-      }, "Qty:"), React.createElement("input", {
-        id: "quantity" + props.index,
-        type: "number",
-        name: "quantity",
-        min: "1",
-        defaultValue: "1"
-      }), React.createElement("button", {
-        type: "button",
-        onClick: () => (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.add_cart)(props.index)
-      }, "Add to Cart")));
-    }
-
-    i = 0;
-
-    while (i < obj.products.length) {
-      var index = `${i}`;
-      var item = React.createElement(Store_Item, {
-        title: obj.products[i].title,
-        price: obj.products[i].price,
-        description: obj.products[i].descr,
-        image_path: obj.products[i].image_path,
-        index: index
-      });
-      ReactDOM.render(item, document.getElementById('store_item' + i));
-      i++;
-    }
+    return query;
   }
 
-  (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.getJSON)('load?id0=0000&id1=0008', build_store);
+  (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.getJSON)('cart-data' + build_query(), build_store);
 }
 
 window.load_cart = load_cart;

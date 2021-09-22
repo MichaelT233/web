@@ -17,7 +17,7 @@ const db_port = 5432
 app.use(express.static('src'))
 // application object listen on port value
 app.listen(web_port, () => {
-  	console.log(`web application listening on port ${web_port}...\nCtrl+C to exit, stdout->:`)
+  	console.log(`web application listening on port ${web_port}...\nCtrl+C to exit`)
 })
 // create new instance of Pool object for DB access
 const psql = new Pool({
@@ -87,7 +87,7 @@ app.get('/cart', (req, res) => {
     //console.log(req.cookies)
 })
 
-app.get('/load', (req, res) => {
+app.get('/cart-data', (req, res) => {
     // callback for sending reponse
     function send_response(data) {
         // set response type to text/html
@@ -98,7 +98,6 @@ app.get('/load', (req, res) => {
     var sql = "SELECT id, title, price, descr, image_path FROM products WHERE"
     const cart = req.query
     for (const key in cart) {
-        console.log(cart[key])
         if (key == "id0") {
             sql += " id = " + `'${cart[key]}'`
         }
@@ -107,11 +106,13 @@ app.get('/load', (req, res) => {
         }
     }
     sql += ";"
-    console.log(sql)
     // using Pool instance to query postgreSQL database
     psql.query(sql, (err, res) => {
+        if (err) {
+            console.error(err)
+            return
+        }
         // converting JSON object into a string in order to edit and transfer
-        console.log(err)
         const shop = JSON.stringify(res.rows)
         // encapsulating JSON string into a "products" object
         const shop_response = '{"products": ' + shop + "}"
