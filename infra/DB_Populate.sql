@@ -1,17 +1,17 @@
 -- initializes products table and it's columns/fields
 CREATE TABLE products 
-    (name varchar(50), description varchar(300), price varchar(20), image_path varchar(50));
+    (id varchar(4), title varchar(50), price varchar(20), descr varchar(300), image_path varchar(50));
 -- populates products table rows with test data
 INSERT INTO products 
-    (name, description, price, image_path)
+    (id, title, price, descr, image_path)
 VALUES 
-    ('name0', 'description0: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'price0: $00.00', 'images/img_test.jpg'),
-    ('name1', 'description1: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'price1: $00.00', 'images/img_test.jpg'),
-    ('name2', 'description2: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'price2: $00.00', 'images/img_test.jpg'),
-    ('name3', 'description3: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'price3: $00.00', 'images/img_test.jpg'),
-    ('name4', 'description4: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'price4: $00.00', 'images/img_test.jpg'),
-    ('name5', 'description5: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'price5: $00.00', 'images/img_test.jpg'),
-    ('name6', 'description6: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'price6: $00.00', 'images/img_test.jpg'),
-    ('name7', 'description7: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'price7: $00.00', 'images/img_test.jpg'),
-    ('name8', 'description8: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'price8: $00.00', 'images/img_test.jpg'),
-    ('name9', 'description9: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'price9: $00.00', 'images/img_test.jpg');
+    ('0000', 'title0', 'price0: $00.00', 'descr0: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'images/img_test.jpg'),
+    ('0001', 'title1', 'price1: $00.00', 'descr1: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'images/img_test.jpg'),
+    ('0002', 'title2', 'price2: $00.00', 'descr2: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'images/img_test.jpg'),
+    ('0003', 'title3', 'price3: $00.00', 'descr3: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'images/img_test.jpg'),
+    ('0004', 'title4', 'price4: $00.00', 'descr4: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'images/img_test.jpg'),
+    ('0005', 'title5', 'price5: $00.00', 'descr5: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'images/img_test.jpg'),
+    ('0006', 'title6', 'price6: $00.00', 'descr6: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'images/img_test.jpg'),
+    ('0007', 'title7', 'price7: $00.00', 'descr7: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'images/img_test.jpg'),
+    ('0008', 'title8', 'price8: $00.00', 'descr8: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'images/img_test.jpg'),
+    ('0009', 'title9', 'price9: $00.00', 'descr9: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'images/img_test.jpg');
