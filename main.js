@@ -95,17 +95,16 @@ app.get('/cart-data', (req, res) => {
         // send response
         res.send(data)
     }
-    var sql = "SELECT id, title, price, descr, image_path FROM products WHERE"
-    const cart = req.query
-    for (const key in cart) {
-        if (key == "id0") {
-            sql += " id = " + `'${cart[key]}'`
-        }
-        else {
-            sql += " OR id = " + `'${cart[key]}'`
-        }
+    var sql = "SELECT id, title, price, descr, image_path FROM products WHERE id = "
+    const cart = JSON.parse(req.query['cart'])
+    sql += `'${cart[0]}'`
+    var i = 1
+    while (i < cart.length) {
+        sql += ' OR id = ' + `'${cart[i]}'`
+        ++i
     }
-    sql += ";"
+    sql += ';'
+    console.log(sql)
     // using Pool instance to query postgreSQL database
     psql.query(sql, (err, res) => {
         if (err) {

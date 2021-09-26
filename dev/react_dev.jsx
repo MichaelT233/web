@@ -71,21 +71,15 @@ window.load_all = load_all
 
 // function: load cart products on cart page
 function load_cart() {
+    var cart_count = window.localStorage.getItem('cart-count')
     function build_query() {
-        const count = Number(window.localStorage.getItem('cart-count'))
-        var query = "?"
-        var i = 0
-        while (i < count) {
-            query += `id${i}=`
-            query += window.localStorage.getItem(`id${i}`)
-            query += "&"
-            ++i
-        }
+        const query = '?cart=' + window.localStorage['cart']
         return query
     }
-    const cart_count = window.localStorage.getItem('cart-count')
-    if (cart_count != null && cart_count != 0) {
+    if (cart_count != null && cart_count != '0') {
         // call AJAX JSON get request to product database URL and giving the above function as callback
+        console.log(build_query())
+        console.log(window.localStorage['cart'])
         getJSON('cart-data' + build_query(), build_store)
     }
 }

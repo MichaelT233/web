@@ -29,42 +29,58 @@ function getJSON(url, callback) {
 }
 var client_storage = window.localStorage;
 function add_cart(id_num) {
-  if (client_storage.getItem('cart-count') == null) {
+  var cart_count = client_storage.getItem('cart-count');
+
+  if (cart_count == null || cart_count == '0') {
     client_storage.setItem('cart-count', '1');
-    client_storage.setItem('id0', id_num);
+    var cart_init = [id_num];
+    cart_init = JSON.stringify(cart_init);
+    client_storage.setItem('cart', cart_init);
   } else {
-    for (const key in client_storage) {
-      if (client_storage[key] == id_num) {
-        console.log(Object.keys(client_storage));
+    var cart = JSON.parse(client_storage['cart']);
+
+    for (const item of cart) {
+      if (item == id_num) {
+        console.log(client_storage);
         console.log(client_storage['cart-count']);
         return;
       }
     }
 
-    var count = client_storage.getItem('cart-count');
-    client_storage.setItem(`id${count}`, id_num);
-    count = Number(count);
-    ++count;
-    client_storage.setItem('cart-count', "" + count);
+    cart.push(id_num);
+    cart = JSON.stringify(cart);
+    client_storage.setItem(`cart`, cart);
+    cart_count = Number(cart_count);
+    ++cart_count;
+    client_storage.setItem('cart-count', "" + cart_count);
   }
 
-  console.log(Object.keys(client_storage));
+  console.log(client_storage);
   console.log(client_storage['cart-count']);
 }
 function remove_cart(id_num) {
-  for (const key in client_storage) {
-    if (client_storage[key] == id_num) {
-      client_storage.removeItem(key);
-      var count = Number(client_storage.getItem('cart-count'));
-      --count;
-      client_storage.setItem('cart-count', "" + count);
-      console.log(Object.keys(client_storage));
-      console.log(client_storage['cart-count']);
-      return;
+  var cart_count = client_storage.getItem('cart-count');
+
+  if (cart_count != '0' && cart_count != null) {
+    var cart = JSON.parse(client_storage['cart']);
+    var i = 0;
+
+    for (const item of cart) {
+      if (item == id_num) {
+        cart.splice(cart.indexOf(item), 1);
+        cart = JSON.stringify(cart);
+        client_storage.setItem('cart', cart);
+        cart_count = Number(cart_count);
+        --cart_count;
+        client_storage.setItem('cart-count', "" + cart_count);
+        console.log(client_storage);
+        console.log(client_storage['cart-count']);
+        return;
+      }
     }
   }
 
-  console.log(Object.keys(client_storage));
+  console.log(client_storage);
   console.log(client_storage['cart-count']);
 }
 
@@ -205,24 +221,16 @@ function load_all() {
 window.load_all = load_all;
 
 function load_cart() {
+  var cart_count = window.localStorage.getItem('cart-count');
+
   function build_query() {
-    const count = Number(window.localStorage.getItem('cart-count'));
-    var query = "?";
-    var i = 0;
-
-    while (i < count) {
-      query += `id${i}=`;
-      query += window.localStorage.getItem(`id${i}`);
-      query += "&";
-      ++i;
-    }
-
+    const query = '?cart=' + window.localStorage['cart'];
     return query;
   }
 
-  const cart_count = window.localStorage.getItem('cart-count');
-
-  if (cart_count != null && cart_count != 0) {
+  if (cart_count != null && cart_count != '0') {
+    console.log(build_query());
+    console.log(window.localStorage['cart']);
     (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.getJSON)('cart-data' + build_query(), build_store);
   }
 }
