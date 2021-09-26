@@ -95,17 +95,22 @@ app.get('/cart-data', (req, res) => {
         // send response
         res.send(data)
     }
+    // set initial sql string to find product data from database, according to what is in the client's cart
     var sql = "SELECT id, title, price, descr, image_path FROM products WHERE id = "
+    // access cart data sent in the request URL query 
     const cart = JSON.parse(req.query['cart'])
+    // add first item to sql string
     sql += `'${cart[0][0]}'`
+    // starting from the second item, add each item as an equivalency check to the sql string
     var i = 1
     while (i < cart.length) {
         sql += ' OR id = ' + `'${cart[i][0]}'`
         ++i
     }
+    // terminate sql string
     sql += ';'
     console.log(sql)
-    // using Pool instance to query postgreSQL database
+    // using Pool instance to query postgreSQL database, passing the sql string as it's query
     psql.query(sql, (err, res) => {
         if (err) {
             console.error(err)

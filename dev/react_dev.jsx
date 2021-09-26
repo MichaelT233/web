@@ -23,12 +23,19 @@ function build_store(obj) {
     ReactDOM.render(container_jsx, document.getElementById('store_view'))
     // react component for each store item
     function Store_Item(props) {
+        // access cart item count
         var cart_count = window.localStorage.getItem('cart-count')
+        // initialize quantity variable globally in function
         var quantity = null
-        if (document.location.pathname == '/cart' && (cart_count != null && cart_count != 0)) {
+        // if on cart page and cart is not empty
+        if (document.location.pathname == '/cart' && (cart_count != null && cart_count != '0')) {
+            // access and iterate cart array
             var cart = JSON.parse(window.localStorage['cart'])
+            // iterate item arrays
             for (item of cart) {
+                // if id prop is in the cart
                 if (item[0] == props.id) {
+                    // set the quantity variable to the quantity of the item in the cart that is currently being rendered
                     quantity = item[1]
                 }
             }
@@ -48,7 +55,9 @@ function build_store(obj) {
             <p>{props.description}</p>
             {/*product quantity selector*/}
             <label htmlFor="quantity">Qty:</label>
+            {/*if on home page*/}
             {document.location.pathname == '/' && <input id={props.id} type="number" name="quantity" min="1" defaultValue="1"/>}
+            {/*if on cart page*/}
             {document.location.pathname == '/cart' && <input id={props.id} type="number" name="quantity" defaultValue={quantity}/>}
             {/*an add to cart button*/}
             <button className="add_cart" type="button" onClick={ () => add_cart(props.id)}>Add to Cart</button>
@@ -69,12 +78,12 @@ function build_store(obj) {
         // rendering finished item into it's div
         ReactDOM.render(item, document.getElementById('store_item' + i));
         // increment counter value
-        i ++
+        ++i
     }
 }
-// function made to load product data and render into elements in the store viewport 
+// function made to load product data and render into elements in the store_view div
 function load_all() {
-    // call AJAX JSON get request to product database URL and giving the above function as callback
+    // call AJAX JSON get request to '/all' path and giving the build_store as callback
     getJSON('all', build_store)
 }
 // set the loadProducts function to global browser scope so it can be accessed from the DOM
@@ -82,18 +91,22 @@ window.load_all = load_all
 
 // function: load cart products on cart page
 function load_cart() {
+    // access cart item count
     var cart_count = window.localStorage.getItem('cart-count')
+    // function: build URL query to send cart data to server
     function build_query() {
+        // build query string from cart data and return it
         const query = '?cart=' + window.localStorage['cart']
         return query
     }
+    // if cart is not initialized and not empty
     if (cart_count != null && cart_count != '0') {
-        // call AJAX JSON get request to product database URL and giving the above function as callback
         const query = build_query()
         console.log(window.localStorage)
         console.log(query)
+        // call AJAX JSON get request to '/cart-data' path with query and passing build_store as callback
         getJSON('cart-data' + query, build_store)
     }
 }
-// set the loadProducts function to global browser scope so it can be accessed from the DOM
+// set the loadProducts function to global browser scope so it can be accessed from the DOM (onload)
 window.load_cart = load_cart
