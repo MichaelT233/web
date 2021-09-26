@@ -21,23 +21,23 @@ export function getJSON(url, callback) {
 var client_storage = window.localStorage
 // function add item to cart
 export function add_cart(id_num) {
+    var quantity = document.getElementById(id_num).value
     var cart_count = client_storage.getItem('cart-count')
     if (cart_count == null || cart_count == '0') {
         client_storage.setItem('cart-count', '1')
-        var cart_init = [id_num]
+        var cart_init = [[id_num, quantity]]
         cart_init = JSON.stringify(cart_init)
         client_storage.setItem('cart', cart_init)
     }
     else {
         var cart = JSON.parse(client_storage['cart'])
         for (const item of cart) {
-            if (item == id_num) {
+            if (item[0] == id_num) {
                 console.log(client_storage)
-                console.log(client_storage['cart-count'])
                 return
             }
         }
-        cart.push(id_num)
+        cart.push([id_num, quantity])
         cart = JSON.stringify(cart)
         client_storage.setItem(`cart`, cart)
         cart_count = Number(cart_count)
@@ -45,7 +45,6 @@ export function add_cart(id_num) {
         client_storage.setItem('cart-count', "" + cart_count)
         }
     console.log(client_storage)
-    console.log(client_storage['cart-count'])
 }
 /*
 function remove item to cart
@@ -59,7 +58,7 @@ export function remove_cart(id_num) {
         var cart = JSON.parse(client_storage['cart'])
         var i = 0
         for (const item of cart) {
-            if (item == id_num) {
+            if (item[0] == id_num) {
                 cart.splice(cart.indexOf(item), 1)
                 cart = JSON.stringify(cart)
                 client_storage.setItem('cart', cart)
@@ -67,11 +66,9 @@ export function remove_cart(id_num) {
                 --cart_count
                 client_storage.setItem('cart-count', "" + cart_count)
                 console.log(client_storage)
-                console.log(client_storage['cart-count'])
                 return
             }
         }
     }
     console.log(client_storage)
-    console.log(client_storage['cart-count'])
 }

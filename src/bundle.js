@@ -29,25 +29,25 @@ function getJSON(url, callback) {
 }
 var client_storage = window.localStorage;
 function add_cart(id_num) {
+  var quantity = document.getElementById(id_num).value;
   var cart_count = client_storage.getItem('cart-count');
 
   if (cart_count == null || cart_count == '0') {
     client_storage.setItem('cart-count', '1');
-    var cart_init = [id_num];
+    var cart_init = [[id_num, quantity]];
     cart_init = JSON.stringify(cart_init);
     client_storage.setItem('cart', cart_init);
   } else {
     var cart = JSON.parse(client_storage['cart']);
 
     for (const item of cart) {
-      if (item == id_num) {
+      if (item[0] == id_num) {
         console.log(client_storage);
-        console.log(client_storage['cart-count']);
         return;
       }
     }
 
-    cart.push(id_num);
+    cart.push([id_num, quantity]);
     cart = JSON.stringify(cart);
     client_storage.setItem(`cart`, cart);
     cart_count = Number(cart_count);
@@ -56,7 +56,6 @@ function add_cart(id_num) {
   }
 
   console.log(client_storage);
-  console.log(client_storage['cart-count']);
 }
 function remove_cart(id_num) {
   var cart_count = client_storage.getItem('cart-count');
@@ -66,7 +65,7 @@ function remove_cart(id_num) {
     var i = 0;
 
     for (const item of cart) {
-      if (item == id_num) {
+      if (item[0] == id_num) {
         cart.splice(cart.indexOf(item), 1);
         cart = JSON.stringify(cart);
         client_storage.setItem('cart', cart);
@@ -74,14 +73,12 @@ function remove_cart(id_num) {
         --cart_count;
         client_storage.setItem('cart-count', "" + cart_count);
         console.log(client_storage);
-        console.log(client_storage['cart-count']);
         return;
       }
     }
   }
 
   console.log(client_storage);
-  console.log(client_storage['cart-count']);
 }
 
 
@@ -172,6 +169,20 @@ function build_store(obj) {
   ReactDOM.render(container_jsx, document.getElementById('store_view'));
 
   function Store_Item(props) {
+    var cart_count = window.localStorage.getItem('cart-count');
+    var quantity = null;
+
+    if (document.location.pathname == '/cart' && cart_count != null && cart_count != 0) {
+      var cart = JSON.parse(window.localStorage['cart']);
+
+      for (item of cart) {
+        if (item[0] == props.id) {
+          quantity = item[1];
+        }
+      }
+    }
+
+    console.log('q = ' + quantity);
     return React.createElement("div", {
       className: "store_item"
     }, React.createElement("img", {
@@ -182,12 +193,17 @@ function build_store(obj) {
       className: "product_text"
     }, React.createElement("h2", null, props.title), React.createElement("h2", null, props.price), React.createElement("p", null, props.description), React.createElement("label", {
       htmlFor: "quantity"
-    }, "Qty:"), React.createElement("input", {
-      id: "quantity" + props.index,
+    }, "Qty:"), document.location.pathname == '/' && React.createElement("input", {
+      id: props.id,
       type: "number",
       name: "quantity",
       min: "1",
       defaultValue: "1"
+    }), document.location.pathname == '/cart' && React.createElement("input", {
+      id: props.id,
+      type: "number",
+      name: "quantity",
+      defaultValue: quantity
     }), React.createElement("button", {
       className: "add_cart",
       type: "button",
@@ -229,9 +245,10 @@ function load_cart() {
   }
 
   if (cart_count != null && cart_count != '0') {
-    console.log(build_query());
-    console.log(window.localStorage['cart']);
-    (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.getJSON)('cart-data' + build_query(), build_store);
+    const query = build_query();
+    console.log(window.localStorage);
+    console.log(query);
+    (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.getJSON)('cart-data' + query, build_store);
   }
 }
 

@@ -97,10 +97,10 @@ app.get('/cart-data', (req, res) => {
     }
     var sql = "SELECT id, title, price, descr, image_path FROM products WHERE id = "
     const cart = JSON.parse(req.query['cart'])
-    sql += `'${cart[0]}'`
+    sql += `'${cart[0][0]}'`
     var i = 1
     while (i < cart.length) {
-        sql += ' OR id = ' + `'${cart[i]}'`
+        sql += ' OR id = ' + `'${cart[i][0]}'`
         ++i
     }
     sql += ';'

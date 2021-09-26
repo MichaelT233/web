@@ -23,6 +23,17 @@ function build_store(obj) {
     ReactDOM.render(container_jsx, document.getElementById('store_view'))
     // react component for each store item
     function Store_Item(props) {
+        var cart_count = window.localStorage.getItem('cart-count')
+        var quantity = null
+        if (document.location.pathname == '/cart' && (cart_count != null && cart_count != 0)) {
+            var cart = JSON.parse(window.localStorage['cart'])
+            for (item of cart) {
+                if (item[0] == props.id) {
+                    quantity = item[1]
+                }
+            }
+        }
+        console.log('q = '+quantity)
         return (
         // creation of store item class instance
         <div className="store_item">
@@ -38,7 +49,8 @@ function build_store(obj) {
             <p>{props.description}</p>
             {/*product quantity selector*/}
             <label htmlFor="quantity">Qty:</label>
-            <input id={"quantity" + props.index} type="number" name="quantity" min="1" defaultValue="1"/>
+            {document.location.pathname == '/' && <input id={props.id} type="number" name="quantity" min="1" defaultValue="1"/>}
+            {document.location.pathname == '/cart' && <input id={props.id} type="number" name="quantity" defaultValue={quantity}/>}
             {/*an add to cart button*/}
             <button className="add_cart" type="button" onClick={ () => add_cart(props.id)}>Add to Cart</button>
             {/*a remove from cart button*/}
@@ -78,9 +90,10 @@ function load_cart() {
     }
     if (cart_count != null && cart_count != '0') {
         // call AJAX JSON get request to product database URL and giving the above function as callback
-        console.log(build_query())
-        console.log(window.localStorage['cart'])
-        getJSON('cart-data' + build_query(), build_store)
+        const query = build_query()
+        console.log(window.localStorage)
+        console.log(query)
+        getJSON('cart-data' + query, build_store)
     }
 }
 // set the loadProducts function to global browser scope so it can be accessed from the DOM
