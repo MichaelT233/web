@@ -33,6 +33,10 @@ export function add_cart(id_num) {
         var cart = JSON.parse(client_storage['cart'])
         for (const item of cart) {
             if (item[0] == id_num) {
+                quantity = Number(quantity) + Number(item[1])
+                item[1] = `${quantity}`
+                cart = JSON.stringify(cart)
+                client_storage.setItem(`cart`, cart)
                 console.log(client_storage)
                 return
             }

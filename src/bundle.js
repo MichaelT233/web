@@ -42,6 +42,10 @@ function add_cart(id_num) {
 
     for (const item of cart) {
       if (item[0] == id_num) {
+        quantity = Number(quantity) + Number(item[1]);
+        item[1] = `${quantity}`;
+        cart = JSON.stringify(cart);
+        client_storage.setItem(`cart`, cart);
         console.log(client_storage);
         return;
       }
@@ -182,7 +186,6 @@ function build_store(obj) {
       }
     }
 
-    console.log('q = ' + quantity);
     return React.createElement("div", {
       className: "store_item"
     }, React.createElement("img", {

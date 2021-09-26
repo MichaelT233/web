@@ -33,7 +33,6 @@ function build_store(obj) {
                 }
             }
         }
-        console.log('q = '+quantity)
         return (
         // creation of store item class instance
         <div className="store_item">
