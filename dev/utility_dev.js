@@ -93,10 +93,45 @@ export function remove_cart(id_num) {
                 --cart_count
                 client_storage.setItem('cart-count', "" + cart_count)
                 console.log(client_storage)
+                // reload cart
+                location.reload()
                 // exit function
                 return
             }
         }
     }
     console.log(client_storage)
+}
+export function update_cart(id_num, flag) {
+    // get cart item count from storage
+    var cart_count = client_storage.getItem('cart-count')
+    // if cart is not empty
+    if (cart_count != '0' && cart_count != null) {
+        // access cart array
+        var cart = JSON.parse(client_storage['cart'])
+        // iterate cart array 
+        for (const item of cart) {
+            // if item is in cart
+            if (item[0] == id_num) {
+                // if incrementing
+                if (flag == 'inc') {
+                    var quantity = Number(item[1]) + 1
+                    item[1] = `${quantity}`
+                }
+                // if decrementing
+                else if (flag == 'dec') {
+                    var quantity = Number(item[1]) - 1
+                    item[1] = `${quantity}`
+                }
+                // set new cart array in storage
+                cart = JSON.stringify(cart)
+                client_storage.setItem(`cart`, cart)
+                console.log(client_storage)
+                // reload cart
+                location.reload()
+                // exit function
+                return              
+            }
+        }
+    }
 }

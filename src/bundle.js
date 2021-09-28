@@ -55,7 +55,11 @@ function build_store(obj) {
       className: "product_text"
     }, React.createElement("h2", null, props.title), React.createElement("h2", null, props.price), React.createElement("p", null, props.description), React.createElement("label", {
       htmlFor: "quantity"
-    }, "Qty:"), document.location.pathname == '/' && React.createElement("input", {
+    }, "Qty: "), document.location.pathname == '/cart' && React.createElement("button", {
+      className: "update_cart",
+      type: "button",
+      onClick: () => (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.update_cart)(props.id, 'dec')
+    }, "-"), document.location.pathname == '/' && React.createElement("input", {
       id: props.id,
       type: "number",
       name: "quantity",
@@ -63,18 +67,24 @@ function build_store(obj) {
       defaultValue: "1"
     }), document.location.pathname == '/cart' && React.createElement("input", {
       id: props.id,
+      className: "cart_quantity",
       type: "number",
       name: "quantity",
-      defaultValue: quantity
+      defaultValue: quantity,
+      disabled: true
     }), document.location.pathname == '/' && React.createElement("button", {
       className: "add_cart",
       type: "button",
       onClick: () => (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.add_cart)(props.id)
     }, "Add to Cart"), document.location.pathname == '/cart' && React.createElement("button", {
+      className: "update_cart",
+      type: "button",
+      onClick: () => (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.update_cart)(props.id, 'inc')
+    }, "+"), document.location.pathname == '/cart' && React.createElement("button", {
       className: "remove_cart",
       type: "button",
       onClick: () => (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.remove_cart)(props.id)
-    }, "Remove from Cart")));
+    }, "Delete")));
   }
 
   i = 0;
@@ -105,7 +115,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "getJSON": () => (/* binding */ getJSON),
 /* harmony export */   "add_cart": () => (/* binding */ add_cart),
-/* harmony export */   "remove_cart": () => (/* binding */ remove_cart)
+/* harmony export */   "remove_cart": () => (/* binding */ remove_cart),
+/* harmony export */   "update_cart": () => (/* binding */ update_cart)
 /* harmony export */ });
 function getJSON(url, callback) {
   var request = new XMLHttpRequest();
@@ -169,12 +180,38 @@ function remove_cart(id_num) {
         --cart_count;
         client_storage.setItem('cart-count', "" + cart_count);
         console.log(client_storage);
+        location.reload();
         return;
       }
     }
   }
 
   console.log(client_storage);
+}
+function update_cart(id_num, flag) {
+  var cart_count = client_storage.getItem('cart-count');
+
+  if (cart_count != '0' && cart_count != null) {
+    var cart = JSON.parse(client_storage['cart']);
+
+    for (const item of cart) {
+      if (item[0] == id_num) {
+        if (flag == 'inc') {
+          var quantity = Number(item[1]) + 1;
+          item[1] = `${quantity}`;
+        } else if (flag == 'dec') {
+          var quantity = Number(item[1]) - 1;
+          item[1] = `${quantity}`;
+        }
+
+        cart = JSON.stringify(cart);
+        client_storage.setItem(`cart`, cart);
+        console.log(client_storage);
+        location.reload();
+        return;
+      }
+    }
+  }
 }
 
 

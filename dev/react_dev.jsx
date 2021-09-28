@@ -1,6 +1,6 @@
 // client side react jsx scripts
 // dependency requirment, also a flag for webpack
-import {add_cart, remove_cart} from './utility.js'
+import {add_cart, remove_cart, update_cart} from './utility.js'
 // populate store with products, take postgresql rows object from product database as input
 export function build_store(obj) {
     // loop that generates the necessary html divs based on product quantity, for react to plug into
@@ -52,15 +52,17 @@ export function build_store(obj) {
             {/*product description*/}
             <p>{props.description}</p>
             {/*product quantity selector*/}
-            <label htmlFor="quantity">Qty:</label>
-            {/*if on home page*/}
+            <label htmlFor="quantity">Qty: </label>
+            {/**/}
+            {document.location.pathname == '/cart' && <button className="update_cart" type="button" onClick={ () => update_cart(props.id, 'dec')}>-</button>}
+
             {document.location.pathname == '/' && <input id={props.id} type="number" name="quantity" min="1" defaultValue="1"/>}
-            {/*if on cart page*/}
-            {document.location.pathname == '/cart' && <input id={props.id} type="number" name="quantity" defaultValue={quantity}/>}
-            {/*an add to cart button*/}
+            {document.location.pathname == '/cart' && <input id={props.id} className="cart_quantity" type="number" name="quantity" defaultValue={quantity} disabled/>}
+
             {document.location.pathname == '/' && <button className="add_cart" type="button" onClick={ () => add_cart(props.id)}>Add to Cart</button>}
-            {/*a remove from cart button*/}
-            {document.location.pathname == '/cart' && <button className="remove_cart" type="button" onClick={ () => remove_cart(props.id)}>Remove from Cart</button>}
+
+            {document.location.pathname == '/cart' && <button className="update_cart" type="button" onClick={ () => update_cart(props.id, 'inc')}>+</button>}
+            {document.location.pathname == '/cart' && <button className="remove_cart" type="button" onClick={ () => remove_cart(props.id)}>Delete</button>}
             </div>
         </div>)
     }
