@@ -6,6 +6,7 @@ function build_js {
     # transpile react_dev.jsx into plain javascript as react.js, also include vanilla js files in order to remove comments
     npx babel ./react_dev.jsx --out-file ./react.js
     npx babel ./utility_dev.js --out-file ./utility.js
+    npx babel ./client_dev.js --out-file ./client.js
     echo 'babel transpile complete'
     # bundle the multiple javascript files into one, and write into the client's wd(../src/bundle.js)
     echo 'bundling js modules...'
@@ -15,6 +16,7 @@ function build_js {
     echo 'cleaning up...'
     rm react.js
     rm utility.js
+    rm client.js
 }
 # transpile style_dev.scss into plain css and save in src folder (omitting source map file creation and comments (compressed))
 function build_css {

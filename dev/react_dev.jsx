@@ -1,10 +1,8 @@
 // client side react jsx scripts
 // dependency requirment, also a flag for webpack
-import {getJSON} from './utility.js'
 import {add_cart, remove_cart} from './utility.js'
-
 // populate store with products, take postgresql rows object from product database as input
-function build_store(obj) {
+export function build_store(obj) {
     // loop that generates the necessary html divs based on product quantity, for react to plug into
     // initial string
     var container = `<div class='item_wrapper' id='store_item0'></div>`;
@@ -60,9 +58,9 @@ function build_store(obj) {
             {/*if on cart page*/}
             {document.location.pathname == '/cart' && <input id={props.id} type="number" name="quantity" defaultValue={quantity}/>}
             {/*an add to cart button*/}
-            <button className="add_cart" type="button" onClick={ () => add_cart(props.id)}>Add to Cart</button>
+            {document.location.pathname == '/' && <button className="add_cart" type="button" onClick={ () => add_cart(props.id)}>Add to Cart</button>}
             {/*a remove from cart button*/}
-            <button className="remove_cart" type="button" onClick={ () => remove_cart(props.id)}>Remove from Cart</button>
+            {document.location.pathname == '/cart' && <button className="remove_cart" type="button" onClick={ () => remove_cart(props.id)}>Remove from Cart</button>}
             </div>
         </div>)
     }
@@ -81,32 +79,3 @@ function build_store(obj) {
         ++i
     }
 }
-// function made to load product data and render into elements in the store_view div
-function load_all() {
-    // call AJAX JSON get request to '/all' path and giving the build_store as callback
-    getJSON('all', build_store)
-}
-// set the loadProducts function to global browser scope so it can be accessed from the DOM
-window.load_all = load_all
-
-// function: load cart products on cart page
-function load_cart() {
-    // access cart item count
-    var cart_count = window.localStorage.getItem('cart-count')
-    // function: build URL query to send cart data to server
-    function build_query() {
-        // build query string from cart data and return it
-        const query = '?cart=' + window.localStorage['cart']
-        return query
-    }
-    // if cart is not initialized and not empty
-    if (cart_count != null && cart_count != '0') {
-        const query = build_query()
-        console.log(window.localStorage)
-        console.log(query)
-        // call AJAX JSON get request to '/cart-data' path with query and passing build_store as callback
-        getJSON('cart-data' + query, build_store)
-    }
-}
-// set the loadProducts function to global browser scope so it can be accessed from the DOM (onload)
-window.load_cart = load_cart
