@@ -10,125 +10,17 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "renderStore": () => (/* binding */ renderStore),
-/* harmony export */   "loadCart": () => (/* binding */ loadCart),
-/* harmony export */   "loadAll": () => (/* binding */ loadAll)
+/* harmony export */   "Store": () => (/* binding */ Store),
+/* harmony export */   "Cart": () => (/* binding */ Cart)
 /* harmony export */ });
 /* harmony import */ var _utility_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utility.js */ "./utility.js");
 
-let cart = new _utility_js__WEBPACK_IMPORTED_MODULE_0__.Cart();
-function renderStore(obj) {
-  const store = React.createElement(BuildStore, {
-    products: obj.products
-  });
-  ReactDOM.render(store, document.getElementById('store_view'));
-
-  if (document.location.pathname == '/cart' && cart.getItemCount() != '0') {
-    var totalPrice = 0.0;
-
-    for (const row of obj.products) {
-      totalPrice += Number(row.price) * cart.getItemQuantity(row.id);
-    }
-
-    totalPrice = totalPrice.toFixed(2);
-    const head = React.createElement(BuildHeaderAppend, {
-      totalPrice: totalPrice,
-      totalQuantity: cart.getTotalCount()
-    });
-    ReactDOM.render(head, document.getElementById('cart_head'));
+class Store {
+  loadAll() {
+    (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)('all', render);
   }
+
 }
-
-function BuildStore(props) {
-  const roots = props.products.map(row => React.createElement("div", {
-    key: row.id,
-    className: "store_item",
-    id: row.id
-  }, React.createElement("img", {
-    alt: row.image_path,
-    src: row.image_path,
-    className: "product_image"
-  }), React.createElement("div", {
-    className: "product_text"
-  }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), React.createElement("p", null, row.description), React.createElement("label", {
-    htmlFor: "quantity"
-  }, "Qty: "), document.location.pathname == '/cart' && React.createElement("button", {
-    className: "update_cart",
-    type: "button",
-    onClick: () => cart.decItem(row.id)
-  }, "-"), document.location.pathname == '/' && React.createElement("input", {
-    id: row.id + 'q',
-    type: "number",
-    name: "quantity",
-    min: "1",
-    defaultValue: "1"
-  }), document.location.pathname == '/cart' && React.createElement("input", {
-    id: row.id + 'q',
-    className: "cart_quantity",
-    type: "number",
-    name: "quantity",
-    value: cart.getItemQuantity(row.id),
-    disabled: true
-  }), document.location.pathname == '/' && React.createElement("button", {
-    className: "add_cart",
-    type: "button",
-    onClick: () => cart.addItem(row.id)
-  }, "Add to Cart"), document.location.pathname == '/cart' && React.createElement("button", {
-    className: "update_cart",
-    type: "button",
-    onClick: () => cart.incItem(row.id)
-  }, "+"), document.location.pathname == '/cart' && React.createElement("button", {
-    className: "remove_cart",
-    type: "button",
-    onClick: () => cart.deleteItem(row.id)
-  }, "Delete"))));
-  return React.createElement("div", null, roots);
-}
-
-function BuildHeaderAppend(props) {
-  return React.createElement("div", {
-    id: "cart_head"
-  }, React.createElement("h2", null, "Total $", props.totalPrice), props.totalQuantity == 1 && React.createElement("button", {
-    type: "button"
-  }, "Proceed to Checkout ", '(' + props.totalQuantity + ' item)'), props.totalQuantity != 1 && React.createElement("button", {
-    type: "button"
-  }, "Proceed to Checkout ", '(' + props.totalQuantity + ' items)'));
-}
-
-function clearStore() {
-  ReactDOM.render(React.createElement("div", null), document.getElementById('cart_head'));
-  ReactDOM.render(React.createElement("div", null), document.getElementById('store_view'));
-}
-
-function loadCart() {
-  if (window.localStorage.getItem('itemCount') != '0') {
-    (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)('cart-data' + (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.buildQuery)(), renderStore);
-    return;
-  } else {
-    clearStore();
-  }
-}
-function loadAll() {
-  (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)('all', renderStore);
-}
-
-
-/***/ }),
-
-/***/ "./utility.js":
-/*!********************!*\
-  !*** ./utility.js ***!
-  \********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Cart": () => (/* binding */ Cart),
-/* harmony export */   "buildQuery": () => (/* binding */ buildQuery),
-/* harmony export */   "accessProductDB": () => (/* binding */ accessProductDB)
-/* harmony export */ });
-/* harmony import */ var _react_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./react.js */ "./react.js");
-
 class Cart {
   getItemCount() {
     return Number(window.localStorage.getItem('itemCount'));
@@ -196,7 +88,7 @@ class Cart {
         table.splice(table.indexOf(item), 1);
         this.write(table);
         this.addItemCount(-1);
-        (0,_react_js__WEBPACK_IMPORTED_MODULE_0__.loadCart)();
+        this.load();
         console.log(window.localStorage);
         return;
       }
@@ -213,7 +105,7 @@ class Cart {
         quantity = Number(item[1]) + 1;
         item[1] = `${quantity}`;
         this.write(table);
-        (0,_react_js__WEBPACK_IMPORTED_MODULE_0__.loadCart)();
+        this.load();
         console.log(window.localStorage);
         return;
       }
@@ -231,7 +123,7 @@ class Cart {
           table.splice(table.indexOf(item), 1);
           this.write(table);
           this.addItemCount(-1);
-          (0,_react_js__WEBPACK_IMPORTED_MODULE_0__.loadCart)();
+          this.load();
           console.log(window.localStorage);
           return;
         }
@@ -239,14 +131,122 @@ class Cart {
         quantity = Number(item[1]) - 1;
         item[1] = `${quantity}`;
         this.write(table);
-        (0,_react_js__WEBPACK_IMPORTED_MODULE_0__.loadCart)();
+        this.load();
         console.log(window.localStorage);
         return;
       }
     }
   }
 
+  load() {
+    if (window.localStorage.getItem('itemCount') != '0') {
+      (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)('cart-data' + (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.buildQuery)(), render);
+      return;
+    } else {
+      clear();
+    }
+  }
+
 }
+let cart = new Cart();
+
+function BuildStore(props) {
+  const roots = props.products.map(row => React.createElement("div", {
+    key: row.id,
+    className: "store_item",
+    id: row.id
+  }, React.createElement("img", {
+    alt: row.image_path,
+    src: row.image_path,
+    className: "product_image"
+  }), React.createElement("div", {
+    className: "product_text"
+  }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), React.createElement("p", null, row.description), React.createElement("label", {
+    htmlFor: "quantity"
+  }, "Qty: "), document.location.pathname == '/cart' && React.createElement("button", {
+    className: "update_cart",
+    type: "button",
+    onClick: () => cart.decItem(row.id)
+  }, "-"), document.location.pathname == '/' && React.createElement("input", {
+    id: row.id + 'q',
+    type: "number",
+    name: "quantity",
+    min: "1",
+    defaultValue: "1"
+  }), document.location.pathname == '/cart' && React.createElement("input", {
+    id: row.id + 'q',
+    className: "cart_quantity",
+    type: "number",
+    name: "quantity",
+    value: cart.getItemQuantity(row.id),
+    disabled: true
+  }), document.location.pathname == '/' && React.createElement("button", {
+    className: "add_cart",
+    type: "button",
+    onClick: () => cart.addItem(row.id)
+  }, "Add to Cart"), document.location.pathname == '/cart' && React.createElement("button", {
+    className: "update_cart",
+    type: "button",
+    onClick: () => cart.incItem(row.id)
+  }, "+"), document.location.pathname == '/cart' && React.createElement("button", {
+    className: "remove_cart",
+    type: "button",
+    onClick: () => cart.deleteItem(row.id)
+  }, "Delete"))));
+  return React.createElement("div", null, roots);
+}
+
+function BuildHeaderAppend(props) {
+  return React.createElement("div", {
+    id: "cart_head"
+  }, React.createElement("h2", null, "Total $", props.totalPrice), props.totalQuantity == 1 && React.createElement("button", {
+    type: "button"
+  }, "Proceed to Checkout ", '(' + props.totalQuantity + ' item)'), props.totalQuantity != 1 && React.createElement("button", {
+    type: "button"
+  }, "Proceed to Checkout ", '(' + props.totalQuantity + ' items)'));
+}
+
+function render(obj) {
+  const store = React.createElement(BuildStore, {
+    products: obj.products
+  });
+  ReactDOM.render(store, document.getElementById('store_view'));
+
+  if (document.location.pathname == '/cart' && cart.getItemCount() != '0') {
+    var totalPrice = 0.0;
+
+    for (const row of obj.products) {
+      totalPrice += Number(row.price) * cart.getItemQuantity(row.id);
+    }
+
+    totalPrice = totalPrice.toFixed(2);
+    const head = React.createElement(BuildHeaderAppend, {
+      totalPrice: totalPrice,
+      totalQuantity: cart.getTotalCount()
+    });
+    ReactDOM.render(head, document.getElementById('cart_head'));
+  }
+}
+
+function clear() {
+  ReactDOM.render(React.createElement("div", null), document.getElementById('cart_head'));
+  ReactDOM.render(React.createElement("div", null), document.getElementById('store_view'));
+}
+
+
+/***/ }),
+
+/***/ "./utility.js":
+/*!********************!*\
+  !*** ./utility.js ***!
+  \********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "buildQuery": () => (/* binding */ buildQuery),
+/* harmony export */   "accessProductDB": () => (/* binding */ accessProductDB)
+/* harmony export */ });
 function buildQuery() {
   const query = '?cart=' + window.localStorage.getItem('cart');
   console.log(query);
@@ -334,8 +334,11 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _react_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./react.js */ "./react.js");
 
-window.loadAll = _react_js__WEBPACK_IMPORTED_MODULE_0__.loadAll;
-window.loadCart = _react_js__WEBPACK_IMPORTED_MODULE_0__.loadCart;
+
+let store = new _react_js__WEBPACK_IMPORTED_MODULE_0__.Store();
+window.store = store;
+let cart = new _react_js__WEBPACK_IMPORTED_MODULE_0__.Cart();
+window.cart = cart;
 
 if (window.localStorage.getItem('cart') == null) {
   window.localStorage.setItem('cart', '[]');

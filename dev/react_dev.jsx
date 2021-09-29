@@ -1,20 +1,122 @@
-// client side react jsx scripts
-import {Cart, accessProductDB, buildQuery} from './utility.js'
-let cart = new Cart()
-// populate store with products, take postgresql rows object from product database as input
-export function renderStore(obj) {
-    const store = <BuildStore products={obj.products}/>
-    ReactDOM.render(store, document.getElementById('store_view'))
-    if (document.location.pathname == '/cart' && cart.getItemCount() != '0') {
-        var totalPrice = 0.0
-        for (const row of obj.products) {
-            totalPrice += Number(row.price) * cart.getItemQuantity(row.id)
-        }
-        totalPrice = totalPrice.toFixed(2)
-        const head = <BuildHeaderAppend totalPrice={totalPrice} totalQuantity={cart.getTotalCount()}/>
-        ReactDOM.render(head, document.getElementById('cart_head'))
+// client side js that includes react jsx
+import {accessProductDB, buildQuery} from './utility.js'
+// class: main store
+export class Store {
+    loadAll() {
+        accessProductDB('all', render)
     }
 }
+// class: shopping cart
+export class Cart {
+    getItemCount() {
+        return Number(window.localStorage.getItem('itemCount'))
+    }
+    getTotalCount() {
+        return Number(window.localStorage.getItem('totalCount'))
+    }
+    getTable() {
+        return JSON.parse(window.localStorage.getItem('cart'))
+    }
+    getItemQuantity(id) {
+        var table = this.getTable()
+        for (const item of table) {
+            if (item[0] == id) {
+                return Number(item[1])
+            }
+        }
+    }
+    write(table) {
+        window.localStorage.setItem('cart', JSON.stringify(table))
+    }
+    addItemCount(value) {
+        var itemCount = Number(window.localStorage.getItem('itemCount')) + value
+        window.localStorage.setItem('itemCount', itemCount)
+    }
+    addTotalCount(value) {
+        var totalCount = Number(window.localStorage.getItem('totalCount')) + value
+        window.localStorage.setItem('totalCount', totalCount)
+    }
+    addItem(id) {
+        var table = this.getTable()
+        var quantity = Number(document.getElementById(id + 'q').value)
+        this.addTotalCount(quantity)
+        for (const item of table) {
+            if (item[0] == id) {
+                quantity += Number(item[1])
+                item[1] = `${quantity}`
+                this.write(table)
+                console.log(window.localStorage)
+                return
+            }
+        }
+        table.push([id, quantity])
+        this.write(table)
+        this.addItemCount(1)
+        console.log(window.localStorage)
+    }
+    deleteItem(id) {
+        var table = this.getTable()
+        for (const item of table) {
+            if (item[0] == id) {
+                this.addTotalCount(-Number(item[1]))
+                table.splice(table.indexOf(item), 1)
+                this.write(table)
+                this.addItemCount(-1)
+                this.load()
+                console.log(window.localStorage)
+                return
+            }
+        }
+    }
+    incItem(id) {
+        this.addTotalCount(1)
+        var quantity = 0
+        var table = this.getTable()
+        for (const item of table) {
+            if (item[0] == id) {
+                quantity = Number(item[1]) + 1
+                item[1] = `${quantity}`
+                this.write(table)
+                this.load()
+                console.log(window.localStorage)
+                return
+            }
+        }
+    }
+    decItem(id) {
+        this.addTotalCount(-1)
+        var quantity = 0
+        var table = this.getTable()
+        for (const item of table) {
+            if (item[0] == id) {
+                if (item[1] == 1) {
+                    table.splice(table.indexOf(item), 1)
+                    this.write(table)
+                    this.addItemCount(-1)
+                    this.load()
+                    console.log(window.localStorage)
+                    return
+                }
+                quantity = Number(item[1]) - 1
+                item[1] = `${quantity}`
+                this.write(table)
+                this.load()
+                console.log(window.localStorage)
+                return
+            }
+        }
+    }
+    load() {
+        if (window.localStorage.getItem('itemCount') != '0') {
+            accessProductDB('cart-data' + buildQuery(), render)
+            return
+        }
+        else {
+            clear()
+        }
+    }
+}
+let cart = new Cart()
 // react component for each store item
 function BuildStore(props) {
     const roots = props.products.map((row) =>    
@@ -59,19 +161,21 @@ function BuildHeaderAppend(props) {
         </div>
     )
 }
-function clearStore() {
+// populate store with products, take postgresql rows object from product database as input
+function render(obj) {
+    const store = <BuildStore products={obj.products}/>
+    ReactDOM.render(store, document.getElementById('store_view'))
+    if (document.location.pathname == '/cart' && cart.getItemCount() != '0') {
+        var totalPrice = 0.0
+        for (const row of obj.products) {
+            totalPrice += Number(row.price) * cart.getItemQuantity(row.id)
+        }
+        totalPrice = totalPrice.toFixed(2)
+        const head = <BuildHeaderAppend totalPrice={totalPrice} totalQuantity={cart.getTotalCount()}/>
+        ReactDOM.render(head, document.getElementById('cart_head'))
+    }
+}
+function clear() {
     ReactDOM.render(<div></div>, document.getElementById('cart_head'))
     ReactDOM.render(<div></div>, document.getElementById('store_view'))
-}
-export function loadCart() {
-    if (window.localStorage.getItem('itemCount') != '0') {
-        accessProductDB('cart-data' + buildQuery(), renderStore)
-        return
-    }
-    else {
-        clearStore()
-    }
-}
-export function loadAll() {
-    accessProductDB('all', renderStore)
 }
