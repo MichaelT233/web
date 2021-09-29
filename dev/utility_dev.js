@@ -1,4 +1,6 @@
 // client scripts
+
+import {build_store, clear_store} from './react.js'
 // function for making AJAX requests for JSON objects from a given URL and then executes a given callback with access to said JSON data
 export function getJSON(url, callback) {
     // creating AJAX request object
@@ -19,6 +21,27 @@ export function getJSON(url, callback) {
     request.send()
 }
 var client_storage = window.localStorage
+// function: load cart products on cart page
+export function load_cart() {
+    // access cart item count
+    var cart_count = client_storage.getItem('cart-count')
+    // function: build URL query to send cart data to server
+    function build_query() {
+        // build query string from cart data and return it
+        const query = '?cart=' + client_storage['cart']
+        return query
+    }
+    // if cart is not initialized and not empty
+    if (cart_count != null && cart_count != '0') {
+        const query = build_query()
+        console.log(client_storage)
+        console.log(query)
+        // call AJAX JSON get request to '/cart-data' path with query and passing build_store as callback
+        getJSON('cart-data' + query, build_store)
+        return
+    }
+    clear_store()
+}
 // function add item to cart
 export function add_cart(id_num) {
     // get item quantity from dom
@@ -94,12 +117,13 @@ export function remove_cart(id_num) {
                 client_storage.setItem('cart-count', "" + cart_count)
                 console.log(client_storage)
                 // reload cart
-                location.reload()
+                load_cart()
                 // exit function
                 return
             }
         }
     }
+    clear_store()
     console.log(client_storage)
 }
 export function update_cart(id_num, flag) {
@@ -128,7 +152,7 @@ export function update_cart(id_num, flag) {
                 client_storage.setItem(`cart`, cart)
                 console.log(client_storage)
                 // reload cart
-                location.reload()
+                load_cart()
                 // exit function
                 return              
             }

@@ -81,3 +81,6 @@ export function build_store(obj) {
         ++i
     }
 }
+export function clear_store() {
+    ReactDOM.render(<div></div>, document.getElementById('store_view'))
+}
