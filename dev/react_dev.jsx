@@ -92,7 +92,6 @@ export function build_store(obj) {
         }
         total_price = total_price.toFixed(2)
         var head = <Build_Head total={total_price}/>
-        console.log(total_price)
         ReactDOM.render(head, document.getElementById('cart_head'))
     }
 }

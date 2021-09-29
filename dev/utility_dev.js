@@ -40,6 +40,7 @@ export function load_cart() {
         getJSON('cart-data' + query, build_store)
         return
     }
+    console.log(client_storage)
     clear_roots()
 }
 // function add item to cart
@@ -115,7 +116,6 @@ export function remove_cart(id_num) {
                 cart_count = Number(cart_count)
                 --cart_count
                 client_storage.setItem('cart-count', "" + cart_count)
-                console.log(client_storage)
                 // reload cart
                 load_cart()
                 // exit function
@@ -145,11 +145,17 @@ export function update_cart(id_num, flag) {
                 else if (flag == 'dec') {
                     var quantity = Number(item[1]) - 1
                     item[1] = `${quantity}`
+                    if (quantity == 0) {
+                        cart.splice(cart.indexOf(item), 1)
+                        // decrement and set new cart count in storage        
+                        cart_count = Number(cart_count)
+                        --cart_count
+                        client_storage.setItem('cart-count', "" + cart_count)
+                    }
                 }
                 // set new cart array in storage
                 cart = JSON.stringify(cart)
                 client_storage.setItem(`cart`, cart)
-                console.log(client_storage)
                 // reload cart
                 load_cart()
                 // exit function

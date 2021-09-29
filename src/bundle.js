@@ -120,7 +120,6 @@ function build_store(obj) {
     var head = React.createElement(Build_Head, {
       total: total_price
     });
-    console.log(total_price);
     ReactDOM.render(head, document.getElementById('cart_head'));
   }
 }
@@ -178,6 +177,7 @@ function load_cart() {
     return;
   }
 
+  console.log(client_storage);
   (0,_react_js__WEBPACK_IMPORTED_MODULE_0__.clear_roots)();
 }
 function add_cart(id_num) {
@@ -227,7 +227,6 @@ function remove_cart(id_num) {
         cart_count = Number(cart_count);
         --cart_count;
         client_storage.setItem('cart-count', "" + cart_count);
-        console.log(client_storage);
         load_cart();
         return;
       }
@@ -250,11 +249,17 @@ function update_cart(id_num, flag) {
         } else if (flag == 'dec') {
           var quantity = Number(item[1]) - 1;
           item[1] = `${quantity}`;
+
+          if (quantity == 0) {
+            cart.splice(cart.indexOf(item), 1);
+            cart_count = Number(cart_count);
+            --cart_count;
+            client_storage.setItem('cart-count', "" + cart_count);
+          }
         }
 
         cart = JSON.stringify(cart);
         client_storage.setItem(`cart`, cart);
-        console.log(client_storage);
         load_cart();
         return;
       }
