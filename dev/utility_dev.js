@@ -1,6 +1,6 @@
 /*
 */
-import {renderStore, ClearRoots} from './react.js'
+import {loadCart} from './react.js'
 export class Cart {
     getItemCount() {
         return Number(window.localStorage.getItem('itemCount'))
@@ -10,6 +10,14 @@ export class Cart {
     }
     getTable() {
         return JSON.parse(window.localStorage.getItem('cart'))
+    }
+    getItemQuantity(id) {
+        var table = this.getTable()
+        for (const item of table) {
+            if (item[0] == id) {
+                return Number(item[1])
+            }
+        }
     }
     write(table) {
         window.localStorage.setItem('cart', JSON.stringify(table))
@@ -92,30 +100,13 @@ export class Cart {
             }
         }
     }
-    getItemQuantity(id) {
-        var table = this.getTable()
-        for (const item of table) {
-            if (item[0] == id) {
-                return Number(item[1])
-            }
-        }
-    }
 }
-export function loadCart() {
-    if (window.localStorage.getItem('itemCount') != '0') {
-        getJSON('cart-data' + buildQuery(), renderStore)
-        return
-    }
-    else {
-        ClearRoots()
-    }
-}
-function buildQuery() {
+export function buildQuery() {
     const query = '?cart=' + window.localStorage.getItem('cart')
     console.log(query)
     return query
 }
-export function getJSON(url, callback) {
+export function accessProductDB(url, callback) {
     var request = new XMLHttpRequest()
     request.open("GET", url)
     request.onreadystatechange = function ready() {

@@ -1,6 +1,5 @@
 // client side react jsx scripts
-// dependency requirment, also a flag for webpack
-import {Cart} from './utility.js'
+import {Cart, accessProductDB, buildQuery} from './utility.js'
 let cart = new Cart()
 // populate store with products, take postgresql rows object from product database as input
 export function renderStore(obj) {
@@ -15,11 +14,6 @@ export function renderStore(obj) {
         const head = <BuildHeaderAppend totalPrice={totalPrice} totalQuantity={cart.getTotalCount()}/>
         ReactDOM.render(head, document.getElementById('cart_head'))
     }
-}
-
-export function ClearRoots() {
-    ReactDOM.render(<div></div>, document.getElementById('cart_head'))
-    ReactDOM.render(<div></div>, document.getElementById('store_view'))
 }
 // react component for each store item
 function BuildStore(props) {
@@ -64,4 +58,20 @@ function BuildHeaderAppend(props) {
             {props.totalQuantity != 1 && <button type='button'>Proceed to Checkout {'('+props.totalQuantity+' items)'}</button>}
         </div>
     )
+}
+function clearStore() {
+    ReactDOM.render(<div></div>, document.getElementById('cart_head'))
+    ReactDOM.render(<div></div>, document.getElementById('store_view'))
+}
+export function loadCart() {
+    if (window.localStorage.getItem('itemCount') != '0') {
+        accessProductDB('cart-data' + buildQuery(), renderStore)
+        return
+    }
+    else {
+        clearStore()
+    }
+}
+export function loadAll() {
+    accessProductDB('all', renderStore)
 }
