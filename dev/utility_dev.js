@@ -1,6 +1,6 @@
 /*
 */
-import {build_store, clear_roots} from './react.js'
+import {renderStore, ClearRoots} from './react.js'
 export class Cart {
     getItemCount() {
         return Number(window.localStorage.getItem('itemCount'))
@@ -24,7 +24,7 @@ export class Cart {
     }
     addItem(id) {
         var table = this.getTable()
-        var quantity = Number(document.getElementById(id).value)
+        var quantity = Number(document.getElementById(id + 'q').value)
         this.addTotalCount(quantity)
         for (const item of table) {
             if (item[0] == id) {
@@ -44,7 +44,7 @@ export class Cart {
         var table = this.getTable()
         for (const item of table) {
             if (item[0] == id) {
-                this.addTotalCount(-(Number(item[1])))
+                this.addTotalCount(-Number(item[1]))
                 table.splice(table.indexOf(item), 1)
                 this.write(table)
                 this.addItemCount(-1)
@@ -103,11 +103,11 @@ export class Cart {
 }
 export function loadCart() {
     if (window.localStorage.getItem('itemCount') != '0') {
-        getJSON('cart-data' + buildQuery(), build_store)
+        getJSON('cart-data' + buildQuery(), renderStore)
         return
     }
     else {
-        clear_roots()
+        ClearRoots()
     }
 }
 function buildQuery() {

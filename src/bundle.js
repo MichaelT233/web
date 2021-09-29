@@ -17,42 +17,21 @@ __webpack_require__.r(__webpack_exports__);
 
 let cart = new _utility_js__WEBPACK_IMPORTED_MODULE_0__.Cart();
 function build_store(obj) {
-  var container = '';
-  var i = 0;
-
-  while (i < obj.products.length) {
-    container += `<div class='item_wrapper' id='store_item${i}'></div>`;
-    ++i;
-  }
-
-  var container_jsx = React.createElement("div", {
-    id: "store_wrapper",
-    dangerouslySetInnerHTML: {
-      __html: container
-    }
+  const store = React.createElement(Store_Item, {
+    products: obj.products
   });
-  ReactDOM.render(container_jsx, document.getElementById('store_view'));
-  i = 0;
-  var total_price = 0;
-
-  while (i < obj.products.length) {
-    var item = React.createElement(Store_Item, {
-      title: obj.products[i].title,
-      price: obj.products[i].price,
-      description: obj.products[i].descr,
-      image_path: obj.products[i].image_path,
-      id: obj.products[i].id,
-      quantity: "" + cart.getItemQuantity(obj.products[i].id)
-    });
-    ReactDOM.render(item, document.getElementById('store_item' + i));
-    total_price += Number(obj.products[i].price) * cart.getItemQuantity(obj.products[i].id);
-    ++i;
-  }
+  ReactDOM.render(store, document.getElementById('store_view'));
 
   if (document.location.pathname == '/cart' && cart.getItemCount() != '0') {
-    total_price = total_price.toFixed(2);
-    var head = React.createElement(Build_Head, {
-      totalPrice: total_price,
+    var totalPrice = 0.0;
+
+    for (const row of obj.products) {
+      totalPrice += Number(row.price) * cart.getItemQuantity(row.id);
+    }
+
+    totalPrice = totalPrice.toFixed(2);
+    const head = React.createElement(Build_Head, {
+      totalPrice: totalPrice,
       totalQuantity: cart.getTotalCount()
     });
     ReactDOM.render(head, document.getElementById('cart_head'));
@@ -64,46 +43,49 @@ function clear_roots() {
 }
 
 function Store_Item(props) {
-  return React.createElement("div", {
-    className: "store_item"
+  const roots = props.products.map(row => React.createElement("div", {
+    key: row.id,
+    className: "store_item",
+    id: row.id
   }, React.createElement("img", {
-    alt: props.image_path,
-    src: props.image_path,
+    alt: row.image_path,
+    src: row.image_path,
     className: "product_image"
   }), React.createElement("div", {
     className: "product_text"
-  }, React.createElement("h2", null, props.title), React.createElement("h2", null, "$", props.price), React.createElement("p", null, props.description), React.createElement("label", {
+  }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), React.createElement("p", null, row.description), React.createElement("label", {
     htmlFor: "quantity"
   }, "Qty: "), document.location.pathname == '/cart' && React.createElement("button", {
     className: "update_cart",
     type: "button",
-    onClick: () => cart.decItem(props.id)
+    onClick: () => cart.decItem(row.id)
   }, "-"), document.location.pathname == '/' && React.createElement("input", {
-    id: props.id,
+    id: row.id + 'q',
     type: "number",
     name: "quantity",
     min: "1",
     defaultValue: "1"
   }), document.location.pathname == '/cart' && React.createElement("input", {
-    id: props.id,
+    id: row.id + 'q',
     className: "cart_quantity",
     type: "number",
     name: "quantity",
-    value: props.quantity,
+    value: cart.getItemQuantity(row.id),
     disabled: true
   }), document.location.pathname == '/' && React.createElement("button", {
     className: "add_cart",
     type: "button",
-    onClick: () => cart.addItem(props.id)
+    onClick: () => cart.addItem(row.id)
   }, "Add to Cart"), document.location.pathname == '/cart' && React.createElement("button", {
     className: "update_cart",
     type: "button",
-    onClick: () => cart.incItem(props.id)
+    onClick: () => cart.incItem(row.id)
   }, "+"), document.location.pathname == '/cart' && React.createElement("button", {
     className: "remove_cart",
     type: "button",
-    onClick: () => cart.deleteItem(props.id)
-  }, "Delete")));
+    onClick: () => cart.deleteItem(row.id)
+  }, "Delete"))));
+  return React.createElement("div", null, roots);
 }
 
 function Build_Head(props) {
@@ -162,7 +144,7 @@ class Cart {
 
   addItem(id) {
     var table = this.getTable();
-    var quantity = Number(document.getElementById(id).value);
+    var quantity = Number(document.getElementById(id + 'q').value);
     this.addTotalCount(quantity);
 
     for (const item of table) {
