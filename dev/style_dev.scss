@@ -133,8 +133,7 @@ header {
 /***********************************/
 /*store containing div*/
 #store_view {
-    /*set top margin to floating header height as to not have overlap*/
-    margin-top: $header_space + 1em;
+    margin-top: 1em;
 }
 /*wrapper div for store items*/
 .item_wrapper {
@@ -150,20 +149,20 @@ header {
     width: 100%;
     /*font styling of titles of store items*/
     h2 {
-        font-size: 3em;
+        font-size: 3.6em;
         margin: 1em 0;
     }
     /*price and description styling*/
     p {
-        margin: 0 0 6em 0;
-        font-size: 1.6em;
+        margin: 0 0 4em 0;
+        font-size: 2em;
     }
     label {
-        font-size: 2.2em;
+        font-size: 3em;
     }
     /*store item quantity selector*/
     input {
-        font-size: 2.2em;
+        font-size: 3em;
         width: 15%;
         text-align: center;
         touch-action: none;
@@ -171,7 +170,7 @@ header {
     /*store item add to cart button*/
     button {
         background-color: $primary_color;
-        font-size: 2.2em;
+        font-size: 3em;
         text-align: center;
     }
 }
@@ -227,3 +226,24 @@ footer {
     }
 }
 /***********************************/
+
+#head_space {
+    height: $header_space;
+}
+
+#cart_head {
+    background-color: $primary_color;
+    @include black_border();
+    h2 {
+        font-size: 3.6em;
+        display: inline-block;
+        margin-left: 10%;
+    }
+    button {
+        background-color: $primary_color;
+        font-size: 3em;
+        text-align: center;
+        margin-left: 20%;
+        display: inline-block;
+    }
+}

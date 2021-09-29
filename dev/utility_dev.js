@@ -1,6 +1,6 @@
 // client scripts
 
-import {build_store, clear_store} from './react.js'
+import {build_store, clear_roots} from './react.js'
 // function for making AJAX requests for JSON objects from a given URL and then executes a given callback with access to said JSON data
 export function getJSON(url, callback) {
     // creating AJAX request object
@@ -40,7 +40,7 @@ export function load_cart() {
         getJSON('cart-data' + query, build_store)
         return
     }
-    clear_store()
+    clear_roots()
 }
 // function add item to cart
 export function add_cart(id_num) {
@@ -123,7 +123,6 @@ export function remove_cart(id_num) {
             }
         }
     }
-    clear_store()
     console.log(client_storage)
 }
 export function update_cart(id_num, flag) {

@@ -11,11 +11,12 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "build_store": () => (/* binding */ build_store),
-/* harmony export */   "clear_store": () => (/* binding */ clear_store)
+/* harmony export */   "clear_roots": () => (/* binding */ clear_roots)
 /* harmony export */ });
 /* harmony import */ var _utility_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utility.js */ "./utility.js");
 
 function build_store(obj) {
+  var cart_count = window.localStorage.getItem('cart-count');
   var container = `<div class='item_wrapper' id='store_item0'></div>`;
   var i = 1;
 
@@ -33,7 +34,6 @@ function build_store(obj) {
   ReactDOM.render(container_jsx, document.getElementById('store_view'));
 
   function Store_Item(props) {
-    var cart_count = window.localStorage.getItem('cart-count');
     var quantity = null;
 
     if (document.location.pathname == '/cart' && cart_count != null && cart_count != '0') {
@@ -54,7 +54,7 @@ function build_store(obj) {
       className: "product_image"
     }), React.createElement("div", {
       className: "product_text"
-    }, React.createElement("h2", null, props.title), React.createElement("h2", null, props.price), React.createElement("p", null, props.description), React.createElement("label", {
+    }, React.createElement("h2", null, props.title), React.createElement("h2", null, "$", props.price), React.createElement("p", null, props.description), React.createElement("label", {
       htmlFor: "quantity"
     }, "Qty: "), document.location.pathname == '/cart' && React.createElement("button", {
       className: "update_cart",
@@ -101,8 +101,34 @@ function build_store(obj) {
     ReactDOM.render(item, document.getElementById('store_item' + i));
     ++i;
   }
+
+  if (document.location.pathname == '/cart' && cart_count != null && cart_count != '0') {
+    function Build_Head(props) {
+      return React.createElement("div", {
+        id: "cart_head"
+      }, React.createElement("h2", null, "$", props.total), React.createElement("button", {
+        type: "button"
+      }, "Proceed to Checkout"));
+    }
+
+    var total_price = 0;
+    i = 0;
+
+    while (i < obj.products.length) {
+      total_price += Number(obj.products[i].price);
+      ++i;
+    }
+
+    total_price = total_price.toFixed(2);
+    var head = React.createElement(Build_Head, {
+      total: total_price
+    });
+    console.log(total_price);
+    ReactDOM.render(head, document.getElementById('cart_head'));
+  }
 }
-function clear_store() {
+function clear_roots() {
+  ReactDOM.render(React.createElement("div", null), document.getElementById('cart_head'));
   ReactDOM.render(React.createElement("div", null), document.getElementById('store_view'));
 }
 
@@ -155,7 +181,7 @@ function load_cart() {
     return;
   }
 
-  (0,_react_js__WEBPACK_IMPORTED_MODULE_0__.clear_store)();
+  (0,_react_js__WEBPACK_IMPORTED_MODULE_0__.clear_roots)();
 }
 function add_cart(id_num) {
   var quantity = document.getElementById(id_num).value;
@@ -211,7 +237,6 @@ function remove_cart(id_num) {
     }
   }
 
-  (0,_react_js__WEBPACK_IMPORTED_MODULE_0__.clear_store)();
   console.log(client_storage);
 }
 function update_cart(id_num, flag) {

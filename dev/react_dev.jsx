@@ -3,6 +3,9 @@
 import {add_cart, remove_cart, update_cart} from './utility.js'
 // populate store with products, take postgresql rows object from product database as input
 export function build_store(obj) {
+    // access cart item count
+    var cart_count = window.localStorage.getItem('cart-count')
+    // initialize quantity variable globally in function
     // loop that generates the necessary html divs based on product quantity, for react to plug into
     // initial string
     var container = `<div class='item_wrapper' id='store_item0'></div>`;
@@ -21,9 +24,6 @@ export function build_store(obj) {
     ReactDOM.render(container_jsx, document.getElementById('store_view'))
     // react component for each store item
     function Store_Item(props) {
-        // access cart item count
-        var cart_count = window.localStorage.getItem('cart-count')
-        // initialize quantity variable globally in function
         var quantity = null
         // if on cart page and cart is not empty
         if (document.location.pathname == '/cart' && (cart_count != null && cart_count != '0')) {
@@ -48,7 +48,7 @@ export function build_store(obj) {
             {/*products title heading*/}
             <h2>{props.title}</h2>
             {/*product price*/}
-            <h2>{props.price}</h2>
+            <h2>${props.price}</h2>
             {/*product description*/}
             <p>{props.description}</p>
             {/*product quantity selector*/}
@@ -80,7 +80,28 @@ export function build_store(obj) {
         // increment counter value
         ++i
     }
+    if (document.location.pathname == '/cart' && (cart_count != null && cart_count != '0')) {
+        function Build_Head(props) {
+            return (
+                <div id='cart_head'>
+                <h2>${props.total}</h2>
+                <button type='button'>Proceed to Checkout</button>
+                </div>
+            )
+        }
+        var total_price = 0
+        i = 0
+        while (i < obj.products.length) {
+            total_price += Number(obj.products[i].price)
+            ++i
+        }
+        total_price = total_price.toFixed(2)
+        var head = <Build_Head total={total_price}/>
+        console.log(total_price)
+        ReactDOM.render(head, document.getElementById('cart_head'))
+    }
 }
-export function clear_store() {
+export function clear_roots() {
+    ReactDOM.render(<div></div>, document.getElementById('cart_head'))
     ReactDOM.render(<div></div>, document.getElementById('store_view'))
 }
