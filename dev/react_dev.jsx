@@ -6,25 +6,12 @@ export function build_store(obj) {
     // access cart item count
     var cart_count = window.localStorage.getItem('cart-count')
     // initialize quantity variable globally in function
-    // loop that generates the necessary html divs based on product quantity, for react to plug into
-    // initial string
-    var container = `<div class='item_wrapper' id='store_item0'></div>`;
-    // creating a counter value            
-    var i = 1
-    // loops as many times as their are products in the JSON response
-    while (i < obj.products.length) {
-        // building string (and divs)
-        container = container + `<div class='item_wrapper' id='store_item${i}'></div>`
-        //increment counter value
-        i ++
-    }
-    // converting the jsx string into an actual react jsx reference
-    var container_jsx = (<div id='store_wrapper' dangerouslySetInnerHTML={{__html: container}}/>)
-    // rendering the react jsx into the store viewport
-    ReactDOM.render(container_jsx, document.getElementById('store_view'))
+    var quantity = 0
+    var total_quantity = 0
+    var total_price = 0
+
     // react component for each store item
     function Store_Item(props) {
-        var quantity = null
         // if on cart page and cart is not empty
         if (document.location.pathname == '/cart' && (cart_count != null && cart_count != '0')) {
             // access and iterate cart array
@@ -35,6 +22,7 @@ export function build_store(obj) {
                 if (item[0] == props.id) {
                     // set the quantity variable to the quantity of the item in the cart that is currently being rendered
                     quantity = item[1]
+                    total_quantity += Number(quantity)
                 }
             }
         }
@@ -66,6 +54,17 @@ export function build_store(obj) {
             </div>
         </div>)
     }
+    var container = ''
+    var i = 0
+    while (i < obj.products.length) {
+        container+= `<div class='item_wrapper' id='store_item${i}'></div>`
+        ++i
+    }
+    // converting the jsx string into an actual react jsx reference
+    var container_jsx = (<div id='store_wrapper' dangerouslySetInnerHTML={{__html: container}}/>)
+    // rendering the react jsx into the store viewport
+    ReactDOM.render(container_jsx, document.getElementById('store_view'))
+
     // loop for populating the previously rendered divs with store items/products
     i = 0
     while (i < obj.products.length) {
@@ -77,6 +76,7 @@ export function build_store(obj) {
             id = {obj.products[i].id}/>
         // rendering finished item into it's div
         ReactDOM.render(item, document.getElementById('store_item' + i));
+        total_price += (Number(obj.products[i].price) * Number(quantity))
         // increment counter value
         ++i
     }
@@ -84,16 +84,11 @@ export function build_store(obj) {
         function Build_Head(props) {
             return (
                 <div id='cart_head'>
-                <h2>${props.total}</h2>
-                <button type='button'>Proceed to Checkout</button>
+                <h2>Total ${props.total}</h2>
+                {total_quantity == 1 && <button type='button'>Proceed to Checkout {'('+total_quantity+' item)'}</button>}
+                {total_quantity != 1 && <button type='button'>Proceed to Checkout {'('+total_quantity+' items)'}</button>}
                 </div>
             )
-        }
-        var total_price = 0
-        i = 0
-        while (i < obj.products.length) {
-            total_price += Number(obj.products[i].price)
-            ++i
         }
         total_price = total_price.toFixed(2)
         var head = <Build_Head total={total_price}/>

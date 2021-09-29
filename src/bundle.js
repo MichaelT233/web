@@ -17,31 +17,18 @@ __webpack_require__.r(__webpack_exports__);
 
 function build_store(obj) {
   var cart_count = window.localStorage.getItem('cart-count');
-  var container = `<div class='item_wrapper' id='store_item0'></div>`;
-  var i = 1;
-
-  while (i < obj.products.length) {
-    container = container + `<div class='item_wrapper' id='store_item${i}'></div>`;
-    i++;
-  }
-
-  var container_jsx = React.createElement("div", {
-    id: "store_wrapper",
-    dangerouslySetInnerHTML: {
-      __html: container
-    }
-  });
-  ReactDOM.render(container_jsx, document.getElementById('store_view'));
+  var quantity = 0;
+  var total_quantity = 0;
+  var total_price = 0;
 
   function Store_Item(props) {
-    var quantity = null;
-
     if (document.location.pathname == '/cart' && cart_count != null && cart_count != '0') {
       var cart = JSON.parse(window.localStorage['cart']);
 
       for (item of cart) {
         if (item[0] == props.id) {
           quantity = item[1];
+          total_quantity += Number(quantity);
         }
       }
     }
@@ -88,6 +75,21 @@ function build_store(obj) {
     }, "Delete")));
   }
 
+  var container = '';
+  var i = 0;
+
+  while (i < obj.products.length) {
+    container += `<div class='item_wrapper' id='store_item${i}'></div>`;
+    ++i;
+  }
+
+  var container_jsx = React.createElement("div", {
+    id: "store_wrapper",
+    dangerouslySetInnerHTML: {
+      __html: container
+    }
+  });
+  ReactDOM.render(container_jsx, document.getElementById('store_view'));
   i = 0;
 
   while (i < obj.products.length) {
@@ -99,6 +101,7 @@ function build_store(obj) {
       id: obj.products[i].id
     });
     ReactDOM.render(item, document.getElementById('store_item' + i));
+    total_price += Number(obj.products[i].price) * Number(quantity);
     ++i;
   }
 
@@ -106,17 +109,11 @@ function build_store(obj) {
     function Build_Head(props) {
       return React.createElement("div", {
         id: "cart_head"
-      }, React.createElement("h2", null, "$", props.total), React.createElement("button", {
+      }, React.createElement("h2", null, "Total $", props.total), total_quantity == 1 && React.createElement("button", {
         type: "button"
-      }, "Proceed to Checkout"));
-    }
-
-    var total_price = 0;
-    i = 0;
-
-    while (i < obj.products.length) {
-      total_price += Number(obj.products[i].price);
-      ++i;
+      }, "Proceed to Checkout ", '(' + total_quantity + ' item)'), total_quantity != 1 && React.createElement("button", {
+        type: "button"
+      }, "Proceed to Checkout ", '(' + total_quantity + ' items)'));
     }
 
     total_price = total_price.toFixed(2);
