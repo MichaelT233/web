@@ -1,18 +1,17 @@
+// main client module
+
+// import primary classes
 import {Store} from './react.js'
 import {Cart} from './react.js'
 
-// set the loadProducts function to global browser scope so it can be accessed from the DOM
-//window.loadAll = loadAll
-
-// set the loadProducts function to global browser scope so it can be accessed from the DOM
-//window.loadCart = loadCart
-
+// instantiate new Store object
 let store = new Store()
-window.store = store
+// instantiate new Cart object
 let cart = new Cart()
+// make objects' scope accessible from DOM
+window.store = store
 window.cart = cart
-
-// initialize cart parameters if cart is null
+// initialize localStorage parameters if cart is null
 if (window.localStorage.getItem('cart') == null) {
     window.localStorage.setItem('cart', '[]')
     window.localStorage.setItem('itemCount', '0')

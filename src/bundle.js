@@ -17,7 +17,18 @@ __webpack_require__.r(__webpack_exports__);
 
 class Store {
   loadAll() {
-    (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)('all', render);
+    (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)('all', this.#render);
+  }
+
+  #render(rows) {
+    const storeItems = React.createElement(BuildStore, {
+      rows: rows
+    });
+    ReactDOM.render(storeItems, document.getElementById('store_view'));
+  }
+
+  clear() {
+    ReactDOM.render(React.createElement("div", null), document.getElementById('store_view'));
   }
 
 }
@@ -37,14 +48,14 @@ class Cart {
   getItemQuantity(id) {
     var table = this.getTable();
 
-    for (const item of table) {
-      if (item[0] == id) {
-        return Number(item[1]);
+    for (const row of table) {
+      if (row[0] == id) {
+        return Number(row[1]);
       }
     }
   }
 
-  write(table) {
+  overwrite(table) {
     window.localStorage.setItem('cart', JSON.stringify(table));
   }
 
@@ -63,18 +74,18 @@ class Cart {
     var quantity = Number(document.getElementById(id + 'q').value);
     this.addTotalCount(quantity);
 
-    for (const item of table) {
-      if (item[0] == id) {
-        quantity += Number(item[1]);
-        item[1] = `${quantity}`;
-        this.write(table);
+    for (const row of table) {
+      if (row[0] == id) {
+        quantity += Number(row[1]);
+        row[1] = `${quantity}`;
+        this.overwrite(table);
         console.log(window.localStorage);
         return;
       }
     }
 
     table.push([id, quantity]);
-    this.write(table);
+    this.overwrite(table);
     this.addItemCount(1);
     console.log(window.localStorage);
   }
@@ -82,11 +93,11 @@ class Cart {
   deleteItem(id) {
     var table = this.getTable();
 
-    for (const item of table) {
-      if (item[0] == id) {
-        this.addTotalCount(-Number(item[1]));
-        table.splice(table.indexOf(item), 1);
-        this.write(table);
+    for (const row of table) {
+      if (row[0] == id) {
+        this.addTotalCount(-Number(row[1]));
+        table.splice(table.indexOf(row), 1);
+        this.overwrite(table);
         this.addItemCount(-1);
         this.load();
         console.log(window.localStorage);
@@ -100,11 +111,11 @@ class Cart {
     var quantity = 0;
     var table = this.getTable();
 
-    for (const item of table) {
-      if (item[0] == id) {
-        quantity = Number(item[1]) + 1;
-        item[1] = `${quantity}`;
-        this.write(table);
+    for (const row of table) {
+      if (row[0] == id) {
+        quantity = Number(row[1]) + 1;
+        row[1] = `${quantity}`;
+        this.overwrite(table);
         this.load();
         console.log(window.localStorage);
         return;
@@ -117,41 +128,64 @@ class Cart {
     var quantity = 0;
     var table = this.getTable();
 
-    for (const item of table) {
-      if (item[0] == id) {
-        if (item[1] == 1) {
-          table.splice(table.indexOf(item), 1);
-          this.write(table);
+    for (const row of table) {
+      if (row[0] == id) {
+        if (row[1] == 1) {
+          table.splice(table.indexOf(row), 1);
+          this.overwrite(table);
           this.addItemCount(-1);
           this.load();
           console.log(window.localStorage);
           return;
+        } else {
+          quantity = Number(row[1]) - 1;
+          row[1] = `${quantity}`;
+          this.overwrite(table);
+          this.load();
+          console.log(window.localStorage);
+          return;
         }
-
-        quantity = Number(item[1]) - 1;
-        item[1] = `${quantity}`;
-        this.write(table);
-        this.load();
-        console.log(window.localStorage);
-        return;
       }
     }
   }
 
   load() {
-    if (window.localStorage.getItem('itemCount') != '0') {
-      (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)('cart-data' + (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.buildQuery)(), render);
-      return;
+    if (this.getItemCount() != 0) {
+      (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)('cart-data' + (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.buildQuery)(), this.#render);
     } else {
-      clear();
+      this.clear();
     }
+  }
+
+  #render(rows) {
+    const cartItems = React.createElement(BuildCart, {
+      rows: rows
+    });
+    ReactDOM.render(cartItems, document.getElementById('store_view'));
+    var totalPrice = 0.0;
+
+    for (const row of rows) {
+      totalPrice += Number(row.price) * cart.getItemQuantity(row.id);
+    }
+
+    totalPrice = totalPrice.toFixed(2);
+    const head = React.createElement(BuildCartHeader, {
+      totalPrice: totalPrice,
+      totalQuantity: cart.getTotalCount()
+    });
+    ReactDOM.render(head, document.getElementById('cart_head'));
+  }
+
+  clear() {
+    ReactDOM.render(React.createElement("div", null), document.getElementById('cart_head'));
+    ReactDOM.render(React.createElement("div", null), document.getElementById('store_view'));
   }
 
 }
 let cart = new Cart();
 
 function BuildStore(props) {
-  const roots = props.products.map(row => React.createElement("div", {
+  const roots = props.rows.map(row => React.createElement("div", {
     key: row.id,
     className: "store_item",
     id: row.id
@@ -163,32 +197,49 @@ function BuildStore(props) {
     className: "product_text"
   }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), React.createElement("p", null, row.description), React.createElement("label", {
     htmlFor: "quantity"
-  }, "Qty: "), document.location.pathname == '/cart' && React.createElement("button", {
-    className: "update_cart",
-    type: "button",
-    onClick: () => cart.decItem(row.id)
-  }, "-"), document.location.pathname == '/' && React.createElement("input", {
+  }, "Qty: "), React.createElement("input", {
     id: row.id + 'q',
     type: "number",
     name: "quantity",
     min: "1",
     defaultValue: "1"
-  }), document.location.pathname == '/cart' && React.createElement("input", {
+  }), React.createElement("button", {
+    className: "add_cart",
+    type: "button",
+    onClick: () => cart.addItem(row.id)
+  }, "Add to Cart"))));
+  return React.createElement("div", null, roots);
+}
+
+function BuildCart(props) {
+  const roots = props.rows.map(row => React.createElement("div", {
+    key: row.id,
+    className: "store_item",
+    id: row.id
+  }, React.createElement("img", {
+    alt: row.image_path,
+    src: row.image_path,
+    className: "product_image"
+  }), React.createElement("div", {
+    className: "product_text"
+  }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), React.createElement("p", null, row.description), React.createElement("label", {
+    htmlFor: "quantity"
+  }, "Qty: "), React.createElement("button", {
+    className: "update_cart",
+    type: "button",
+    onClick: () => cart.decItem(row.id)
+  }, "-"), React.createElement("input", {
     id: row.id + 'q',
     className: "cart_quantity",
     type: "number",
     name: "quantity",
     value: cart.getItemQuantity(row.id),
     disabled: true
-  }), document.location.pathname == '/' && React.createElement("button", {
-    className: "add_cart",
-    type: "button",
-    onClick: () => cart.addItem(row.id)
-  }, "Add to Cart"), document.location.pathname == '/cart' && React.createElement("button", {
+  }), React.createElement("button", {
     className: "update_cart",
     type: "button",
     onClick: () => cart.incItem(row.id)
-  }, "+"), document.location.pathname == '/cart' && React.createElement("button", {
+  }, "+"), React.createElement("button", {
     className: "remove_cart",
     type: "button",
     onClick: () => cart.deleteItem(row.id)
@@ -196,7 +247,7 @@ function BuildStore(props) {
   return React.createElement("div", null, roots);
 }
 
-function BuildHeaderAppend(props) {
+function BuildCartHeader(props) {
   return React.createElement("div", {
     id: "cart_head"
   }, React.createElement("h2", null, "Total $", props.totalPrice), props.totalQuantity == 1 && React.createElement("button", {
@@ -204,33 +255,6 @@ function BuildHeaderAppend(props) {
   }, "Proceed to Checkout ", '(' + props.totalQuantity + ' item)'), props.totalQuantity != 1 && React.createElement("button", {
     type: "button"
   }, "Proceed to Checkout ", '(' + props.totalQuantity + ' items)'));
-}
-
-function render(obj) {
-  const store = React.createElement(BuildStore, {
-    products: obj.products
-  });
-  ReactDOM.render(store, document.getElementById('store_view'));
-
-  if (document.location.pathname == '/cart' && cart.getItemCount() != '0') {
-    var totalPrice = 0.0;
-
-    for (const row of obj.products) {
-      totalPrice += Number(row.price) * cart.getItemQuantity(row.id);
-    }
-
-    totalPrice = totalPrice.toFixed(2);
-    const head = React.createElement(BuildHeaderAppend, {
-      totalPrice: totalPrice,
-      totalQuantity: cart.getTotalCount()
-    });
-    ReactDOM.render(head, document.getElementById('cart_head'));
-  }
-}
-
-function clear() {
-  ReactDOM.render(React.createElement("div", null), document.getElementById('cart_head'));
-  ReactDOM.render(React.createElement("div", null), document.getElementById('store_view'));
 }
 
 
@@ -336,8 +360,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let store = new _react_js__WEBPACK_IMPORTED_MODULE_0__.Store();
-window.store = store;
 let cart = new _react_js__WEBPACK_IMPORTED_MODULE_0__.Cart();
+window.store = store;
 window.cart = cart;
 
 if (window.localStorage.getItem('cart') == null) {
