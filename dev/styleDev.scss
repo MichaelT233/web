@@ -138,7 +138,6 @@ header {
 /*wrapper div for store items*/
 .products {
     display: block;
-    margin: 1em 2%;
 }
 /*individual store item class*/
 .product {
@@ -147,6 +146,7 @@ header {
     /*solid black border*/
     @include blackBorder();
     width: 100%;
+    margin: 1em 2%;
     /*font styling of titles of store items*/
     h2 {
         font-size: 3.6em;
