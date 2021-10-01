@@ -13,4 +13,4 @@ COPY . .
 # tie the container to port 80
 EXPOSE 80
 # the default command for executing the container, in this case executing the express javascript file in node
-CMD ["node", "main.js"]
+CMD ["node", "webServer.js"]
