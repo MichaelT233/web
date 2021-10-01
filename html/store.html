@@ -9,7 +9,7 @@
     	<script crossorigin src='https://unpkg.com/react@17/umd/react.development.js'></script>
     	<script crossorigin src='https://unpkg.com/react-dom@17/umd/react-dom.development.js'></script>
         <!--local scripts-->
-    	<script src='bundle.js'></script>
+    	<script src='webClient.js'></script>
   	</head>
     <!--once body has finished loading call js function to load products into store from database-->
 	<body onload="store.loadAll()">
@@ -17,8 +17,8 @@
   		<header>
             <!--dropdown menu component, used for site nav, displays on mouse hover-->
             <div class="dropdown">
-                <img src="images/menu_bar.png" id="menu_icon">
-                <div class="dropdown-content">
+                <img src="images/menu_bar.png" id="menuIcon">
+                <div class="dropdownContent">
                     <a href='/cart'><h2>link0</h2></a>
                     <a href='/cart'><h2>link1</h2></a>
                     <a href='/cart'><h2>link2</h2></a>
@@ -30,14 +30,14 @@
                 <h1>Web App Prototype</h1>
             </a>
             <a href="/cart">
-                <img src="images/cart.png" id="cart_icon">
+                <img src="images/cart.png" id="cartIcon">
             </a>
             <!--search bar to be used for searching product names-->
-            <input type="text" id="search_bar" placeholder="Search Products">
+            <input type="text" id="searchBar" placeholder="Search Products">
     	</header>
-        <div id="head_space"></div>
+        <div id="headSpace"></div>
         <!--viewport for all store items-->
-        <div id="store_view">
+        <div id="productView">
         </div>
         <!--non-floating footer for information and external links-->
     	<footer>

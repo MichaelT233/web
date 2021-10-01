@@ -24,11 +24,11 @@ class Store {
     const storeItems = React.createElement(BuildStore, {
       rows: rows
     });
-    ReactDOM.render(storeItems, document.getElementById('store_view'));
+    ReactDOM.render(storeItems, document.getElementById('productView'));
   }
 
   clear() {
-    ReactDOM.render(React.createElement("div", null), document.getElementById('store_view'));
+    ReactDOM.render(React.createElement("div", null), document.getElementById('productView'));
   }
 
 }
@@ -161,7 +161,7 @@ class Cart {
     const cartItems = React.createElement(BuildCart, {
       rows: rows
     });
-    ReactDOM.render(cartItems, document.getElementById('store_view'));
+    ReactDOM.render(cartItems, document.getElementById('productView'));
     var totalPrice = 0.0;
 
     for (const row of rows) {
@@ -173,12 +173,12 @@ class Cart {
       totalPrice: totalPrice,
       totalQuantity: cart.getTotalCount()
     });
-    ReactDOM.render(head, document.getElementById('cart_head'));
+    ReactDOM.render(head, document.getElementById('cartHead'));
   }
 
   clear() {
-    ReactDOM.render(React.createElement("div", null), document.getElementById('cart_head'));
-    ReactDOM.render(React.createElement("div", null), document.getElementById('store_view'));
+    ReactDOM.render(React.createElement("div", null), document.getElementById('cartHead'));
+    ReactDOM.render(React.createElement("div", null), document.getElementById('productView'));
   }
 
 }
@@ -187,14 +187,14 @@ let cart = new Cart();
 function BuildStore(props) {
   const roots = props.rows.map(row => React.createElement("div", {
     key: row.id,
-    className: "store_item",
+    className: "product",
     id: row.id
   }, React.createElement("img", {
     alt: row.image_path,
     src: row.image_path,
-    className: "product_image"
+    className: "productImage"
   }), React.createElement("div", {
-    className: "product_text"
+    className: "productText"
   }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), React.createElement("p", null, row.description), React.createElement("label", {
     htmlFor: "quantity"
   }, "Qty: "), React.createElement("input", {
@@ -204,52 +204,56 @@ function BuildStore(props) {
     min: "1",
     defaultValue: "1"
   }), React.createElement("button", {
-    className: "add_cart",
+    className: "addCart",
     type: "button",
     onClick: () => cart.addItem(row.id)
   }, "Add to Cart"))));
-  return React.createElement("div", null, roots);
+  return React.createElement("div", {
+    className: "products"
+  }, roots);
 }
 
 function BuildCart(props) {
   const roots = props.rows.map(row => React.createElement("div", {
     key: row.id,
-    className: "store_item",
+    className: "product",
     id: row.id
   }, React.createElement("img", {
     alt: row.image_path,
     src: row.image_path,
-    className: "product_image"
+    className: "productImage"
   }), React.createElement("div", {
-    className: "product_text"
+    className: "productText"
   }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), React.createElement("p", null, row.description), React.createElement("label", {
     htmlFor: "quantity"
   }, "Qty: "), React.createElement("button", {
-    className: "update_cart",
+    className: "updateCart",
     type: "button",
     onClick: () => cart.decItem(row.id)
   }, "-"), React.createElement("input", {
     id: row.id + 'q',
-    className: "cart_quantity",
+    className: "cartQuantity",
     type: "number",
     name: "quantity",
     value: cart.getItemQuantity(row.id),
     disabled: true
   }), React.createElement("button", {
-    className: "update_cart",
+    className: "updateCart",
     type: "button",
     onClick: () => cart.incItem(row.id)
   }, "+"), React.createElement("button", {
-    className: "remove_cart",
+    className: "removeCart",
     type: "button",
     onClick: () => cart.deleteItem(row.id)
   }, "Delete"))));
-  return React.createElement("div", null, roots);
+  return React.createElement("div", {
+    className: "products"
+  }, roots);
 }
 
 function BuildCartHeader(props) {
   return React.createElement("div", {
-    id: "cart_head"
+    id: "cartHead"
   }, React.createElement("h2", null, "Total $", props.totalPrice), props.totalQuantity == 1 && React.createElement("button", {
     type: "button"
   }, "Proceed to Checkout ", '(' + props.totalQuantity + ' item)'), props.totalQuantity != 1 && React.createElement("button", {

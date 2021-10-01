@@ -17,11 +17,11 @@ export class Store {
     */
     #render(rows) {
         const storeItems = <BuildStore rows={rows}/>
-        ReactDOM.render(storeItems, document.getElementById('store_view'))
+        ReactDOM.render(storeItems, document.getElementById('productView'))
     }
     // overwrite store
     clear() {
-        ReactDOM.render(<div></div>, document.getElementById('store_view'))
+        ReactDOM.render(<div></div>, document.getElementById('productView'))
     }
 }
 /*
@@ -151,19 +151,19 @@ export class Cart {
     */
     #render(rows) {
         const cartItems = <BuildCart rows={rows}/>
-        ReactDOM.render(cartItems, document.getElementById('store_view'))
+        ReactDOM.render(cartItems, document.getElementById('productView'))
         var totalPrice = 0.0
         for (const row of rows) {
             totalPrice += Number(row.price) * cart.getItemQuantity(row.id)
         }
         totalPrice = totalPrice.toFixed(2)
         const head = <BuildCartHeader totalPrice={totalPrice} totalQuantity={cart.getTotalCount()}/>
-        ReactDOM.render(head, document.getElementById('cart_head'))
+        ReactDOM.render(head, document.getElementById('cartHead'))
     }
     // overwrite the store and cart header
     clear() {
-        ReactDOM.render(<div></div>, document.getElementById('cart_head'))
-        ReactDOM.render(<div></div>, document.getElementById('store_view'))
+        ReactDOM.render(<div></div>, document.getElementById('cartHead'))
+        ReactDOM.render(<div></div>, document.getElementById('productView'))
     }
 }
 // instantiate new Cart object for use in react components
@@ -171,11 +171,11 @@ let cart = new Cart()
 // react component: build main store page items
 function BuildStore(props) {
     const roots = props.rows.map((row) =>    
-    <div key={row.id} className="store_item" id={row.id}>
+    <div key={row.id} className="product" id={row.id}>
         {/*product image source*/}
-        <img alt={row.image_path} src={row.image_path} className="product_image"/>
+        <img alt={row.image_path} src={row.image_path} className="productImage"/>
         {/*wrapper for non-image content of a store item*/}
-        <div className="product_text">
+        <div className="productText">
             {/*products title heading*/}
             <h2>{row.title}</h2>
             {/*product price*/}
@@ -187,11 +187,11 @@ function BuildStore(props) {
             {/*quantity input*/}
             <input id={row.id + 'q'} type="number" name="quantity" min="1" defaultValue="1"/>
             {/*add to cart button*/}
-            <button className="add_cart" type="button" onClick={ () => cart.addItem(row.id)}>Add to Cart</button>
+            <button className="addCart" type="button" onClick={ () => cart.addItem(row.id)}>Add to Cart</button>
         </div>
     </div>)
     return (
-        <div>
+        <div className='products'>
             {roots}
         </div>
     )
@@ -199,11 +199,11 @@ function BuildStore(props) {
 // react component: build cart page items
 function BuildCart(props) {
     const roots = props.rows.map((row) =>    
-    <div key={row.id} className="store_item" id={row.id}>
+    <div key={row.id} className="product" id={row.id}>
         {/*product image source*/}
-        <img alt={row.image_path} src={row.image_path} className="product_image"/>
+        <img alt={row.image_path} src={row.image_path} className="productImage"/>
         {/*wrapper for non-image content of a store item*/}
-        <div className="product_text">
+        <div className="productText">
             {/*products title heading*/}
             <h2>{row.title}</h2>
             {/*product price*/}
@@ -213,17 +213,17 @@ function BuildCart(props) {
             {/*product quantity selector*/}
             <label htmlFor="quantity">Qty: </label>
             {/*decrement button*/}
-            <button className="update_cart" type="button" onClick={ () => cart.decItem(row.id)}>-</button>
+            <button className="updateCart" type="button" onClick={ () => cart.decItem(row.id)}>-</button>
             {/*quantity display*/}
-            <input id={row.id + 'q'} className="cart_quantity" type="number" name="quantity" value={cart.getItemQuantity(row.id)} disabled/>
+            <input id={row.id + 'q'} className="cartQuantity" type="number" name="quantity" value={cart.getItemQuantity(row.id)} disabled/>
             {/*increment button*/}
-            <button className="update_cart" type="button" onClick={ () => cart.incItem(row.id)}>+</button>
+            <button className="updateCart" type="button" onClick={ () => cart.incItem(row.id)}>+</button>
             {/*delete button*/}
-            <button className="remove_cart" type="button" onClick={ () => cart.deleteItem(row.id)}>Delete</button>
+            <button className="removeCart" type="button" onClick={ () => cart.deleteItem(row.id)}>Delete</button>
         </div>
     </div>)
     return (
-        <div>
+        <div className='products'>
             {roots}
         </div>
     )
@@ -231,7 +231,7 @@ function BuildCart(props) {
 // react component: build cart page header
 function BuildCartHeader(props) {
     return (
-        <div id='cart_head'>
+        <div id='cartHead'>
             <h2>Total ${props.totalPrice}</h2>
             {props.totalQuantity == 1 && <button type='button'>Proceed to Checkout {'('+props.totalQuantity+' item)'}</button>}
             {props.totalQuantity != 1 && <button type='button'>Proceed to Checkout {'('+props.totalQuantity+' items)'}</button>}

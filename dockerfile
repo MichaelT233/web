@@ -3,7 +3,7 @@
 # use node v14 image
 FROM node:14
 # the working directory of the container
-WORKDIR /home/wallace/web_server
+WORKDIR /home/wallace/webServer
 # copy package.json and package-lock.json into the container's working directory (new layer)
 COPY package*.json ./
 # install all node packages included in package config files from above (new layer)

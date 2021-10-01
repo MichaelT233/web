@@ -9,7 +9,7 @@ if [ $1 == "-prod" ]; then
     docker stop database
     # stop and remove node web server container
     echo 'stopping and removing the following container...'
-    docker stop web_server
+    docker stop webServer
     echo 'web application reset complete'
 # if development mode (just input validation currently)
 elif [ $1 == "-dev" ]; then

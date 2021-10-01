@@ -3,9 +3,9 @@
 # meant for automated configuration of production environment only
 
 # name of the built node web application image on dockerhub
-node_app_image="michaelt23/web_app:node"
+webServerImage="michaelt23/web:webServer"
 # name of the postgreSQL database image on dockerhub
-postgres_image="postgres:13"
+dbImage="postgres:13"
 
 # install docker and it's repository on ubuntu
 # based on docs.docker.com, subject to change
@@ -39,9 +39,9 @@ newgrp docker
 docker login
 # pull postgreSQL image, current version 13
 echo 'pulling postgreSQL image...'
-docker pull ${postgres_image}
+docker pull ${dbImage}
 # pull built node dockerhub image
 echo 'pulling custom node image...'
-docker pull ${node_app_image}
+docker pull ${webServerImage}
 
-# Site_Deploy.sh can now be run to deploy the web application in production mode
+# siteDeploy.sh can now be run to deploy the web application in production mode

@@ -3,11 +3,11 @@
 /*SCSS declarations*/
 /***********************************/
 /*main web page color*/ 
-$primary_color: orangered;
+$primaryColor: orangered;
 /*vertical space taken by floating header*/
-$header_space: 14em;
+$headerSpace: 14em;
 /*declaration for a solid black border and removes margins*/
-@mixin black_border {
+@mixin blackBorder {
     border-style: solid;
     border-color: black;
     border-width: thin;
@@ -41,13 +41,13 @@ header {
     top:0;
     left:0;
     /*background color*/
-    background-color: $primary_color;
+    background-color: $primaryColor;
     /*fixed height so exact top margin can be used by element below*/
-    height: $header_space;
+    height: $headerSpace;
     /*fit full page width*/
     width: 100%;
     /*solid black border*/
-    @include black_border();
+    @include blackBorder();
     /*center heading in header*/
     text-align: center;
     /*font styling of main title in header*/
@@ -70,7 +70,7 @@ header {
     height: 3.8em;
 }
 /*class for content within dropdown menu*/
-.dropdown-content {
+.dropdownContent {
     /*hidden while mouse is not hovering over element*/
     display: none;
     /*fit width to width of dropdown menu*/
@@ -78,8 +78,8 @@ header {
     /*align text items to the left*/
     text-align: left;
     /*background color*/
-    background-color: $primary_color;
-    @include black_border();
+    background-color: $primaryColor;
+    @include blackBorder();
     margin-top: 6em;
     /*dropdown content text styling*/
     h2 {
@@ -89,12 +89,12 @@ header {
         /*em used for horizontal spacing in special case where the width required is greater than it's parent (>%100)*/
         padding-right: 5em;
         /*solid black border*/
-        @include black_border();
+        @include blackBorder();
     }
     z-index: 1;
 }
 /*dropdown menu icon styling*/
-#menu_icon {
+#menuIcon {
     height: 6.5em;
     /*parent is div fit to width, % cannot be used for horizontal spacing here*/
     margin-left: 1em;
@@ -102,7 +102,7 @@ header {
     left: 0;
     top: 0;
 }
-#cart_icon {
+#cartIcon {
     position: absolute;
     right: 0;
     top: 0;
@@ -111,11 +111,11 @@ header {
     margin: 0.1em 0.9% 0 0;
 }
 /*on mouse hover the dropdown content class will display underneath the dropdown menu class*/
-.dropdown:hover .dropdown-content {
+.dropdown:hover .dropdownContent {
     display: block;
 }
 /*search bar in header*/
-#search_bar {
+#searchBar {
     /*position in bottom right and leave space on the left for dropdown menu*/
     font-size: 3em;
     position: absolute;
@@ -132,20 +132,20 @@ header {
 /*web store styling*/
 /***********************************/
 /*store containing div*/
-#store_view {
+#productView {
     margin-top: 1em;
 }
 /*wrapper div for store items*/
-.item_wrapper {
+.products {
     display: block;
     margin: 1em 2%;
 }
 /*individual store item class*/
-.store_item {
+.product {
     /*set the store item divs to the width of their content*/
     display: inline-block;
     /*solid black border*/
-    @include black_border();
+    @include blackBorder();
     width: 100%;
     /*font styling of titles of store items*/
     h2 {
@@ -169,32 +169,32 @@ header {
     }
     /*store item add to cart button*/
     button {
-        background-color: $primary_color;
+        background-color: $primaryColor;
         font-size: 3em;
         text-align: center;
     }
 }
-.add_cart {
+.addCart {
     margin-left: 10%;
 }
-.update_cart {
+.updateCart {
     width: 12%;
 }
-.remove_cart {
+.removeCart {
     margin-left: 10%;
 }
-.cart_quantity {
+.cartQuantity {
     width: 12%;
 }
 /*store item images*/
-.product_image {
+.productImage {
     /*sets size of image*/
     height: 42em;
     width: 39%;
     display: inline;
     margin: 0.25em 0.6% 0 0.6%;
 }
-.product_text {
+.productText {
     display: inline-block;
     vertical-align: top;
     text-align: left;
@@ -216,9 +216,9 @@ footer {
     width: 100%;
     padding-bottom: 0.8em;
     /*background color*/
-    background-color: $primary_color;
+    background-color: $primaryColor;
     /*solid black border*/
-    @include black_border();
+    @include blackBorder();
     /*footer paragraph styling*/
     p {
         margin: 0;
@@ -227,12 +227,12 @@ footer {
 }
 /***********************************/
 
-#head_space {
-    height: $header_space;
+#headSpace {
+    height: $headerSpace;
 }
 
-#cart_head {
-    @include black_border();
+#cartHead {
+    @include blackBorder();
     text-align: center;
     h2 {
         text-align: left;
@@ -240,7 +240,7 @@ footer {
         margin-left: 6%;
     }
     button {
-        background-color: $primary_color;
+        background-color: $primaryColor;
         font-size: 3em;
         text-align: center;
         margin-bottom: 1em;

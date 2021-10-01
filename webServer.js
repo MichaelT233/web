@@ -22,11 +22,11 @@ app.listen(webPort, () => {
 // create new instance of Pool object for DB access
 const psql = new Pool({
     // building object properties
-    // local docker env user defined in /infra/Site_Deploy.sh
+    // local docker env user defined in /infra/siteDeploy.sh
     user: 'postgres',
     // default first IP assigned by docker to containers
     host: '172.17.0.2',
-    // psql database defined in /infra/Site_Deploy.sh
+    // psql database defined in /infra/siteDeploy.sh
     database: 'postgres',
     password: dbPassword,
     port: dbPort,
