@@ -17,11 +17,11 @@ export class Store {
     */
     #render(rows) {
         const storeItems = <BuildStore rows={rows}/>
-        ReactDOM.render(storeItems, document.getElementById('productView'))
+        ReactDOM.render(storeItems, document.getElementById('mainView'))
     }
     // overwrite store
     clear() {
-        ReactDOM.render(<div></div>, document.getElementById('productView'))
+        ReactDOM.render(<div></div>, document.getElementById('mainView'))
     }
 }
 /*
@@ -151,7 +151,7 @@ export class Cart {
     */
     #render(rows) {
         const cartItems = <BuildCart rows={rows}/>
-        ReactDOM.render(cartItems, document.getElementById('productView'))
+        ReactDOM.render(cartItems, document.getElementById('mainView'))
         var totalPrice = 0.0
         for (const row of rows) {
             totalPrice += Number(row.price) * cart.getItemQuantity(row.id)
@@ -163,7 +163,7 @@ export class Cart {
     // overwrite the store and cart header
     clear() {
         ReactDOM.render(<div></div>, document.getElementById('cartHead'))
-        ReactDOM.render(<div></div>, document.getElementById('productView'))
+        ReactDOM.render(<div></div>, document.getElementById('mainView'))
     }
 }
 // instantiate new Cart object for use in react components
@@ -173,7 +173,7 @@ function BuildStore(props) {
     const roots = props.rows.map((row) =>    
     <div key={row.id} className="product" id={row.id}>
         {/*product image source*/}
-        <img alt={row.image_path} src={row.image_path} className="productImage"/>
+        <img alt={row.image_path} src={row.image_path}/>
         {/*wrapper for non-image content of a store item*/}
         <div className="productText">
             {/*products title heading*/}
@@ -201,7 +201,7 @@ function BuildCart(props) {
     const roots = props.rows.map((row) =>    
     <div key={row.id} className="product" id={row.id}>
         {/*product image source*/}
-        <img alt={row.image_path} src={row.image_path} className="productImage"/>
+        <img alt={row.image_path} src={row.image_path}/>
         {/*wrapper for non-image content of a store item*/}
         <div className="productText">
             {/*products title heading*/}

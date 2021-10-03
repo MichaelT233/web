@@ -24,11 +24,11 @@ class Store {
     const storeItems = React.createElement(BuildStore, {
       rows: rows
     });
-    ReactDOM.render(storeItems, document.getElementById('productView'));
+    ReactDOM.render(storeItems, document.getElementById('mainView'));
   }
 
   clear() {
-    ReactDOM.render(React.createElement("div", null), document.getElementById('productView'));
+    ReactDOM.render(React.createElement("div", null), document.getElementById('mainView'));
   }
 
 }
@@ -161,7 +161,7 @@ class Cart {
     const cartItems = React.createElement(BuildCart, {
       rows: rows
     });
-    ReactDOM.render(cartItems, document.getElementById('productView'));
+    ReactDOM.render(cartItems, document.getElementById('mainView'));
     var totalPrice = 0.0;
 
     for (const row of rows) {
@@ -178,7 +178,7 @@ class Cart {
 
   clear() {
     ReactDOM.render(React.createElement("div", null), document.getElementById('cartHead'));
-    ReactDOM.render(React.createElement("div", null), document.getElementById('productView'));
+    ReactDOM.render(React.createElement("div", null), document.getElementById('mainView'));
   }
 
 }
@@ -191,8 +191,7 @@ function BuildStore(props) {
     id: row.id
   }, React.createElement("img", {
     alt: row.image_path,
-    src: row.image_path,
-    className: "productImage"
+    src: row.image_path
   }), React.createElement("div", {
     className: "productText"
   }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), React.createElement("p", null, row.description), React.createElement("label", {
@@ -220,8 +219,7 @@ function BuildCart(props) {
     id: row.id
   }, React.createElement("img", {
     alt: row.image_path,
-    src: row.image_path,
-    className: "productImage"
+    src: row.image_path
   }), React.createElement("div", {
     className: "productText"
   }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), React.createElement("p", null, row.description), React.createElement("label", {
