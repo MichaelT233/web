@@ -1,3 +1,2 @@
-# resources to be ignored by docker during the build process
 node_modules
 npm-debug.log
