@@ -3,7 +3,7 @@ CREATE TABLE products
     (id varchar(4), category varchar(50), title varchar(50), price decimal(5, 2), descr varchar(300), image_path varchar(50));
 -- populates products table rows with test data
 INSERT INTO products 
-    (id, category, title, price, descr, image_path) 'category0'
+    (id, category, title, price, descr, image_path)
 VALUES 
     ('0000', 'category0', 'title0', 01.01, 'descr0: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'images/img_test.jpg'),
     ('0001', 'category0', 'title1', 02.00, 'descr1: Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'images/img_test.jpg'),
