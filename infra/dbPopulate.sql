@@ -1,6 +1,6 @@
 -- initializes products table and it's columns/fields
 CREATE TABLE products 
-    (id varchar(4), category varchar(50) title varchar(50), price decimal(5, 2), descr varchar(300), image_path varchar(50));
+    (id varchar(4), category varchar(50), title varchar(50), price decimal(5, 2), descr varchar(300), image_path varchar(50));
 -- populates products table rows with test data
 INSERT INTO products 
     (id, category, title, price, descr, image_path) 'category0'
