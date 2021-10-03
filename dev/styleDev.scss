@@ -68,11 +68,12 @@ header {
     @include blackBorder();
     margin-top: 6em;
     h2 {
+        display: block;
         font-size: 4em;
-        margin: 0 0 1em 0;
-        width: 100%;
         /*em used for horizontal spacing in special case where the width required is greater than it's parent (>%100)*/
-        padding-right: 5em;
+        padding: 0.6em 5em 0.6em 0;
+        width: 100%;
+        margin: 0;
         @include blackBorder();
     }
     z-index: 1;
@@ -98,6 +99,9 @@ header {
 /*hovering over dropdown will display dropdown content*/
 .dropdown:hover .dropdownContent {
     display: block;
+}
+.dropdownItem:active{
+    display: none;
 }
 /*search bar*/
 #searchBar {

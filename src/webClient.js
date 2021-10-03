@@ -27,6 +27,15 @@ class Store {
     ReactDOM.render(storeItems, document.getElementById('mainView'));
   }
 
+  loadSearch() {
+    const title = document.getElementById('searchBar').value;
+    (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)(`search?title=${title}`, this.#render);
+  }
+
+  loadCategory(category) {
+    (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)(`search?category=${category}`, this.#render);
+  }
+
   clear() {
     ReactDOM.render(React.createElement("div", null), document.getElementById('mainView'));
   }

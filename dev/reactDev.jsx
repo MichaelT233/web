@@ -19,6 +19,13 @@ export class Store {
         const storeItems = <BuildStore rows={rows}/>
         ReactDOM.render(storeItems, document.getElementById('mainView'))
     }
+    loadSearch() {
+        const title = document.getElementById('searchBar').value
+        accessProductDB(`search?title=${title}`, this.#render)
+    }
+    loadCategory(category) {
+        accessProductDB(`search?category=${category}`, this.#render)
+    }
     // overwrite store
     clear() {
         ReactDOM.render(<div></div>, document.getElementById('mainView'))

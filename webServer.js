@@ -73,6 +73,40 @@ app.get('/all', (req, res) => {
     })
 })
 
+// GET search
+app.get('/search', (req, res) => {
+    // callback for sending reponse
+    function sendResponse(data) {
+        res.type('html')
+        res.send(data)
+    }
+    var sql = ''
+    if (req.query['title'] != undefined) {
+        // set initial sql string to find product data from database, according to what is in the client's cart
+        sql = "SELECT id, category, title, price, descr, image_path FROM products WHERE title = "
+        // add first item to sql string
+        sql += `'${req.query['title']}';`
+        console.log(sql)
+    }
+    if (req.query['category'] != undefined) {
+        // set initial sql string to find product data from database, according to what is in the client's cart
+        sql = "SELECT id, category, title, price, descr, image_path FROM products WHERE category = "
+        // add first item to sql string
+        sql += `'${req.query['category']}';`
+        console.log(sql)
+    }
+    // using Pool instance to query postgreSQL database, passing the sql string as it's query
+    psql.query(sql, (err, res) => {
+        if (err) {
+            console.error(err)
+            return
+        }
+        // converting JSON object into a string in order to send as response text
+        const rows = JSON.stringify(res.rows)
+        sendResponse(rows)
+    })
+})
+
 // GET cart-data
 app.get('/cart-data', (req, res) => {
     // callback for sending reponse

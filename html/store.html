@@ -15,11 +15,10 @@
             <div class="dropdown">
                 <img src="images/menu_bar.png" id="menuIcon">
                 <div class="dropdownContent">
-                    <a href='/cart'><h2>link0</h2></a>
-                    <a href='/cart'><h2>link1</h2></a>
-                    <a href='/cart'><h2>link2</h2></a>
-                    <a href='/cart'><h2>link3</h2></a>
-                    <a href='/cart'><h2>link4</h2></a>
+                    <h2 class="dropdownItem" onclick="store.loadCategory('category0')">category0</h2>
+                    <h2 class="dropdownItem" onclick="store.loadCategory('category1')">category1</h2>
+                    <h2 class="dropdownItem" onclick="store.loadCategory('category2')">category2</h2>
+                    <h2 class="dropdownItem" onclick="store.loadCategory('category3')">category3</h2>
                 </div>
             </div>
             <a href ="/">
@@ -28,7 +27,7 @@
             <a href="/cart">
                 <img src="images/cart.png" id="cartIcon">
             </a>
-            <input type="text" id="searchBar" placeholder="Search Products">
+            <input type="text" id="searchBar" placeholder="Search Products" onchange="store.loadSearch()">
     	</header>
         <div id="headSpace"></div>
         <div id="mainView">
