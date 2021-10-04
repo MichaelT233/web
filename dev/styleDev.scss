@@ -52,16 +52,15 @@ header {
     }
 }
 /*dropdown menu*/
-.dropdown {
+#dropdown {
     position: absolute;
     left: 0;
     display: inline-block;
     height: 3.8em;
 }
 /*content within dropdown menu*/
-.dropdownContent {
+#dropdownContent {
     /*hidden while mouse is not hovering over element*/
-    display: none;
     width: 100%;
     text-align: left;
     background-color: $primaryColor;
@@ -77,6 +76,12 @@ header {
         @include blackBorder();
     }
     z-index: 1;
+}
+.dropdownContentOn {
+    display: block;
+}
+.dropdownContentOff {
+    display: none;
 }
 /*dropdown menu icon*/
 #menuIcon {
@@ -95,13 +100,6 @@ header {
     display: inline;
     height: 6em;
     margin: 0.1em 0.9% 0 0;
-}
-/*hovering over dropdown will display dropdown content*/
-.dropdown:hover .dropdownContent {
-    display: block;
-}
-.dropdownItem:active{
-    display: none;
 }
 /*search bar*/
 #searchBar {
@@ -125,13 +123,14 @@ header {
 /*root div for products*/
 .products {
     display: block;
+    text-align: center;
 }
 /*individual product*/
 .product {
     display: inline-block;
     @include blackBorder();
-    width: 100%;
-    margin: 0 2% 1em 2%;
+    width: 96%;
+    margin-bottom: 1em;
     h2 {
         font-size: 3.6em;
         margin: 1em 0;

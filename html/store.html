@@ -10,11 +10,11 @@
     	<script src='webClient.js'></script>
   	</head>
     <!--call function to load all products-->
-	<body onload="store.loadAll()">
+	<body>
   		<header>
-            <div class="dropdown">
-                <img src="images/menu_bar.png" id="menuIcon">
-                <div class="dropdownContent">
+            <div id="dropdown">
+                <img src="images/menu_bar.png" id="menuIcon" onclick="document.getElementById('dropdownContent').className = 'dropdownContentOn'">
+                <div id="dropdownContent" class="dropdownContentOff" onclick="document.getElementById('dropdownContent').className = 'dropdownContentOff'">
                     <h2 class="dropdownItem" onclick="store.loadCategory('category0')">category0</h2>
                     <h2 class="dropdownItem" onclick="store.loadCategory('category1')">category1</h2>
                     <h2 class="dropdownItem" onclick="store.loadCategory('category2')">category2</h2>

@@ -381,6 +381,18 @@ if (window.localStorage.getItem('cart') == null) {
   window.localStorage.setItem('totalCount', '0');
 }
 
+if (document.location.pathname == '/') {
+  window.onload = function () {
+    store.loadAll();
+  };
+}
+
+if (document.location.pathname == '/cart') {
+  window.onload = function () {
+    cart.load();
+  };
+}
+
 })();
 
 /******/ })()
