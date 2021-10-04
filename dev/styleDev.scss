@@ -116,7 +116,7 @@ header {
     touch-action: none;
 }
 #headSpace {
-    height: $headerSpace;
+    height: $headerSpace + 1em;
 }
 /***********************************/
 
@@ -131,7 +131,7 @@ header {
     display: inline-block;
     @include blackBorder();
     width: 100%;
-    margin: 1em 2%;
+    margin: 0 2% 1em 2%;
     h2 {
         font-size: 3.6em;
         margin: 1em 0;
