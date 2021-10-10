@@ -136,7 +136,7 @@ header {
         margin: 1em 0;
     }
     p {
-        margin: 0 0 4em 0;
+        margin: 0 0 1em 0;
         font-size: 2em;
     }
     label {
@@ -149,6 +149,7 @@ header {
         touch-action: none;
     }
     button {
+        margin-top: 1.2em;
         background-color: $primaryColor;
         font-size: 3em;
         text-align: center;
@@ -201,9 +202,13 @@ footer {
 
 /*cart*/
 /***********************************/
-#cartHead {
+#productHead {
     @include blackBorder();
     text-align: center;
+    margin-bottom: 1em;
+    h1 {
+        font-size: 3.4em;
+    }
     h2 {
         text-align: left;
         font-size: 3.4em;
@@ -213,8 +218,8 @@ footer {
         background-color: $primaryColor;
         font-size: 3em;
         text-align: center;
-        margin-bottom: 1em;
         width: 80%;
+        margin-bottom: 1em;
     }
 }
 /***********************************/

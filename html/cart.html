@@ -13,8 +13,8 @@
 	<body onload="cart.load()">
   		<header>
             <div id="dropdown">
-                <img src="images/menu_bar.png" id="menuIcon">
-                <div id="dropdownContent">
+                <img src="images/menu_bar.png" id="menuIcon" onclick="store.displayDropdown()">
+                <div id="dropdownContent" class="dropdownContentOff" onclick="document.getElementById('dropdownContent').className = 'dropdownContentOff'">
                     <h2 onclick="store.loadCategory('category0')">category0</h2>
                     <h2 onclick="store.loadCategory('category1')">category1</h2>
                     <h2 onclick="store.loadCategory('category2')">category2</h2>
@@ -30,7 +30,7 @@
             <input type="text" id="searchBar" placeholder="Search Products">
     	</header>
         <div id="headSpace"></div>
-        <div id="cartHead"></div>
+        <div id="productHead"></div>
         <div id="mainView">
         </div>
     	<footer>

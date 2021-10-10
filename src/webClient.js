@@ -17,6 +17,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class Store {
   loadAll() {
+    ReactDOM.render(React.createElement("h1", null, "All Products"), document.getElementById('productHead'));
     (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)('all', this.#render);
   }
 
@@ -33,11 +34,25 @@ class Store {
   }
 
   loadCategory(category) {
+    if (window.location.pathname == '/cart') {
+      window.location.replace(window.location.origin);
+      console.log(window.location.origin);
+    }
+
+    ReactDOM.render(React.createElement("h1", null, category), document.getElementById('productHead'));
     (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)(`search?category=${category}`, this.#render);
   }
 
   clear() {
     ReactDOM.render(React.createElement("div", null), document.getElementById('mainView'));
+  }
+
+  displayDropdown() {
+    if (document.getElementById('dropdownContent').className == 'dropdownContentOn') {
+      document.getElementById('dropdownContent').className = 'dropdownContentOff';
+    } else {
+      document.getElementById('dropdownContent').className = 'dropdownContentOn';
+    }
   }
 
 }
@@ -182,11 +197,11 @@ class Cart {
       totalPrice: totalPrice,
       totalQuantity: cart.getTotalCount()
     });
-    ReactDOM.render(head, document.getElementById('cartHead'));
+    ReactDOM.render(head, document.getElementById('productHead'));
   }
 
   clear() {
-    ReactDOM.render(React.createElement("div", null), document.getElementById('cartHead'));
+    ReactDOM.render(React.createElement("div", null), document.getElementById('productHead'));
     ReactDOM.render(React.createElement("div", null), document.getElementById('mainView'));
   }
 
@@ -203,7 +218,7 @@ function BuildStore(props) {
     src: row.image_path
   }), React.createElement("div", {
     className: "productText"
-  }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), React.createElement("p", null, row.description), React.createElement("label", {
+  }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), row.stock > 0 && React.createElement("p", null, "In Stock (", row.stock, ")"), row.stock == 0 && React.createElement("p", null, "Out of Stock"), React.createElement("p", null, row.descr), React.createElement("label", {
     htmlFor: "quantity"
   }, "Qty: "), React.createElement("input", {
     id: row.id + 'q',
@@ -231,7 +246,7 @@ function BuildCart(props) {
     src: row.image_path
   }), React.createElement("div", {
     className: "productText"
-  }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), React.createElement("p", null, row.description), React.createElement("label", {
+  }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), React.createElement("p", null, row.descr), React.createElement("label", {
     htmlFor: "quantity"
   }, "Qty: "), React.createElement("button", {
     className: "updateCart",

@@ -9,6 +9,7 @@ class:
 export class Store {
     // get data for all products and pass this.#render as a callback
     loadAll() {
+        ReactDOM.render(<h1>All Products</h1>, document.getElementById('productHead'))
         accessProductDB('all', this.#render)
     }
     /*
@@ -24,11 +25,24 @@ export class Store {
         accessProductDB(`search?title=${title}`, this.#render)
     }
     loadCategory(category) {
+        if (window.location.pathname == '/cart') {
+            window.location.replace(window.location.origin)
+            console.log(window.location.origin)
+        }
+        ReactDOM.render(<h1>{category}</h1>, document.getElementById('productHead'))
         accessProductDB(`search?category=${category}`, this.#render)
     }
     // overwrite store
     clear() {
         ReactDOM.render(<div></div>, document.getElementById('mainView'))
+    }
+    displayDropdown() {
+        if (document.getElementById('dropdownContent').className == 'dropdownContentOn') {
+            document.getElementById('dropdownContent').className = 'dropdownContentOff'
+        }
+        else {
+            document.getElementById('dropdownContent').className = 'dropdownContentOn'
+        }
     }
 }
 /*
@@ -165,11 +179,11 @@ export class Cart {
         }
         totalPrice = totalPrice.toFixed(2)
         const head = <BuildCartHeader totalPrice={totalPrice} totalQuantity={cart.getTotalCount()}/>
-        ReactDOM.render(head, document.getElementById('cartHead'))
+        ReactDOM.render(head, document.getElementById('productHead'))
     }
     // overwrite the store and cart header
     clear() {
-        ReactDOM.render(<div></div>, document.getElementById('cartHead'))
+        ReactDOM.render(<div></div>, document.getElementById('productHead'))
         ReactDOM.render(<div></div>, document.getElementById('mainView'))
     }
 }
@@ -187,8 +201,11 @@ function BuildStore(props) {
             <h2>{row.title}</h2>
             {/*product price*/}
             <h2>${row.price}</h2>
+            {/*product stock*/}
+            {row.stock > 0 && <p>In Stock ({row.stock})</p>}
+            {row.stock == 0 && <p>Out of Stock</p>}
             {/*product description*/}
-            <p>{row.description}</p>
+            <p>{row.descr}</p>
             {/*product quantity selector*/}
             <label htmlFor="quantity">Qty: </label>
             {/*quantity input*/}
@@ -216,7 +233,7 @@ function BuildCart(props) {
             {/*product price*/}
             <h2>${row.price}</h2>
             {/*product description*/}
-            <p>{row.description}</p>
+            <p>{row.descr}</p>
             {/*product quantity selector*/}
             <label htmlFor="quantity">Qty: </label>
             {/*decrement button*/}
