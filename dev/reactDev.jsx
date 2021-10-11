@@ -89,7 +89,9 @@ export class Cart {
             var quantity = Number(document.getElementById(id + 'q').value)
             for (const row of table) {
                 if (row[0] == id) {
-                    if (Number(row[1]) + quantity <= stock) {
+                    console.log(stock)
+                    var total = Number(row[1]) + quantity
+                    if (total <= stock) {
                         this.addTotalCount(quantity)
                         quantity += Number(row[1])
                         row[1] = `${quantity}`
@@ -97,13 +99,30 @@ export class Cart {
                         console.log(window.localStorage)
                         return
                     }
-                    console.log(window.localStorage)
-                    return
+                    else if (Number(row[1]) == stock) {
+                        console.log(window.localStorage)
+                        return
+                    }
+                    else if (total > stock) {
+                        this.addTotalCount(total - stock)
+                        row[1] = `${stock}`
+                        this.overwrite(table)
+                        console.log(window.localStorage)
+                        return
+                    }
                 }
             }
             if (quantity <= stock) {
                 this.addTotalCount(quantity)
                 table.push([id, quantity])
+                this.overwrite(table)
+                this.addItemCount(1)
+                console.log(window.localStorage)
+                return
+            }
+            else if (quantity > stock) {
+                this.addTotalCount(stock)
+                table.push([id, stock])
                 this.overwrite(table)
                 this.addItemCount(1)
                 console.log(window.localStorage)
