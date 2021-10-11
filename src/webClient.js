@@ -15,6 +15,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _utility_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utility.js */ "./utility.js");
 
+let db = new _utility_js__WEBPACK_IMPORTED_MODULE_0__.DB();
 class Store {
   loadAll() {
     ReactDOM.render(React.createElement("h1", null, "All Products"), document.getElementById('productHead'));
@@ -94,24 +95,37 @@ class Cart {
   }
 
   addItem(id) {
-    var table = this.getTable();
-    var quantity = Number(document.getElementById(id + 'q').value);
-    this.addTotalCount(quantity);
+    db.readField('stock', id, stock => {
+      var table = this.getTable();
+      var quantity = Number(document.getElementById(id + 'q').value);
 
-    for (const row of table) {
-      if (row[0] == id) {
-        quantity += Number(row[1]);
-        row[1] = `${quantity}`;
+      for (const row of table) {
+        if (row[0] == id) {
+          if (Number(row[1]) + quantity <= stock) {
+            this.addTotalCount(quantity);
+            quantity += Number(row[1]);
+            row[1] = `${quantity}`;
+            this.overwrite(table);
+            console.log(window.localStorage);
+            return;
+          }
+
+          console.log(window.localStorage);
+          return;
+        }
+      }
+
+      if (quantity <= stock) {
+        this.addTotalCount(quantity);
+        table.push([id, quantity]);
         this.overwrite(table);
+        this.addItemCount(1);
         console.log(window.localStorage);
         return;
       }
-    }
 
-    table.push([id, quantity]);
-    this.overwrite(table);
-    this.addItemCount(1);
-    console.log(window.localStorage);
+      console.log(window.localStorage);
+    });
   }
 
   deleteItem(id) {
@@ -131,20 +145,25 @@ class Cart {
   }
 
   incItem(id) {
-    this.addTotalCount(1);
-    var quantity = 0;
-    var table = this.getTable();
+    db.readField('stock', id, stock => {
+      console.log(stock);
 
-    for (const row of table) {
-      if (row[0] == id) {
-        quantity = Number(row[1]) + 1;
-        row[1] = `${quantity}`;
-        this.overwrite(table);
-        this.load();
-        console.log(window.localStorage);
-        return;
+      if (this.getItemQuantity(id) < stock) {
+        this.addTotalCount(1);
+        var quantity = 0;
+        var table = this.getTable();
+
+        for (const row of table) {
+          if (row[0] == id) {
+            quantity = Number(row[1]) + 1;
+            row[1] = `${quantity}`;
+            this.overwrite(table);
+            this.load();
+            console.log(window.localStorage);
+          }
+        }
       }
-    }
+    });
   }
 
   decItem(id) {
@@ -246,7 +265,7 @@ function BuildCart(props) {
     src: row.image_path
   }), React.createElement("div", {
     className: "productText"
-  }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), React.createElement("p", null, row.descr), React.createElement("label", {
+  }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), row.stock > 0 && React.createElement("p", null, "In Stock (", row.stock, ")"), row.stock == 0 && React.createElement("p", null, "Out of Stock"), React.createElement("p", null, row.descr), React.createElement("label", {
     htmlFor: "quantity"
   }, "Qty: "), React.createElement("button", {
     className: "updateCart",
@@ -337,18 +356,17 @@ class DB {
     });
   }
 
+  readField(field, id, callback) {
+    this.readDB(`?id=${id}`, row => {
+      callback(row[0][`${field}`]);
+    });
+  }
+
   readTable(callback) {
     this.readDB('', callback);
   }
 
 }
-let db = new DB();
-db.readRow('0001', row => {
-  console.log(row);
-});
-db.readTable(rows => {
-  console.log(rows);
-});
 
 
 /***/ })

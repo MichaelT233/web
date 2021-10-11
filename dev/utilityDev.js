@@ -40,16 +40,12 @@ export class DB {
             callback(row[0])
         })
     }
+    readField(field, id, callback) {
+        this.readDB(`?id=${id}`, (row) => {
+            callback(row[0][`${field}`])
+        })
+    }
     readTable(callback) {
         this.readDB('', callback)
     }
 }
-
-let db = new DB()
-
-db.readRow('0001', (row) => {
-    console.log(row)
-})
-db.readTable((rows) => {
-    console.log(rows)
-})

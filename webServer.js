@@ -83,14 +83,14 @@ app.get('/search', (req, res) => {
     var sql = ''
     if (req.query['title'] != undefined) {
         // set initial sql string to find product data from database, according to what is in the client's cart
-        sql = "SELECT id, category, title, price, descr, image_path FROM products WHERE title = "
+        sql = "SELECT * FROM products WHERE title = "
         // add first item to sql string
         sql += `'${req.query['title']}';`
         console.log(sql)
     }
     else if (req.query['category'] != undefined) {
         // set initial sql string to find product data from database, according to what is in the client's cart
-        sql = "SELECT id, category, title, price, descr, image_path FROM products WHERE category = "
+        sql = "SELECT * FROM products WHERE category = "
         // add first item to sql string
         sql += `'${req.query['category']}';`
         console.log(sql)
@@ -115,7 +115,7 @@ app.get('/cart-data', (req, res) => {
         res.send(data)
     }
     // set initial sql string to find product data from database, according to what is in the client's cart
-    var sql = "SELECT id, title, price, descr, image_path FROM products WHERE id = "
+    var sql = "SELECT * FROM products WHERE id = "
     // access cart data sent in the request URL query 
     const cart = JSON.parse(req.query['cart'])
     // add first item to sql string

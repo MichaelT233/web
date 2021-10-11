@@ -1,7 +1,8 @@
 // client modules
 
 // import utility functions
-import {accessProductDB, buildQuery} from './utility.js'
+import {accessProductDB, buildQuery, DB} from './utility.js'
+let db = new DB()
 /*
 class:
     main store page functionality
@@ -82,23 +83,34 @@ export class Cart {
     }
     // add item and it's quantity to cart table
     addItem(id) {
-        var table = this.getTable()
-        // access item quantity, convention for DOM id is product id ending with q
-        var quantity = Number(document.getElementById(id + 'q').value)
-        this.addTotalCount(quantity)
-        for (const row of table) {
-            if (row[0] == id) {
-                quantity += Number(row[1])
-                row[1] = `${quantity}`
+        db.readField('stock', id, (stock) => {
+            var table = this.getTable()
+            // access item quantity, convention for DOM id is product id ending with q
+            var quantity = Number(document.getElementById(id + 'q').value)
+            for (const row of table) {
+                if (row[0] == id) {
+                    if (Number(row[1]) + quantity <= stock) {
+                        this.addTotalCount(quantity)
+                        quantity += Number(row[1])
+                        row[1] = `${quantity}`
+                        this.overwrite(table)
+                        console.log(window.localStorage)
+                        return
+                    }
+                    console.log(window.localStorage)
+                    return
+                }
+            }
+            if (quantity <= stock) {
+                this.addTotalCount(quantity)
+                table.push([id, quantity])
                 this.overwrite(table)
+                this.addItemCount(1)
                 console.log(window.localStorage)
                 return
             }
-        }
-        table.push([id, quantity])
-        this.overwrite(table)
-        this.addItemCount(1)
-        console.log(window.localStorage)
+            console.log(window.localStorage)
+        })
     }
     // remove item from cart table
     deleteItem(id) {
@@ -117,19 +129,23 @@ export class Cart {
     }
     // increment an item's quantity
     incItem(id) {
-        this.addTotalCount(1)
-        var quantity = 0
-        var table = this.getTable()
-        for (const row of table) {
-            if (row[0] == id) {
-                quantity = Number(row[1]) + 1
-                row[1] = `${quantity}`
-                this.overwrite(table)
-                this.load()
-                console.log(window.localStorage)
-                return
+        db.readField('stock', id, (stock) => {
+            console.log(stock)
+            if (this.getItemQuantity(id) < stock) {
+                this.addTotalCount(1)
+                var quantity = 0
+                var table = this.getTable()
+                for (const row of table) {
+                    if (row[0] == id) {
+                        quantity = Number(row[1]) + 1
+                        row[1] = `${quantity}`
+                        this.overwrite(table)
+                        this.load()
+                        console.log(window.localStorage)
+                    }
+                }
             }
-        }
+        })
     }
     // decrement an item's quantity
     decItem(id) {
@@ -232,6 +248,9 @@ function BuildCart(props) {
             <h2>{row.title}</h2>
             {/*product price*/}
             <h2>${row.price}</h2>
+            {/*product stock*/}
+            {row.stock > 0 && <p>In Stock ({row.stock})</p>}
+            {row.stock == 0 && <p>Out of Stock</p>}
             {/*product description*/}
             <p>{row.descr}</p>
             {/*product quantity selector*/}
