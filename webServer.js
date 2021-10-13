@@ -44,7 +44,6 @@ app.get('/', (req, res) => {
         res.send(data)
     })
 })
-
 // GET cart
 app.get('/cart', (req, res) => {
     // read and serve html file
@@ -58,41 +57,22 @@ app.get('/cart', (req, res) => {
     })
 })
 
-// GET all
-app.get('/all', (req, res) => {
+// GET product-data (AJAX)
+app.get('/product-data', (req, res) => {
     // callback for sending reponse
     function sendResponse(data) {
         res.type('html')
         res.send(data)
     }
-    // using Pool instance to query postgreSQL database
-    psql.query('SELECT * FROM products;', (err, res) => {
-        // converting JSON object into a string in order to send as response text
-        const rows = JSON.stringify(res.rows)
-        sendResponse(rows)
-    })
-})
-
-// GET search
-app.get('/search', (req, res) => {
-    // callback for sending reponse
-    function sendResponse(data) {
-        res.type('html')
-        res.send(data)
-    }
-    var sql = ''
-    if (req.query['title'] != undefined) {
-        // set initial sql string to find product data from database, according to what is in the client's cart
-        sql = "SELECT * FROM products WHERE title = "
-        // add first item to sql string
-        sql += `'${req.query['title']}';`
+    if (Object.keys(req.query).length == 0) {
+        var sql = "SELECT * FROM products;"
         console.log(sql)
     }
-    else if (req.query['category'] != undefined) {
+    else {
         // set initial sql string to find product data from database, according to what is in the client's cart
-        sql = "SELECT * FROM products WHERE category = "
+        var sql = `SELECT * FROM products WHERE ${req.query.column} = ${req.query.field}`
         // add first item to sql string
-        sql += `'${req.query['category']}';`
+        //sql += `'${req.query['id']}';`
         console.log(sql)
     }
     // using Pool instance to query postgreSQL database, passing the sql string as it's query
@@ -106,8 +86,7 @@ app.get('/search', (req, res) => {
         sendResponse(rows)
     })
 })
-
-// GET cart-data
+// GET cart-data (AJAX)
 app.get('/cart-data', (req, res) => {
     // callback for sending reponse
     function sendResponse(data) {
@@ -138,35 +117,5 @@ app.get('/cart-data', (req, res) => {
         // converting JSON object into a string in order to send as response text
         const rows = JSON.stringify(res.rows)
         sendResponse(rows)
-    })
-})
-
-// GET search
-app.get('/product-data', (req, res) => {
-    // callback for sending reponse
-    function sendResponse(data) {
-        res.type('html')
-        res.send(data)
-    }
-    if (Object.keys(req.query).length == 0) {
-        var sql = "SELECT * FROM products;"
-        console.log(sql)
-    }
-    else {
-        // set initial sql string to find product data from database, according to what is in the client's cart
-        var sql = "SELECT * FROM products WHERE id = "
-        // add first item to sql string
-        sql += `'${req.query['id']}';`
-        console.log(sql)
-    }
-    // using Pool instance to query postgreSQL database, passing the sql string as it's query
-    psql.query(sql, (err, res) => {
-        if (err) {
-            console.error(err)
-            return
-        }
-        // converting JSON object into a string in order to send as response text
-        const row = JSON.stringify(res.rows)
-        sendResponse(row)
     })
 })

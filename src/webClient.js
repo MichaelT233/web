@@ -19,19 +19,22 @@ let db = new _utility_js__WEBPACK_IMPORTED_MODULE_0__.DB();
 class Store {
   loadAll() {
     ReactDOM.render(React.createElement("h1", null, "All Products"), document.getElementById('productHead'));
-    (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)('all', this.#render);
-  }
-
-  #render(rows) {
-    const storeItems = React.createElement(BuildStore, {
-      rows: rows
+    db.readTable(rows => {
+      const storeItems = React.createElement(BuildStore, {
+        rows: rows
+      });
+      ReactDOM.render(storeItems, document.getElementById('mainView'));
     });
-    ReactDOM.render(storeItems, document.getElementById('mainView'));
   }
 
   loadSearch() {
     const title = document.getElementById('searchBar').value;
-    (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)(`search?title=${title}`, this.#render);
+    db.readRows('title', `'${title}'`, rows => {
+      const storeItems = React.createElement(BuildStore, {
+        rows: rows
+      });
+      ReactDOM.render(storeItems, document.getElementById('mainView'));
+    });
   }
 
   loadCategory(category) {
@@ -41,7 +44,12 @@ class Store {
     }
 
     ReactDOM.render(React.createElement("h1", null, category), document.getElementById('productHead'));
-    (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)(`search?category=${category}`, this.#render);
+    db.readRows('category', `'${category}'`, rows => {
+      const storeItems = React.createElement(BuildStore, {
+        rows: rows
+      });
+      ReactDOM.render(storeItems, document.getElementById('mainView'));
+    });
   }
 
   clear() {
@@ -95,7 +103,8 @@ class Cart {
   }
 
   addItem(id) {
-    db.readField('stock', id, stock => {
+    db.readRows('id', `'${id}'`, rows => {
+      const stock = rows[0].stock;
       var table = this.getTable();
       var quantity = Number(document.getElementById(id + 'q').value);
 
@@ -115,7 +124,7 @@ class Cart {
             console.log(window.localStorage);
             return;
           } else if (total > stock) {
-            this.addTotalCount(total - stock);
+            this.addTotalCount(stock - row[1]);
             row[1] = `${stock}`;
             this.overwrite(table);
             console.log(window.localStorage);
@@ -161,8 +170,8 @@ class Cart {
   }
 
   incItem(id) {
-    db.readField('stock', id, stock => {
-      console.log(stock);
+    db.readRows('id', `'${id}'`, rows => {
+      const stock = rows[0].stock;
 
       if (this.getItemQuantity(id) < stock) {
         this.addTotalCount(1);
@@ -176,13 +185,21 @@ class Cart {
             this.overwrite(table);
             this.load();
             console.log(window.localStorage);
+            return;
           }
         }
       }
+
+      console.log(window.localStorage);
     });
   }
 
   decItem(id) {
+    if (this.getItemQuantity(id) == 0) {
+      console.log(window.localStorage);
+      return;
+    }
+
     this.addTotalCount(-1);
     var quantity = 0;
     var table = this.getTable();
@@ -210,29 +227,27 @@ class Cart {
 
   load() {
     if (this.getItemCount() != 0) {
-      (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.accessProductDB)('cart-data' + (0,_utility_js__WEBPACK_IMPORTED_MODULE_0__.buildQuery)(), this.#render);
+      db.readCartData(rows => {
+        const cartItems = React.createElement(BuildCart, {
+          rows: rows
+        });
+        ReactDOM.render(cartItems, document.getElementById('mainView'));
+        var totalPrice = 0.0;
+
+        for (const row of rows) {
+          totalPrice += Number(row.price) * cart.getItemQuantity(row.id);
+        }
+
+        totalPrice = totalPrice.toFixed(2);
+        const head = React.createElement(BuildCartHeader, {
+          totalPrice: totalPrice,
+          totalQuantity: cart.getTotalCount()
+        });
+        ReactDOM.render(head, document.getElementById('productHead'));
+      });
     } else {
       this.clear();
     }
-  }
-
-  #render(rows) {
-    const cartItems = React.createElement(BuildCart, {
-      rows: rows
-    });
-    ReactDOM.render(cartItems, document.getElementById('mainView'));
-    var totalPrice = 0.0;
-
-    for (const row of rows) {
-      totalPrice += Number(row.price) * cart.getItemQuantity(row.id);
-    }
-
-    totalPrice = totalPrice.toFixed(2);
-    const head = React.createElement(BuildCartHeader, {
-      totalPrice: totalPrice,
-      totalQuantity: cart.getTotalCount()
-    });
-    ReactDOM.render(head, document.getElementById('productHead'));
   }
 
   clear() {
@@ -329,32 +344,12 @@ function BuildCartHeader(props) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "buildQuery": () => (/* binding */ buildQuery),
-/* harmony export */   "accessProductDB": () => (/* binding */ accessProductDB),
 /* harmony export */   "DB": () => (/* binding */ DB)
 /* harmony export */ });
-function buildQuery() {
-  const query = '?cart=' + window.localStorage.getItem('cart');
-  console.log(query);
-  return query;
-}
-function accessProductDB(url, callback) {
-  var request = new XMLHttpRequest();
-  request.open("GET", url);
-
-  request.onreadystatechange = function ready() {
-    if (request.readyState == XMLHttpRequest.DONE) {
-      const obj = JSON.parse(request.responseText);
-      callback(obj);
-    }
-  };
-
-  request.send();
-}
 class DB {
-  readDB(query, callback) {
+  readDB(url, callback) {
     var request = new XMLHttpRequest();
-    request.open("GET", 'product-data' + query);
+    request.open("GET", url);
 
     request.onreadystatechange = function ready() {
       if (request.readyState == XMLHttpRequest.DONE) {
@@ -366,20 +361,18 @@ class DB {
     request.send();
   }
 
-  readRow(id, callback) {
-    this.readDB(`?id=${id}`, row => {
-      callback(row[0]);
-    });
-  }
-
-  readField(field, id, callback) {
-    this.readDB(`?id=${id}`, row => {
-      callback(row[0][`${field}`]);
+  readRows(column, field, callback) {
+    this.readDB(`product-data?column=${column}&field=${field}`, rows => {
+      callback(rows);
     });
   }
 
   readTable(callback) {
-    this.readDB('', callback);
+    this.readDB('product-data', callback);
+  }
+
+  readCartData(callback) {
+    this.readDB('cart-data?cart=' + window.localStorage.getItem('cart'), callback);
   }
 
 }

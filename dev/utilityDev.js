@@ -1,32 +1,13 @@
 // client utility module
 
-// function: build URL query for cart page
-export function buildQuery() {
-    const query = '?cart=' + window.localStorage.getItem('cart')
-    console.log(query)
-    return query
-}
 /*
-function
-    make AJAX call to given URL, and pass given callback to access the response data
-    AJAX response data is JSON parsed before being passed to callback 
+class:
+    async database access
 */
-export function accessProductDB(url, callback) {
-    var request = new XMLHttpRequest()
-    request.open("GET", url)
-    request.onreadystatechange = function ready() {
-        if(request.readyState == XMLHttpRequest.DONE) {
-            const obj = JSON.parse(request.responseText)
-            callback(obj)
-        }
-    }
-    request.send()
-}
-
 export class DB {
-    readDB(query, callback) {
+    readDB(url, callback) {
         var request = new XMLHttpRequest()
-        request.open("GET", 'product-data' + query)
+        request.open("GET", url)
         request.onreadystatechange = function ready() {
             if(request.readyState == XMLHttpRequest.DONE) {
                 const res = JSON.parse(request.responseText)
@@ -35,17 +16,15 @@ export class DB {
         }
         request.send()
     }
-    readRow(id, callback) {
-        this.readDB(`?id=${id}`, (row) => {
-            callback(row[0])
-        })
-    }
-    readField(field, id, callback) {
-        this.readDB(`?id=${id}`, (row) => {
-            callback(row[0][`${field}`])
+    readRows(column, field, callback) {
+        this.readDB(`product-data?column=${column}&field=${field}`, (rows) => {
+            callback(rows)
         })
     }
     readTable(callback) {
-        this.readDB('', callback)
+        this.readDB('product-data', callback)
+    }
+    readCartData(callback) {
+        this.readDB('cart-data?cart=' + window.localStorage.getItem('cart'), callback)
     }
 }

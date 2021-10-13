@@ -1,29 +1,28 @@
 // client modules
 
 // import utility functions
-import {accessProductDB, buildQuery, DB} from './utility.js'
+import {DB} from './utility.js'
 let db = new DB()
 /*
 class:
     main store page functionality
 */
 export class Store {
-    // get data for all products and pass this.#render as a callback
+    // get data for all products and render on page
     loadAll() {
         ReactDOM.render(<h1>All Products</h1>, document.getElementById('productHead'))
-        accessProductDB('all', this.#render)
+        db.readTable((rows) => {
+            const storeItems = <BuildStore rows={rows}/>
+            ReactDOM.render(storeItems, document.getElementById('mainView'))
+        })
     }
-    /*
-    input: JSON object array where each item is a row object of column fields from the product database server
-    fields: id, title, price, desc, imagePath
-    */
-    #render(rows) {
-        const storeItems = <BuildStore rows={rows}/>
-        ReactDOM.render(storeItems, document.getElementById('mainView'))
-    }
+    // load products from search bar query
     loadSearch() {
         const title = document.getElementById('searchBar').value
-        accessProductDB(`search?title=${title}`, this.#render)
+        db.readRows('title', `'${title}'`, (rows) => {
+            const storeItems = <BuildStore rows={rows}/>
+            ReactDOM.render(storeItems, document.getElementById('mainView'))
+        })
     }
     loadCategory(category) {
         if (window.location.pathname == '/cart') {
@@ -31,7 +30,10 @@ export class Store {
             console.log(window.location.origin)
         }
         ReactDOM.render(<h1>{category}</h1>, document.getElementById('productHead'))
-        accessProductDB(`search?category=${category}`, this.#render)
+        db.readRows('category', `'${category}'`, (rows) => {
+            const storeItems = <BuildStore rows={rows}/>
+            ReactDOM.render(storeItems, document.getElementById('mainView'))
+        })
     }
     // overwrite store
     clear() {
@@ -83,7 +85,8 @@ export class Cart {
     }
     // add item and it's quantity to cart table
     addItem(id) {
-        db.readField('stock', id, (stock) => {
+        db.readRows('id', `'${id}'`, (rows) => {
+            const stock = rows[0].stock 
             var table = this.getTable()
             // access item quantity, convention for DOM id is product id ending with q
             var quantity = Number(document.getElementById(id + 'q').value)
@@ -99,12 +102,12 @@ export class Cart {
                         console.log(window.localStorage)
                         return
                     }
-                    else if (Number(row[1]) == stock) {
+                    else if (Number(row[1]) == stock ) {
                         console.log(window.localStorage)
                         return
                     }
                     else if (total > stock) {
-                        this.addTotalCount(total - stock)
+                        this.addTotalCount(stock - row[1])
                         row[1] = `${stock}`
                         this.overwrite(table)
                         console.log(window.localStorage)
@@ -148,8 +151,8 @@ export class Cart {
     }
     // increment an item's quantity
     incItem(id) {
-        db.readField('stock', id, (stock) => {
-            console.log(stock)
+        db.readRows('id', `'${id}'`, (rows) => {
+            const stock = rows[0].stock
             if (this.getItemQuantity(id) < stock) {
                 this.addTotalCount(1)
                 var quantity = 0
@@ -161,13 +164,19 @@ export class Cart {
                         this.overwrite(table)
                         this.load()
                         console.log(window.localStorage)
+                        return
                     }
                 }
             }
+            console.log(window.localStorage)
         })
     }
     // decrement an item's quantity
     decItem(id) {
+        if (this.getItemQuantity(id) == 0) {
+            console.log(window.localStorage)
+            return
+        }
         this.addTotalCount(-1)
         var quantity = 0
         var table = this.getTable()
@@ -192,10 +201,20 @@ export class Cart {
             }
         }
     }
-    // load product data for cart items and pass this.#render as a callback 
+    // load product data for cart items
     load() {
         if (this.getItemCount() != 0) {
-            accessProductDB('cart-data' + buildQuery(), this.#render)
+            db.readCartData((rows) => {
+                const cartItems = <BuildCart rows={rows}/>
+                ReactDOM.render(cartItems, document.getElementById('mainView'))
+                var totalPrice = 0.0
+                for (const row of rows) {
+                    totalPrice += Number(row.price) * cart.getItemQuantity(row.id)
+                }
+                totalPrice = totalPrice.toFixed(2)
+                const head = <BuildCartHeader totalPrice={totalPrice} totalQuantity={cart.getTotalCount()}/>
+                ReactDOM.render(head, document.getElementById('productHead'))
+            })
         }
         else {
             this.clear()
@@ -205,17 +224,6 @@ export class Cart {
     input: JSON object array where each item is a row object of column fields from the product database server
     fields: id, title, price, desc, imagePath
     */
-    #render(rows) {
-        const cartItems = <BuildCart rows={rows}/>
-        ReactDOM.render(cartItems, document.getElementById('mainView'))
-        var totalPrice = 0.0
-        for (const row of rows) {
-            totalPrice += Number(row.price) * cart.getItemQuantity(row.id)
-        }
-        totalPrice = totalPrice.toFixed(2)
-        const head = <BuildCartHeader totalPrice={totalPrice} totalQuantity={cart.getTotalCount()}/>
-        ReactDOM.render(head, document.getElementById('productHead'))
-    }
     // overwrite the store and cart header
     clear() {
         ReactDOM.render(<div></div>, document.getElementById('productHead'))
