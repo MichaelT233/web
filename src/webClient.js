@@ -28,8 +28,7 @@ class Store {
   }
 
   loadSearch() {
-    const title = document.getElementById('searchBar').value;
-    db.readRows('title', `'${title}'`, rows => {
+    db.readSearchData(document.getElementById('searchBar').value, rows => {
       const storeItems = React.createElement(BuildStore, {
         rows: rows
       });
@@ -373,6 +372,11 @@ class DB {
 
   readCartData(callback) {
     this.readDB('cart-data?cart=' + window.localStorage.getItem('cart'), callback);
+  }
+
+  readSearchData(exp, callback) {
+    console.log(exp);
+    this.readDB('search?column=title&field=' + exp, callback);
   }
 
 }

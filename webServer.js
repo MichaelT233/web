@@ -70,7 +70,7 @@ app.get('/product-data', (req, res) => {
     }
     else {
         // set initial sql string to find product data from database, according to what is in the client's cart
-        var sql = `SELECT * FROM products WHERE ${req.query.column} = ${req.query.field}`
+        var sql = `SELECT * FROM products WHERE ${req.query.column} = ${req.query.field};`
         // add first item to sql string
         //sql += `'${req.query['id']}';`
         console.log(sql)
@@ -107,6 +107,27 @@ app.get('/cart-data', (req, res) => {
     }
     // terminate sql string
     sql += ';'
+    console.log(sql)
+    // using Pool instance to query postgreSQL database, passing the sql string as it's query
+    psql.query(sql, (err, res) => {
+        if (err) {
+            console.error(err)
+            return
+        }
+        // converting JSON object into a string in order to send as response text
+        const rows = JSON.stringify(res.rows)
+        sendResponse(rows)
+    })
+})
+// GET search (AJAX)
+app.get('/search', (req, res) => {
+    // callback for sending reponse
+    function sendResponse(data) {
+        res.type('html')
+        res.send(data)
+    }
+    // set initial sql string to find product data from database, according to what is in the client's cart
+    var sql = `SELECT * FROM products WHERE ${req.query.column} LIKE '${req.query.field}%';`
     console.log(sql)
     // using Pool instance to query postgreSQL database, passing the sql string as it's query
     psql.query(sql, (err, res) => {

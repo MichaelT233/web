@@ -18,8 +18,7 @@ export class Store {
     }
     // load products from search bar query
     loadSearch() {
-        const title = document.getElementById('searchBar').value
-        db.readRows('title', `'${title}'`, (rows) => {
+        db.readSearchData(document.getElementById('searchBar').value, (rows) => {
             const storeItems = <BuildStore rows={rows}/>
             ReactDOM.render(storeItems, document.getElementById('mainView'))
         })
