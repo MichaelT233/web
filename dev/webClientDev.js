@@ -11,19 +11,51 @@ let cart = new Cart()
 // make objects' scope accessible from DOM
 window.store = store
 window.cart = cart
-// initialize localStorage parameters if cart is null
-if (window.localStorage.getItem('cart') == null) {
-    window.localStorage.setItem('cart', '[]')
-    window.localStorage.setItem('itemCount', '0')
-    window.localStorage.setItem('totalCount', '0')
-}
-if (document.location.pathname == '/') {
-    window.onload = function() {
-        store.loadAll()
+
+window.addEventListener('load', () => {
+    if (location.hash == '') {
+        location.hash = 'home'
+        return
     }
-}
-if (document.location.pathname == '/cart') {
-    window.onload = function() {
-        cart.load()
+    console.log(location.hash)
+    switch (location.hash) {
+        case '#cart':
+            store.loadCart()
+            break
+        case '#home':
+            store.loadAll()
+            break
+        default:
+            let pattern = /#category\d/
+            if (pattern.test(location.hash)) {
+                const category = location.hash.split('#')[1]
+                store.loadCategory(category)
+                return
+            }
+            pattern = /#search\W/
+            if (pattern.test(location.hash)) {
+                store.loadSearch()
+            }
     }
-}
+})
+window.addEventListener('hashchange', () => {
+    console.log(location.hash)
+    switch (location.hash) {
+        case '#cart':
+            store.loadCart()
+            break
+        case '#home':
+            store.loadAll()
+            break
+        default:
+            let pattern = /#category\d/
+            if (pattern.test(location.hash)) {
+                const category = location.hash.split('#')[1]
+                store.loadCategory(category)
+            }
+            pattern = /#search\W/
+            if (pattern.test(location.hash)) {
+                store.loadSearch()
+            }
+    }
+})

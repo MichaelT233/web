@@ -2,7 +2,7 @@
 
 // import utility functions
 import {DB} from './utility.js'
-let db = new DB()
+
 /*
 class:
     main store page functionality
@@ -18,24 +18,42 @@ export class Store {
     }
     // load products from search bar query
     loadSearch() {
-        db.readSearchData(document.getElementById('searchBar').value, (rows) => {
+        const pattern = location.hash.split('=')[1]
+        ReactDOM.render(<h1>Search Results for "{pattern}"</h1>, document.getElementById('productHead'))
+        db.readSearchData(pattern, (rows) => {
             const storeItems = <BuildStore rows={rows}/>
             ReactDOM.render(storeItems, document.getElementById('mainView'))
         })
     }
     loadCategory(category) {
-        if (window.location.pathname == '/cart') {
-            window.location.replace(window.location.origin)
-            console.log(window.location.origin)
-        }
         ReactDOM.render(<h1>{category}</h1>, document.getElementById('productHead'))
         db.readRows('category', `'${category}'`, (rows) => {
             const storeItems = <BuildStore rows={rows}/>
             ReactDOM.render(storeItems, document.getElementById('mainView'))
         })
     }
+    // load product data for cart items
+    loadCart() {
+        if (cart.getItemCount() != 0) {
+            db.readCartData((rows) => {
+                const cartItems = <BuildCart rows={rows}/>
+                ReactDOM.render(cartItems, document.getElementById('mainView'))
+                var totalPrice = 0.0
+                for (const row of rows) {
+                    totalPrice += Number(row.price) * cart.getItemQuantity(row.id)
+                }
+                totalPrice = totalPrice.toFixed(2)
+                const head = <BuildCartHeader totalPrice={totalPrice} totalQuantity={cart.getTotalCount()}/>
+                ReactDOM.render(head, document.getElementById('productHead'))
+            })
+        }
+        else {
+            this.clear()
+        }
+    }
     // overwrite store
     clear() {
+        ReactDOM.render(<div></div>, document.getElementById('productHead'))
         ReactDOM.render(<div></div>, document.getElementById('mainView'))
     }
     displayDropdown() {
@@ -54,6 +72,13 @@ class:
         cart is formatted as 2D array(table) [[id, quantity], [id, quantity], [id, quantity]]
 */
 export class Cart {
+    constructor() {
+        if (window.localStorage.getItem('cart') == null) {
+            window.localStorage.setItem('cart', '[]')
+            window.localStorage.setItem('itemCount', '0')
+            window.localStorage.setItem('totalCount', '0')
+        }
+    }
     getItemCount() {
         return Number(window.localStorage.getItem('itemCount'))
     }
@@ -142,7 +167,7 @@ export class Cart {
                 table.splice(table.indexOf(row), 1)
                 this.overwrite(table)
                 this.addItemCount(-1)
-                this.load()
+                store.loadCart()
                 console.log(window.localStorage)
                 return
             }
@@ -161,7 +186,7 @@ export class Cart {
                         quantity = Number(row[1]) + 1
                         row[1] = `${quantity}`
                         this.overwrite(table)
-                        this.load()
+                        store.loadCart()
                         console.log(window.localStorage)
                         return
                     }
@@ -185,7 +210,7 @@ export class Cart {
                     table.splice(table.indexOf(row), 1)
                     this.overwrite(table)
                     this.addItemCount(-1)
-                    this.load()
+                    store.loadCart()
                     console.log(window.localStorage)
                     return
                 }
@@ -193,44 +218,14 @@ export class Cart {
                     quantity = Number(row[1]) - 1
                     row[1] = `${quantity}`
                     this.overwrite(table)
-                    this.load()
+                    store.loadCart()
                     console.log(window.localStorage)
                     return
                 }
             }
         }
     }
-    // load product data for cart items
-    load() {
-        if (this.getItemCount() != 0) {
-            db.readCartData((rows) => {
-                const cartItems = <BuildCart rows={rows}/>
-                ReactDOM.render(cartItems, document.getElementById('mainView'))
-                var totalPrice = 0.0
-                for (const row of rows) {
-                    totalPrice += Number(row.price) * cart.getItemQuantity(row.id)
-                }
-                totalPrice = totalPrice.toFixed(2)
-                const head = <BuildCartHeader totalPrice={totalPrice} totalQuantity={cart.getTotalCount()}/>
-                ReactDOM.render(head, document.getElementById('productHead'))
-            })
-        }
-        else {
-            this.clear()
-        }
-    }
-    /*
-    input: JSON object array where each item is a row object of column fields from the product database server
-    fields: id, title, price, desc, imagePath
-    */
-    // overwrite the store and cart header
-    clear() {
-        ReactDOM.render(<div></div>, document.getElementById('productHead'))
-        ReactDOM.render(<div></div>, document.getElementById('mainView'))
-    }
 }
-// instantiate new Cart object for use in react components
-let cart = new Cart()
 // react component: build main store page items
 function BuildStore(props) {
     const roots = props.rows.map((row) =>    
@@ -307,3 +302,8 @@ function BuildCartHeader(props) {
         </div>
     )
 }
+
+// object initializations are not hoisted (DB could be at top)
+let db = new DB()
+let cart = new Cart()
+let store = new Store()

@@ -44,18 +44,6 @@ app.get('/', (req, res) => {
         res.send(data)
     })
 })
-// GET cart
-app.get('/cart', (req, res) => {
-    // read and serve html file
-    fs.readFile('html/cart.html', 'utf8' , (err, data) => {
-        if (err) {
-            console.error(err)
-            return
-        }
-        res.type('html')
-        res.send(data)
-    })
-})
 
 // GET product-data (AJAX)
 app.get('/product-data', (req, res) => {
@@ -127,7 +115,7 @@ app.get('/search', (req, res) => {
         res.send(data)
     }
     // set initial sql string to find product data from database, according to what is in the client's cart
-    var sql = `SELECT * FROM products WHERE ${req.query.column} LIKE '${req.query.field}%';`
+    var sql = `SELECT * FROM products WHERE ${req.query.column} ILIKE '${req.query.field}%';`
     console.log(sql)
     // using Pool instance to query postgreSQL database, passing the sql string as it's query
     psql.query(sql, (err, res) => {

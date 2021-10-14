@@ -15,7 +15,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _utility_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utility.js */ "./utility.js");
 
-let db = new _utility_js__WEBPACK_IMPORTED_MODULE_0__.DB();
 class Store {
   loadAll() {
     ReactDOM.render(React.createElement("h1", null, "All Products"), document.getElementById('productHead'));
@@ -28,7 +27,9 @@ class Store {
   }
 
   loadSearch() {
-    db.readSearchData(document.getElementById('searchBar').value, rows => {
+    const pattern = location.hash.split('=')[1];
+    ReactDOM.render(React.createElement("h1", null, "Search Results for \"", pattern, "\""), document.getElementById('productHead'));
+    db.readSearchData(pattern, rows => {
       const storeItems = React.createElement(BuildStore, {
         rows: rows
       });
@@ -37,11 +38,6 @@ class Store {
   }
 
   loadCategory(category) {
-    if (window.location.pathname == '/cart') {
-      window.location.replace(window.location.origin);
-      console.log(window.location.origin);
-    }
-
     ReactDOM.render(React.createElement("h1", null, category), document.getElementById('productHead'));
     db.readRows('category', `'${category}'`, rows => {
       const storeItems = React.createElement(BuildStore, {
@@ -51,7 +47,33 @@ class Store {
     });
   }
 
+  loadCart() {
+    if (cart.getItemCount() != 0) {
+      db.readCartData(rows => {
+        const cartItems = React.createElement(BuildCart, {
+          rows: rows
+        });
+        ReactDOM.render(cartItems, document.getElementById('mainView'));
+        var totalPrice = 0.0;
+
+        for (const row of rows) {
+          totalPrice += Number(row.price) * cart.getItemQuantity(row.id);
+        }
+
+        totalPrice = totalPrice.toFixed(2);
+        const head = React.createElement(BuildCartHeader, {
+          totalPrice: totalPrice,
+          totalQuantity: cart.getTotalCount()
+        });
+        ReactDOM.render(head, document.getElementById('productHead'));
+      });
+    } else {
+      this.clear();
+    }
+  }
+
   clear() {
+    ReactDOM.render(React.createElement("div", null), document.getElementById('productHead'));
     ReactDOM.render(React.createElement("div", null), document.getElementById('mainView'));
   }
 
@@ -65,6 +87,14 @@ class Store {
 
 }
 class Cart {
+  constructor() {
+    if (window.localStorage.getItem('cart') == null) {
+      window.localStorage.setItem('cart', '[]');
+      window.localStorage.setItem('itemCount', '0');
+      window.localStorage.setItem('totalCount', '0');
+    }
+  }
+
   getItemCount() {
     return Number(window.localStorage.getItem('itemCount'));
   }
@@ -161,7 +191,7 @@ class Cart {
         table.splice(table.indexOf(row), 1);
         this.overwrite(table);
         this.addItemCount(-1);
-        this.load();
+        store.loadCart();
         console.log(window.localStorage);
         return;
       }
@@ -182,7 +212,7 @@ class Cart {
             quantity = Number(row[1]) + 1;
             row[1] = `${quantity}`;
             this.overwrite(table);
-            this.load();
+            store.loadCart();
             console.log(window.localStorage);
             return;
           }
@@ -209,14 +239,14 @@ class Cart {
           table.splice(table.indexOf(row), 1);
           this.overwrite(table);
           this.addItemCount(-1);
-          this.load();
+          store.loadCart();
           console.log(window.localStorage);
           return;
         } else {
           quantity = Number(row[1]) - 1;
           row[1] = `${quantity}`;
           this.overwrite(table);
-          this.load();
+          store.loadCart();
           console.log(window.localStorage);
           return;
         }
@@ -224,38 +254,7 @@ class Cart {
     }
   }
 
-  load() {
-    if (this.getItemCount() != 0) {
-      db.readCartData(rows => {
-        const cartItems = React.createElement(BuildCart, {
-          rows: rows
-        });
-        ReactDOM.render(cartItems, document.getElementById('mainView'));
-        var totalPrice = 0.0;
-
-        for (const row of rows) {
-          totalPrice += Number(row.price) * cart.getItemQuantity(row.id);
-        }
-
-        totalPrice = totalPrice.toFixed(2);
-        const head = React.createElement(BuildCartHeader, {
-          totalPrice: totalPrice,
-          totalQuantity: cart.getTotalCount()
-        });
-        ReactDOM.render(head, document.getElementById('productHead'));
-      });
-    } else {
-      this.clear();
-    }
-  }
-
-  clear() {
-    ReactDOM.render(React.createElement("div", null), document.getElementById('productHead'));
-    ReactDOM.render(React.createElement("div", null), document.getElementById('mainView'));
-  }
-
 }
-let cart = new Cart();
 
 function BuildStore(props) {
   const roots = props.rows.map(row => React.createElement("div", {
@@ -331,6 +330,10 @@ function BuildCartHeader(props) {
     type: "button"
   }, "Proceed to Checkout ", '(' + props.totalQuantity + ' items)'));
 }
+
+let db = new _utility_js__WEBPACK_IMPORTED_MODULE_0__.DB();
+let cart = new Cart();
+let store = new Store();
 
 
 /***/ }),
@@ -454,24 +457,68 @@ let store = new _react_js__WEBPACK_IMPORTED_MODULE_0__.Store();
 let cart = new _react_js__WEBPACK_IMPORTED_MODULE_0__.Cart();
 window.store = store;
 window.cart = cart;
+window.addEventListener('load', () => {
+  if (location.hash == '') {
+    location.hash = 'home';
+    return;
+  }
 
-if (window.localStorage.getItem('cart') == null) {
-  window.localStorage.setItem('cart', '[]');
-  window.localStorage.setItem('itemCount', '0');
-  window.localStorage.setItem('totalCount', '0');
-}
+  console.log(location.hash);
 
-if (document.location.pathname == '/') {
-  window.onload = function () {
-    store.loadAll();
-  };
-}
+  switch (location.hash) {
+    case '#cart':
+      store.loadCart();
+      break;
 
-if (document.location.pathname == '/cart') {
-  window.onload = function () {
-    cart.load();
-  };
-}
+    case '#home':
+      store.loadAll();
+      break;
+
+    default:
+      let pattern = /#category\d/;
+
+      if (pattern.test(location.hash)) {
+        const category = location.hash.split('#')[1];
+        store.loadCategory(category);
+        return;
+      }
+
+      pattern = /#search\W/;
+
+      if (pattern.test(location.hash)) {
+        store.loadSearch();
+      }
+
+  }
+});
+window.addEventListener('hashchange', () => {
+  console.log(location.hash);
+
+  switch (location.hash) {
+    case '#cart':
+      store.loadCart();
+      break;
+
+    case '#home':
+      store.loadAll();
+      break;
+
+    default:
+      let pattern = /#category\d/;
+
+      if (pattern.test(location.hash)) {
+        const category = location.hash.split('#')[1];
+        store.loadCategory(category);
+      }
+
+      pattern = /#search\W/;
+
+      if (pattern.test(location.hash)) {
+        store.loadSearch();
+      }
+
+  }
+});
 
 })();
 

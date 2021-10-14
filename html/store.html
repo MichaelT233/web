@@ -15,24 +15,19 @@
             <div id="dropdown">
                 <img src="images/menu_bar.png" id="menuIcon" onclick="store.displayDropdown()">
                 <div id="dropdownContent" class="dropdownContentOff" onclick="document.getElementById('dropdownContent').className = 'dropdownContentOff'">
-                    <h2 class="dropdownItem" onclick="store.loadCategory('category0')">category0</h2>
-                    <h2 class="dropdownItem" onclick="store.loadCategory('category1')">category1</h2>
-                    <h2 class="dropdownItem" onclick="store.loadCategory('category2')">category2</h2>
-                    <h2 class="dropdownItem" onclick="store.loadCategory('category3')">category3</h2>
+                    <h2 class="dropdownItem" onclick="location.hash = 'category0'">category0</h2>
+                    <h2 class="dropdownItem" onclick="location.hash = 'category1'">category1</h2>
+                    <h2 class="dropdownItem" onclick="location.hash = 'category2'">category2</h2>
+                    <h2 class="dropdownItem" onclick="location.hash = 'category3'">category3</h2>
                 </div>
             </div>
-            <a href ="/">
-                <h1>Web App Prototype</h1>
-            </a>
-            <a href="/cart">
-                <img src="images/cart.png" id="cartIcon">
-            </a>
-            <input type="text" id="searchBar" placeholder="Search Products" onchange="store.loadSearch()">
+            <h1 onclick="location.hash = 'home'">Web App Prototype</h1>
+            <img src="images/cart.png" id="cartIcon" onclick="location.hash = 'cart'">
+            <input type="text" id="searchBar" placeholder="Search All Products" onchange="location.hash = 'search=' + document.getElementById('searchBar').value">
     	</header>
         <div id="headSpace"></div>
         <div id="productHead"></div>
-        <div id="mainView">
-        </div>
+        <div id="mainView"></div>
     	<footer>
       		<p>author: MT</p>
 			<p>Source Code - <a href = 'https://github.com/MichaelT233/web' target = '_blank'>Github</a></p>
