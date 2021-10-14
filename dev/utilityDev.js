@@ -6,15 +6,11 @@ class:
 */
 export class DB {
     readDB(url, callback) {
-        var request = new XMLHttpRequest()
-        request.open("GET", url)
-        request.onreadystatechange = function ready() {
-            if(request.readyState == XMLHttpRequest.DONE) {
-                const res = JSON.parse(request.responseText)
-                callback(res)
-            }
-        }
-        request.send()
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                callback(data)
+            })
     }
     readRows(column, field, callback) {
         this.readDB(`product-data?column=${column}&field=${field}`, (rows) => {
