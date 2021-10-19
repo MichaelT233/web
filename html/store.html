@@ -13,17 +13,17 @@
 	<body>
   		<header>
             <div id="dropdown">
-                <img src="images/menu_bar.png" id="menuIcon" onclick="store.displayDropdown()">
-                <div id="dropdownContent" class="dropdownContentOff" onclick="document.getElementById('dropdownContent').className = 'dropdownContentOff'">
-                    <h2 class="dropdownItem" onclick="location.hash = 'category0'">category0</h2>
-                    <h2 class="dropdownItem" onclick="location.hash = 'category1'">category1</h2>
-                    <h2 class="dropdownItem" onclick="location.hash = 'category2'">category2</h2>
-                    <h2 class="dropdownItem" onclick="location.hash = 'category3'">category3</h2>
+                <img src="images/menu_bar.png" id="menuIcon">
+                <div id="dropdownContent" class="dropdownContentOff">
+                    <h2 class="dropdownItem">category0</h2>
+                    <h2 class="dropdownItem">category1</h2>
+                    <h2 class="dropdownItem">category2</h2>
+                    <h2 class="dropdownItem">category3</h2>
                 </div>
             </div>
-            <h1 onclick="location.hash = 'home'">Web App Prototype</h1>
-            <img src="images/cart.png" id="cartIcon" onclick="location.hash = 'cart'">
-            <input type="text" id="searchBar" placeholder="Search All Products" onchange="location.hash = 'search=' + document.getElementById('searchBar').value">
+            <h1 id='mainTitle'>Web App Prototype</h1>
+            <img src="images/cart.png" id="cartIcon">
+            <input type="text" id="searchBar" placeholder="Search All Products">
     	</header>
         <div id="headSpace"></div>
         <div id="productHead"></div>

@@ -17,8 +17,7 @@ export class Store {
         })
     }
     // load products from search bar query
-    loadSearch() {
-        const pattern = location.hash.split('=')[1]
+    loadSearch(pattern) {
         ReactDOM.render(<h1>Search Results for "{pattern}"</h1>, document.getElementById('productHead'))
         db.readSearchData(pattern, (rows) => {
             const storeItems = <BuildStore rows={rows}/>

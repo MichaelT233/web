@@ -26,8 +26,7 @@ class Store {
     });
   }
 
-  loadSearch() {
-    const pattern = location.hash.split('=')[1];
+  loadSearch(pattern) {
     ReactDOM.render(React.createElement("h1", null, "Search Results for \"", pattern, "\""), document.getElementById('productHead'));
     db.readSearchData(pattern, rows => {
       const storeItems = React.createElement(BuildStore, {
@@ -370,7 +369,6 @@ class DB {
   }
 
   readSearchData(exp, callback) {
-    console.log(exp);
     this.readDB('search?column=title&field=' + exp, callback);
   }
 
@@ -450,66 +448,99 @@ let cart = new _react_js__WEBPACK_IMPORTED_MODULE_0__.Cart();
 window.store = store;
 window.cart = cart;
 window.addEventListener('load', () => {
-  if (location.hash == '') {
-    location.hash = 'home';
-    return;
+  document.getElementById('mainTitle').addEventListener('click', () => {
+    store.loadAll();
+    history.pushState({
+      page: 'home'
+    }, 'Home');
+    console.log(history.state.page);
+  });
+  document.getElementById('cartIcon').addEventListener('click', () => {
+    store.loadCart();
+    history.pushState({
+      page: 'cart'
+    }, 'Cart');
+    console.log(history.state.page);
+  });
+  const menu = document.getElementById('dropdownContent');
+
+  for (let i = 0; i < menu.children.length; i++) {
+    menu.children[i].addEventListener('click', () => {
+      store.loadCategory(`category${i}`);
+      history.pushState({
+        page: 'category',
+        category: `category${i}`
+      }, `Category${i}`);
+      console.log(history.state.page);
+    });
   }
 
-  console.log(location.hash);
+  const searchBar = document.getElementById('searchBar');
+  searchBar.addEventListener('change', () => {
+    const pattern = searchBar.value;
+    store.loadSearch(pattern);
+    history.pushState({
+      page: 'search',
+      pattern: pattern
+    }, 'Search');
+    console.log(history.state.page);
+  });
+  document.getElementById('menuIcon').addEventListener('click', () => {
+    store.displayDropdown();
+  });
+  document.getElementById('dropdownContent').addEventListener('click', () => {
+    document.getElementById('dropdownContent').className = 'dropdownContentOff';
+  });
 
-  switch (location.hash) {
-    case '#cart':
-      store.loadCart();
-      break;
+  if (history.state == null) {
+    store.loadAll();
+    history.pushState({
+      page: 'home'
+    }, 'Home');
+  } else {
+    switch (history.state.page) {
+      case 'cart':
+        store.loadCart();
+        break;
 
-    case '#home':
-      store.loadAll();
-      break;
+      case 'home':
+        store.loadAll();
+        break;
 
-    default:
-      let pattern = /#category\d/;
+      case 'category':
+        store.loadCategory(history.state.category);
+        break;
 
-      if (pattern.test(location.hash)) {
-        const category = location.hash.split('#')[1];
-        store.loadCategory(category);
-        return;
-      }
-
-      pattern = /#search\W/;
-
-      if (pattern.test(location.hash)) {
-        store.loadSearch();
-      }
-
+      case 'search':
+        store.loadSearch(history.state.pattern);
+        document.getElementById('searchBar').value = history.state.pattern;
+        break;
+    }
   }
+
+  console.log(history.state.page);
 });
-window.addEventListener('hashchange', () => {
-  console.log(location.hash);
-
-  switch (location.hash) {
-    case '#cart':
+window.addEventListener('popstate', () => {
+  switch (history.state.page) {
+    case 'cart':
       store.loadCart();
       break;
 
-    case '#home':
+    case 'home':
       store.loadAll();
       break;
 
-    default:
-      let pattern = /#category\d/;
+    case 'category':
+      store.loadCategory(history.state.category);
+      break;
 
-      if (pattern.test(location.hash)) {
-        const category = location.hash.split('#')[1];
-        store.loadCategory(category);
-      }
-
-      pattern = /#search\W/;
-
-      if (pattern.test(location.hash)) {
-        store.loadSearch();
-      }
-
+    case 'search':
+      store.loadSearch(history.state.pattern);
+      document.getElementById('searchBar').value = history.state.pattern;
+      break;
   }
+
+  console.log(history.state.page);
 });
 
 })();
