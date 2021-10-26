@@ -10,8 +10,7 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Store": () => (/* binding */ Store),
-/* harmony export */   "Cart": () => (/* binding */ Cart)
+/* harmony export */   "Store": () => (/* binding */ Store)
 /* harmony export */ });
 /* harmony import */ var _utility_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utility.js */ "./utility.js");
 
@@ -85,25 +84,26 @@ class Store {
   }
 
 }
+
 class Cart {
   constructor() {
-    if (window.localStorage.getItem('cart') == null) {
-      window.localStorage.setItem('cart', '[]');
-      window.localStorage.setItem('itemCount', '0');
-      window.localStorage.setItem('totalCount', '0');
+    if (localStorage.getItem('cart') == null) {
+      localStorage.setItem('cart', '[]');
+      localStorage.setItem('itemCount', '0');
+      localStorage.setItem('totalCount', '0');
     }
   }
 
   getItemCount() {
-    return Number(window.localStorage.getItem('itemCount'));
+    return Number(localStorage.getItem('itemCount'));
   }
 
   getTotalCount() {
-    return Number(window.localStorage.getItem('totalCount'));
+    return Number(localStorage.getItem('totalCount'));
   }
 
   getTable() {
-    return JSON.parse(window.localStorage.getItem('cart'));
+    return JSON.parse(localStorage.getItem('cart'));
   }
 
   getItemQuantity(id) {
@@ -117,17 +117,17 @@ class Cart {
   }
 
   overwrite(table) {
-    window.localStorage.setItem('cart', JSON.stringify(table));
+    localStorage.setItem('cart', JSON.stringify(table));
   }
 
   addItemCount(value) {
-    var itemCount = Number(window.localStorage.getItem('itemCount')) + value;
-    window.localStorage.setItem('itemCount', itemCount);
+    var itemCount = Number(localStorage.getItem('itemCount')) + value;
+    localStorage.setItem('itemCount', itemCount);
   }
 
   addTotalCount(value) {
-    var totalCount = Number(window.localStorage.getItem('totalCount')) + value;
-    window.localStorage.setItem('totalCount', totalCount);
+    var totalCount = Number(localStorage.getItem('totalCount')) + value;
+    localStorage.setItem('totalCount', totalCount);
   }
 
   addItem(id) {
@@ -146,16 +146,16 @@ class Cart {
             quantity += Number(row[1]);
             row[1] = `${quantity}`;
             this.overwrite(table);
-            console.log(window.localStorage);
+            console.log(localStorage);
             return;
           } else if (Number(row[1]) == stock) {
-            console.log(window.localStorage);
+            console.log(localStorage);
             return;
           } else if (total > stock) {
             this.addTotalCount(stock - row[1]);
             row[1] = `${stock}`;
             this.overwrite(table);
-            console.log(window.localStorage);
+            console.log(localStorage);
             return;
           }
         }
@@ -166,18 +166,18 @@ class Cart {
         table.push([id, quantity]);
         this.overwrite(table);
         this.addItemCount(1);
-        console.log(window.localStorage);
+        console.log(localStorage);
         return;
       } else if (quantity > stock) {
         this.addTotalCount(stock);
         table.push([id, stock]);
         this.overwrite(table);
         this.addItemCount(1);
-        console.log(window.localStorage);
+        console.log(localStorage);
         return;
       }
 
-      console.log(window.localStorage);
+      console.log(localStorage);
     });
   }
 
@@ -191,7 +191,7 @@ class Cart {
         this.overwrite(table);
         this.addItemCount(-1);
         store.loadCart();
-        console.log(window.localStorage);
+        console.log(localStorage);
         return;
       }
     }
@@ -212,19 +212,19 @@ class Cart {
             row[1] = `${quantity}`;
             this.overwrite(table);
             store.loadCart();
-            console.log(window.localStorage);
+            console.log(localStorage);
             return;
           }
         }
       }
 
-      console.log(window.localStorage);
+      console.log(localStorage);
     });
   }
 
   decItem(id) {
     if (this.getItemQuantity(id) == 0) {
-      console.log(window.localStorage);
+      console.log(localStorage);
       return;
     }
 
@@ -239,14 +239,14 @@ class Cart {
           this.overwrite(table);
           this.addItemCount(-1);
           store.loadCart();
-          console.log(window.localStorage);
+          console.log(localStorage);
           return;
         } else {
           quantity = Number(row[1]) - 1;
           row[1] = `${quantity}`;
           this.overwrite(table);
           store.loadCart();
-          console.log(window.localStorage);
+          console.log(localStorage);
           return;
         }
       }
@@ -365,7 +365,7 @@ class DB {
   }
 
   readCartData(callback) {
-    this.readDB('cart-data?cart=' + window.localStorage.getItem('cart'), callback);
+    this.readDB('cart-data?cart=' + localStorage.getItem('cart'), callback);
   }
 
   readSearchData(exp, callback) {
@@ -442,11 +442,7 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _react_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./react.js */ "./react.js");
 
-
 let store = new _react_js__WEBPACK_IMPORTED_MODULE_0__.Store();
-let cart = new _react_js__WEBPACK_IMPORTED_MODULE_0__.Cart();
-window.store = store;
-window.cart = cart;
 window.addEventListener('load', () => {
   document.getElementById('mainTitle').addEventListener('click', () => {
     store.loadAll();
@@ -488,8 +484,9 @@ window.addEventListener('load', () => {
   document.getElementById('menuIcon').addEventListener('click', () => {
     store.displayDropdown();
   });
-  document.getElementById('dropdownContent').addEventListener('click', () => {
-    document.getElementById('dropdownContent').className = 'dropdownContentOff';
+  const dropdownContent = document.getElementById('dropdownContent');
+  dropdownContent.addEventListener('click', () => {
+    dropdownContent.className = 'dropdownContentOff';
   });
 
   if (history.state == null) {

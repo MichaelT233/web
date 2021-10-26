@@ -21,7 +21,7 @@ export class DB {
         this.readDB('product-data', callback)
     }
     readCartData(callback) {
-        this.readDB('cart-data?cart=' + window.localStorage.getItem('cart'), callback)
+        this.readDB('cart-data?cart=' + localStorage.getItem('cart'), callback)
     }
     readSearchData(exp, callback) {
         this.readDB('search?column=title&field=' + exp, callback)

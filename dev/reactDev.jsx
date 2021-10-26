@@ -70,22 +70,22 @@ class:
     cross-page data storage
         cart is formatted as 2D array(table) [[id, quantity], [id, quantity], [id, quantity]]
 */
-export class Cart {
+class Cart {
     constructor() {
-        if (window.localStorage.getItem('cart') == null) {
-            window.localStorage.setItem('cart', '[]')
-            window.localStorage.setItem('itemCount', '0')
-            window.localStorage.setItem('totalCount', '0')
+        if (localStorage.getItem('cart') == null) {
+            localStorage.setItem('cart', '[]')
+            localStorage.setItem('itemCount', '0')
+            localStorage.setItem('totalCount', '0')
         }
     }
     getItemCount() {
-        return Number(window.localStorage.getItem('itemCount'))
+        return Number(localStorage.getItem('itemCount'))
     }
     getTotalCount() {
-        return Number(window.localStorage.getItem('totalCount'))
+        return Number(localStorage.getItem('totalCount'))
     }
     getTable() {
-        return JSON.parse(window.localStorage.getItem('cart'))
+        return JSON.parse(localStorage.getItem('cart'))
     }
     getItemQuantity(id) {
         var table = this.getTable()
@@ -96,15 +96,15 @@ export class Cart {
         }
     }
     overwrite(table) {
-        window.localStorage.setItem('cart', JSON.stringify(table))
+        localStorage.setItem('cart', JSON.stringify(table))
     }
     addItemCount(value) {
-        var itemCount = Number(window.localStorage.getItem('itemCount')) + value
-        window.localStorage.setItem('itemCount', itemCount)
+        var itemCount = Number(localStorage.getItem('itemCount')) + value
+        localStorage.setItem('itemCount', itemCount)
     }
     addTotalCount(value) {
-        var totalCount = Number(window.localStorage.getItem('totalCount')) + value
-        window.localStorage.setItem('totalCount', totalCount)
+        var totalCount = Number(localStorage.getItem('totalCount')) + value
+        localStorage.setItem('totalCount', totalCount)
     }
     // add item and it's quantity to cart table
     addItem(id) {
@@ -122,18 +122,18 @@ export class Cart {
                         quantity += Number(row[1])
                         row[1] = `${quantity}`
                         this.overwrite(table)
-                        console.log(window.localStorage)
+                        console.log(localStorage)
                         return
                     }
                     else if (Number(row[1]) == stock ) {
-                        console.log(window.localStorage)
+                        console.log(localStorage)
                         return
                     }
                     else if (total > stock) {
                         this.addTotalCount(stock - row[1])
                         row[1] = `${stock}`
                         this.overwrite(table)
-                        console.log(window.localStorage)
+                        console.log(localStorage)
                         return
                     }
                 }
@@ -143,7 +143,7 @@ export class Cart {
                 table.push([id, quantity])
                 this.overwrite(table)
                 this.addItemCount(1)
-                console.log(window.localStorage)
+                console.log(localStorage)
                 return
             }
             else if (quantity > stock) {
@@ -151,10 +151,10 @@ export class Cart {
                 table.push([id, stock])
                 this.overwrite(table)
                 this.addItemCount(1)
-                console.log(window.localStorage)
+                console.log(localStorage)
                 return
             }
-            console.log(window.localStorage)
+            console.log(localStorage)
         })
     }
     // remove item from cart table
@@ -167,7 +167,7 @@ export class Cart {
                 this.overwrite(table)
                 this.addItemCount(-1)
                 store.loadCart()
-                console.log(window.localStorage)
+                console.log(localStorage)
                 return
             }
         }
@@ -186,18 +186,18 @@ export class Cart {
                         row[1] = `${quantity}`
                         this.overwrite(table)
                         store.loadCart()
-                        console.log(window.localStorage)
+                        console.log(localStorage)
                         return
                     }
                 }
             }
-            console.log(window.localStorage)
+            console.log(localStorage)
         })
     }
     // decrement an item's quantity
     decItem(id) {
         if (this.getItemQuantity(id) == 0) {
-            console.log(window.localStorage)
+            console.log(localStorage)
             return
         }
         this.addTotalCount(-1)
@@ -210,7 +210,7 @@ export class Cart {
                     this.overwrite(table)
                     this.addItemCount(-1)
                     store.loadCart()
-                    console.log(window.localStorage)
+                    console.log(localStorage)
                     return
                 }
                 else {
@@ -218,7 +218,7 @@ export class Cart {
                     row[1] = `${quantity}`
                     this.overwrite(table)
                     store.loadCart()
-                    console.log(window.localStorage)
+                    console.log(localStorage)
                     return
                 }
             }

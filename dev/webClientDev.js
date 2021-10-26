@@ -2,15 +2,9 @@
 
 // import primary classes
 import {Store} from './react.js'
-import {Cart} from './react.js'
 
 // instantiate new Store object
 let store = new Store()
-// instantiate new Cart object
-let cart = new Cart()
-// make objects' scope accessible from DOM
-window.store = store
-window.cart = cart
 
 window.addEventListener('load', () => {
     document.getElementById('mainTitle').addEventListener('click', () => {
@@ -41,8 +35,9 @@ window.addEventListener('load', () => {
     document.getElementById('menuIcon').addEventListener('click', () => {
         store.displayDropdown()
     })
-    document.getElementById('dropdownContent').addEventListener('click', () => {
-        document.getElementById('dropdownContent').className = 'dropdownContentOff'
+    const dropdownContent = document.getElementById('dropdownContent')
+    dropdownContent.addEventListener('click', () => {
+        dropdownContent.className = 'dropdownContentOff'
     })
     if (history.state == null) {
         store.loadAll()
