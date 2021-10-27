@@ -7,6 +7,7 @@ import {Store} from './react.js'
 var store = new Store()
 
 window.addEventListener('load', () => {
+    /***********************************/
     document.getElementById('mainTitle').addEventListener('click', () => {
         store.loadAll()
         history.pushState({page: 'home'}, 'Home')
@@ -39,6 +40,7 @@ window.addEventListener('load', () => {
     dropdownContent.addEventListener('click', () => {
         dropdownContent.className = 'dropdownContentOff'
     })
+    /***********************************/
     if (history.state == null) {
         store.loadAll()
         history.pushState({page: 'home'}, 'Home')
