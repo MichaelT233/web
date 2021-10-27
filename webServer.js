@@ -1,10 +1,10 @@
 // node web server
 
 // load modules
-const express = require('express')
-const app = express()
-const fs = require('fs')
-const { Pool } = require('pg')
+var express = require('express')
+var app = express()
+var fs = require('fs')
+var { Pool } = require('pg')
 
 // port number that the http web server will listen on
 const webPort = 80
@@ -14,7 +14,7 @@ const dbPassword = 'devPass'
 const dbPort = 5432
 
 // create new instance of Pool object for DB access
-const psql = new Pool({
+var psql = new Pool({
     // local docker env user defined in /infra/siteDeploy.sh
     user: 'postgres',
     // default first IP assigned by docker to containers
@@ -26,7 +26,7 @@ const psql = new Pool({
 })
 
 // use src directory as working directory for client resources
-app.use(express.static('src'))
+app.use(express.static('client/public'))
 // application object listen on port value
 app.listen(webPort, () => {
   	console.log(`web application listening on port ${webPort}...\nCtrl+C to exit`)
@@ -35,7 +35,7 @@ app.listen(webPort, () => {
 // GET root
 app.get('/', (req, res) => {
     // read and serve html file
-    fs.readFile('html/store.html', 'utf8' , (err, data) => {
+    fs.readFile('client/doc/store.html', 'utf8' , (err, data) => {
         if (err) {
             console.error(err)
             return

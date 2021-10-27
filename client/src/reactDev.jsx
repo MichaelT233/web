@@ -67,7 +67,7 @@ export class Store {
 /*
 class:
     shopping cart page functionality
-    cross-page data storage
+    cross-page data storage (localStorage)
         cart is formatted as 2D array(table) [[id, quantity], [id, quantity], [id, quantity]]
 */
 class Cart {
@@ -296,13 +296,13 @@ function BuildCartHeader(props) {
     return (
         <div id='cartHead'>
             <h2>Total ${props.totalPrice}</h2>
-            {props.totalQuantity == 1 && <button type='button'>Proceed to Checkout {'('+props.totalQuantity+' item)'}</button>}
+            {props.totalQuantity == 1 && <a href = '/checkout'><button type='button'>Proceed to Checkout {'('+props.totalQuantity+' item)'}</button></a>}
             {props.totalQuantity != 1 && <button type='button'>Proceed to Checkout {'('+props.totalQuantity+' items)'}</button>}
         </div>
     )
 }
 
 // object initializations are not hoisted (DB could be at top)
-let db = new DB()
-let cart = new Cart()
-let store = new Store()
+var db = new DB()
+var cart = new Cart()
+var store = new Store()

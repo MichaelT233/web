@@ -1,10 +1,10 @@
-// main client module
+// store page module
 
 // import primary classes
 import {Store} from './react.js'
 
 // instantiate new Store object
-let store = new Store()
+var store = new Store()
 
 window.addEventListener('load', () => {
     document.getElementById('mainTitle').addEventListener('click', () => {
@@ -63,20 +63,25 @@ window.addEventListener('load', () => {
     console.log(history.state.page)
 })
 window.addEventListener('popstate', () => {
-    switch (history.state.page) {
-        case 'cart':
-            store.loadCart()
-            break
-        case 'home':
-            store.loadAll()
-            break
-        case 'category':
-            store.loadCategory(history.state.category)
-            break
-        case 'search':
-            store.loadSearch(history.state.pattern)
-            document.getElementById('searchBar').value = history.state.pattern
-            break
+    if (history.state != null) {
+        switch (history.state.page) {
+            case 'cart':
+                store.loadCart()
+                break
+            case 'home':
+                store.loadAll()
+                break
+            case 'category':
+                store.loadCategory(history.state.category)
+                break
+            case 'search':
+                store.loadSearch(history.state.pattern)
+                document.getElementById('searchBar').value = history.state.pattern
+                break
+        }
+        console.log(history.state.page) 
     }
-    console.log(history.state.page)
+    else {
+        history.go(-1)
+    }
 })

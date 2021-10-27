@@ -92,6 +92,14 @@ header {
     left: 0;
     top: 0;
 }
+#backIcon {
+    height: 6.5em;
+    /*parent is div fit to width, % cannot be used for horizontal spacing here*/
+    margin-left: 1em;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
 /*cart icon*/
 #cartIcon {
     position: absolute;

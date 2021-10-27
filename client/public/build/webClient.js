@@ -323,16 +323,18 @@ function BuildCart(props) {
 function BuildCartHeader(props) {
   return React.createElement("div", {
     id: "cartHead"
-  }, React.createElement("h2", null, "Total $", props.totalPrice), props.totalQuantity == 1 && React.createElement("button", {
+  }, React.createElement("h2", null, "Total $", props.totalPrice), props.totalQuantity == 1 && React.createElement("a", {
+    href: "/checkout"
+  }, React.createElement("button", {
     type: "button"
-  }, "Proceed to Checkout ", '(' + props.totalQuantity + ' item)'), props.totalQuantity != 1 && React.createElement("button", {
+  }, "Proceed to Checkout ", '(' + props.totalQuantity + ' item)')), props.totalQuantity != 1 && React.createElement("button", {
     type: "button"
   }, "Proceed to Checkout ", '(' + props.totalQuantity + ' items)'));
 }
 
-let db = new _utility_js__WEBPACK_IMPORTED_MODULE_0__.DB();
-let cart = new Cart();
-let store = new Store();
+var db = new _utility_js__WEBPACK_IMPORTED_MODULE_0__.DB();
+var cart = new Cart();
+var store = new Store();
 
 
 /***/ }),
@@ -442,7 +444,7 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _react_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./react.js */ "./react.js");
 
-let store = new _react_js__WEBPACK_IMPORTED_MODULE_0__.Store();
+var store = new _react_js__WEBPACK_IMPORTED_MODULE_0__.Store();
 window.addEventListener('load', () => {
   document.getElementById('mainTitle').addEventListener('click', () => {
     store.loadAll();
@@ -518,26 +520,30 @@ window.addEventListener('load', () => {
   console.log(history.state.page);
 });
 window.addEventListener('popstate', () => {
-  switch (history.state.page) {
-    case 'cart':
-      store.loadCart();
-      break;
+  if (history.state != null) {
+    switch (history.state.page) {
+      case 'cart':
+        store.loadCart();
+        break;
 
-    case 'home':
-      store.loadAll();
-      break;
+      case 'home':
+        store.loadAll();
+        break;
 
-    case 'category':
-      store.loadCategory(history.state.category);
-      break;
+      case 'category':
+        store.loadCategory(history.state.category);
+        break;
 
-    case 'search':
-      store.loadSearch(history.state.pattern);
-      document.getElementById('searchBar').value = history.state.pattern;
-      break;
+      case 'search':
+        store.loadSearch(history.state.pattern);
+        document.getElementById('searchBar').value = history.state.pattern;
+        break;
+    }
+
+    console.log(history.state.page);
+  } else {
+    history.go(-1);
   }
-
-  console.log(history.state.page);
 });
 
 })();

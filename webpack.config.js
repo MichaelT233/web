@@ -5,7 +5,7 @@ module.exports = {
     devtool: false,
     entry: './client.js',
     output: {
-        path: path.resolve(__dirname, '../src'),
+        path: path.resolve(__dirname, './client/public/build'),
         filename: 'webClient.js',
     },
 }
