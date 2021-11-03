@@ -128,6 +128,26 @@ header {
 
 /*product*/
 /***********************************/
+#productHead {
+    @include blackBorder();
+    text-align: center;
+    margin-bottom: 1em;
+    h1 {
+        font-size: 3.4em;
+    }
+    h2 {
+        text-align: left;
+        font-size: 3.4em;
+        margin-left: 6%;
+    }
+    button {
+        background-color: $primaryColor;
+        font-size: 3em;
+        text-align: center;
+        width: 80%;
+        margin-bottom: 1em;
+    }
+}
 /*root div for products*/
 .products {
     display: block;
@@ -205,29 +225,8 @@ footer {
         margin: 0;
         font-size: 2.3em;
     }
-}
-/***********************************/
-
-/*cart*/
-/***********************************/
-#productHead {
-    @include blackBorder();
-    text-align: center;
-    margin-bottom: 1em;
-    h1 {
-        font-size: 3.4em;
-    }
-    h2 {
-        text-align: left;
-        font-size: 3.4em;
-        margin-left: 6%;
-    }
-    button {
-        background-color: $primaryColor;
-        font-size: 3em;
-        text-align: center;
-        width: 80%;
-        margin-bottom: 1em;
+    a {
+        text-decoration: underline;
     }
 }
 /***********************************/

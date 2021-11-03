@@ -1,0 +1,49 @@
+<!--home page -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<title>prototype</title>
+    	<link rel='stylesheet' href='build/style.css'>
+    	<script crossorigin src='https://unpkg.com/react@17/umd/react.development.js'></script>
+    	<script crossorigin src='https://unpkg.com/react-dom@17/umd/react-dom.development.js'></script>
+    	<script src='build/webClient.js'></script>
+  	</head>
+	<body>
+        <header>
+            <h1 id='mainTitle'>Web App Prototype</h1>
+    	</header>
+        <div id="headSpace"></div>
+        <div id='form'>
+            <h1>Enter your Information</h1>
+            <form action='/checkout-data' method='POST'>
+                <div>
+                    <label for='firstName'>First Name: </label>
+                    <input type='text' id='firstName'>
+                </div>
+                <div>
+                    <label for='lastName'>Last Name: </label>
+                    <input type='text' id='lastName'>
+                </div>
+                <div>
+                    <label for='address'>Address: </label>
+                    <input type='text' id='address'>
+                </div>
+                <div>
+                    <label for='city'>City: </label>
+                    <input type='text' id='city'>
+                </div>
+                <div>
+                    <label for='state'>State: </label>
+                    <input type='text' id='state'>
+                </div>
+                <input type='submit' value='Submit'>
+            </form>
+        </div>
+        <footer>
+            <p>Author: MT</p>
+            <p>Source Code - <a href = 'https://github.com/MichaelT233/web' target = '_blank'>Github</a></p>
+            <p>Docker Image - <a href = 'https://hub.docker.com/repository/docker/michaelt23/web' target = '_blank'>Dockerhub</a></p>
+        </footer>
+    </body>
+</html>

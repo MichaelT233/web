@@ -2,10 +2,10 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./react.js":
-/*!******************!*\
-  !*** ./react.js ***!
-  \******************/
+/***/ "./store.jsx":
+/*!*******************!*\
+  !*** ./store.jsx ***!
+  \*******************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -23,6 +23,7 @@ class Store {
       });
       ReactDOM.render(storeItems, document.getElementById('mainView'));
     });
+    document.getElementById('searchBar').value = '';
   }
 
   loadSearch(pattern) {
@@ -43,6 +44,7 @@ class Store {
       });
       ReactDOM.render(storeItems, document.getElementById('mainView'));
     });
+    document.getElementById('searchBar').value = '';
   }
 
   loadCart() {
@@ -65,8 +67,35 @@ class Store {
         });
         ReactDOM.render(head, document.getElementById('productHead'));
       });
+      document.getElementById('searchBar').value = '';
     } else {
       this.clear();
+      document.getElementById('searchBar').value = '';
+    }
+  }
+
+  loadCheckout() {
+    this.clear();
+
+    if (cart.getItemCount() != 0) {
+      db.readCartData(rows => {
+        const checkoutItems = React.createElement(BuildCheckout, {
+          rows: rows
+        });
+        ReactDOM.render(checkoutItems, document.getElementById('mainView'));
+        var totalPrice = 0.0;
+
+        for (const row of rows) {
+          totalPrice += Number(row.price) * cart.getItemQuantity(row.id);
+        }
+
+        totalPrice = totalPrice.toFixed(2);
+        const head = React.createElement(BuildCheckoutHeader, {
+          totalPrice: totalPrice,
+          totalQuantity: cart.getTotalCount()
+        });
+        ReactDOM.render(head, document.getElementById('productHead'));
+      });
     }
   }
 
@@ -81,6 +110,109 @@ class Store {
     } else {
       document.getElementById('dropdownContent').className = 'dropdownContentOn';
     }
+  }
+
+  sideEffect() {
+    window.addEventListener('load', () => {
+      document.getElementById('mainTitle').addEventListener('click', () => {
+        store.loadAll();
+        history.pushState({
+          page: 'home'
+        }, 'Home');
+        console.log(history.state.page);
+      });
+      document.getElementById('cartIcon').addEventListener('click', () => {
+        store.loadCart();
+        history.pushState({
+          page: 'cart'
+        }, 'Cart');
+        console.log(history.state.page);
+      });
+      var menu = document.getElementById('dropdownContent');
+
+      for (let i = 0; i < menu.children.length; i++) {
+        menu.children[i].addEventListener('click', () => {
+          store.loadCategory(`category${i}`);
+          history.pushState({
+            page: 'category',
+            category: `category${i}`
+          }, `Category${i}`);
+          console.log(history.state.page);
+        });
+      }
+
+      var searchBar = document.getElementById('searchBar');
+      searchBar.addEventListener('change', () => {
+        const pattern = searchBar.value;
+        store.loadSearch(pattern);
+        history.pushState({
+          page: 'search',
+          pattern: pattern
+        }, 'Search');
+        console.log(history.state.page);
+      });
+      document.getElementById('menuIcon').addEventListener('click', () => {
+        store.displayDropdown();
+      });
+      var dropdownContent = document.getElementById('dropdownContent');
+      dropdownContent.addEventListener('click', () => {
+        dropdownContent.className = 'dropdownContentOff';
+      });
+
+      if (history.state == null) {
+        store.loadAll();
+        history.pushState({
+          page: 'home'
+        }, 'Home');
+      } else {
+        switch (history.state.page) {
+          case 'cart':
+            store.loadCart();
+            break;
+
+          case 'home':
+            store.loadAll();
+            break;
+
+          case 'category':
+            store.loadCategory(history.state.category);
+            break;
+
+          case 'search':
+            store.loadSearch(history.state.pattern);
+            document.getElementById('searchBar').value = history.state.pattern;
+            break;
+        }
+      }
+
+      console.log(history.state.page);
+    });
+    window.addEventListener('popstate', () => {
+      if (history.state != null) {
+        switch (history.state.page) {
+          case 'cart':
+            store.loadCart();
+            break;
+
+          case 'home':
+            store.loadAll();
+            break;
+
+          case 'category':
+            store.loadCategory(history.state.category);
+            break;
+
+          case 'search':
+            store.loadSearch(history.state.pattern);
+            document.getElementById('searchBar').value = history.state.pattern;
+            break;
+        }
+
+        console.log(history.state.page);
+      } else {
+        history.go(-1);
+      }
+    });
   }
 
 }
@@ -327,9 +459,43 @@ function BuildCartHeader(props) {
     href: "/checkout"
   }, React.createElement("button", {
     type: "button"
-  }, "Proceed to Checkout ", '(' + props.totalQuantity + ' item)')), props.totalQuantity != 1 && React.createElement("button", {
+  }, "Proceed to Checkout ", '(' + props.totalQuantity + ' item)')), props.totalQuantity != 1 && React.createElement("a", {
+    href: "/checkout"
+  }, React.createElement("button", {
     type: "button"
-  }, "Proceed to Checkout ", '(' + props.totalQuantity + ' items)'));
+  }, "Proceed to Checkout ", '(' + props.totalQuantity + ' items)')));
+}
+
+function BuildCheckout(props) {
+  const roots = props.rows.map(row => React.createElement("div", {
+    key: row.id,
+    className: "product",
+    id: row.id
+  }, React.createElement("img", {
+    alt: row.image_path,
+    src: row.image_path
+  }), React.createElement("div", {
+    className: "productText"
+  }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), row.stock > 0 && React.createElement("p", null, "In Stock (", row.stock, ")"), row.stock == 0 && React.createElement("p", null, "Out of Stock"), React.createElement("p", null, row.descr), React.createElement("input", {
+    id: row.id + 'q',
+    className: "cartQuantity",
+    type: "number",
+    name: "quantity",
+    value: cart.getItemQuantity(row.id),
+    disabled: true
+  }))));
+  return React.createElement("div", {
+    className: "products"
+  }, roots);
+}
+
+function BuildCheckoutHeader(props) {
+  return React.createElement("div", null, React.createElement("img", {
+    src: "images/back_arrow.png",
+    id: "backIcon"
+  }), React.createElement("h1", {
+    id: "mainTitle"
+  }, 'Checkout' + props.totalPrice + '' + props.totalQuantity));
 }
 
 var db = new _utility_js__WEBPACK_IMPORTED_MODULE_0__.DB();
@@ -438,113 +604,19 @@ class DB {
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/*!*******************!*\
-  !*** ./client.js ***!
-  \*******************/
+/*!**********************!*\
+  !*** ./webClient.js ***!
+  \**********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _react_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./react.js */ "./react.js");
+/* harmony import */ var _store_jsx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./store.jsx */ "./store.jsx");
 
-var store = new _react_js__WEBPACK_IMPORTED_MODULE_0__.Store();
-window.addEventListener('load', () => {
-  document.getElementById('mainTitle').addEventListener('click', () => {
-    store.loadAll();
-    history.pushState({
-      page: 'home'
-    }, 'Home');
-    console.log(history.state.page);
-  });
-  document.getElementById('cartIcon').addEventListener('click', () => {
-    store.loadCart();
-    history.pushState({
-      page: 'cart'
-    }, 'Cart');
-    console.log(history.state.page);
-  });
-  const menu = document.getElementById('dropdownContent');
+var store = new _store_jsx__WEBPACK_IMPORTED_MODULE_0__.Store();
 
-  for (let i = 0; i < menu.children.length; i++) {
-    menu.children[i].addEventListener('click', () => {
-      store.loadCategory(`category${i}`);
-      history.pushState({
-        page: 'category',
-        category: `category${i}`
-      }, `Category${i}`);
-      console.log(history.state.page);
-    });
-  }
-
-  const searchBar = document.getElementById('searchBar');
-  searchBar.addEventListener('change', () => {
-    const pattern = searchBar.value;
-    store.loadSearch(pattern);
-    history.pushState({
-      page: 'search',
-      pattern: pattern
-    }, 'Search');
-    console.log(history.state.page);
-  });
-  document.getElementById('menuIcon').addEventListener('click', () => {
-    store.displayDropdown();
-  });
-  const dropdownContent = document.getElementById('dropdownContent');
-  dropdownContent.addEventListener('click', () => {
-    dropdownContent.className = 'dropdownContentOff';
-  });
-
-  if (history.state == null) {
-    store.loadAll();
-    history.pushState({
-      page: 'home'
-    }, 'Home');
-  } else {
-    switch (history.state.page) {
-      case 'cart':
-        store.loadCart();
-        break;
-
-      case 'home':
-        store.loadAll();
-        break;
-
-      case 'category':
-        store.loadCategory(history.state.category);
-        break;
-
-      case 'search':
-        store.loadSearch(history.state.pattern);
-        document.getElementById('searchBar').value = history.state.pattern;
-        break;
-    }
-  }
-
-  console.log(history.state.page);
-});
-window.addEventListener('popstate', () => {
-  if (history.state != null) {
-    switch (history.state.page) {
-      case 'cart':
-        store.loadCart();
-        break;
-
-      case 'home':
-        store.loadAll();
-        break;
-
-      case 'category':
-        store.loadCategory(history.state.category);
-        break;
-
-      case 'search':
-        store.loadSearch(history.state.pattern);
-        document.getElementById('searchBar').value = history.state.pattern;
-        break;
-    }
-
-    console.log(history.state.page);
-  } else {
-    history.go(-1);
-  }
-});
+switch (location.pathname) {
+  case '/':
+    store.sideEffect();
+    break;
+}
 
 })();
 

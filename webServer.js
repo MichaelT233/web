@@ -44,6 +44,18 @@ app.get('/', (req, res) => {
         res.send(data)
     })
 })
+// GET checkout
+app.get('/checkout', (req, res) => {
+    // read and serve html file
+    fs.readFile('client/doc/checkout.html', 'utf8' , (err, data) => {
+        if (err) {
+            console.error(err)
+            return
+        }
+        res.type('html')
+        res.send(data)
+    })
+})
 
 // GET product-data (AJAX)
 app.get('/product-data', (req, res) => {

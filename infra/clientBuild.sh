@@ -4,9 +4,9 @@
 # transpile jsx and bundle javascript files into src folder
 function buildJS {
     # transpile reactDev.jsx into plain javascript as react.js, also include vanilla js files in order to remove comments
-    npx babel ./client/src/reactDev.jsx --out-file ./react.js
-    npx babel ./client/src/utilityDev.js --out-file ./utility.js
-    npx babel ./client/src/webClientDev.js --out-file ./client.js
+    npx babel ./client/src/store.jsx --out-file ./store.jsx
+    npx babel ./client/src/utility.js --out-file ./utility.js
+    npx babel ./client/src/webClient.js --out-file ./webClient.js
     echo 'babel transpile complete'
     # bundle the multiple javascript files into one, and write into the client's wd(../src/bundle.js)
     echo 'bundling js modules...'
@@ -14,13 +14,15 @@ function buildJS {
     echo 'webpack module bundle complete'
     # remove intermediary transpiled javascript files
     echo 'cleaning up...'
-    rm react.js
+    rm store.jsx
     rm utility.js
-    rm client.js
+    rm webClient.js
 }
 # transpile styleDev.scss into plain css and save in dist folder (omitting source map file creation and comments (compressed))
 function buildCSS {
-    npx sass --style=compressed --no-source-map ./client/src/styleDev.scss ./client/public/build/style.css
+    cat ./client/src/*.scss >> bundle.scss
+    npx sass --style=compressed --no-source-map ./bundle.scss ./client/public/build/style.css
+    rm bundle.scss
     echo 'sass transpile complete'
 }
 

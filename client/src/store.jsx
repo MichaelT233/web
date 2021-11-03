@@ -15,6 +15,7 @@ export class Store {
             const storeItems = <BuildStore rows={rows}/>
             ReactDOM.render(storeItems, document.getElementById('mainView'))
         })
+        document.getElementById('searchBar').value = ''
     }
     // load products from search bar query
     loadSearch(pattern) {
@@ -30,6 +31,7 @@ export class Store {
             const storeItems = <BuildStore rows={rows}/>
             ReactDOM.render(storeItems, document.getElementById('mainView'))
         })
+        document.getElementById('searchBar').value = ''
     }
     // load product data for cart items
     loadCart() {
@@ -45,9 +47,27 @@ export class Store {
                 const head = <BuildCartHeader totalPrice={totalPrice} totalQuantity={cart.getTotalCount()}/>
                 ReactDOM.render(head, document.getElementById('productHead'))
             })
+            document.getElementById('searchBar').value = ''
         }
         else {
             this.clear()
+            document.getElementById('searchBar').value = ''
+        }
+    }
+    loadCheckout() {
+        this.clear()
+        if (cart.getItemCount() != 0) {
+            db.readCartData((rows) => {
+                const checkoutItems = <BuildCheckout rows={rows}/>
+                ReactDOM.render(checkoutItems, document.getElementById('mainView'))
+                var totalPrice = 0.0
+                for (const row of rows) {
+                    totalPrice += Number(row.price) * cart.getItemQuantity(row.id)
+                }
+                totalPrice = totalPrice.toFixed(2)
+                const head = <BuildCheckoutHeader totalPrice={totalPrice} totalQuantity={cart.getTotalCount()}/>
+                ReactDOM.render(head, document.getElementById('productHead'))
+            })
         }
     }
     // overwrite store
@@ -62,6 +82,89 @@ export class Store {
         else {
             document.getElementById('dropdownContent').className = 'dropdownContentOn'
         }
+    }
+    sideEffect() {
+        window.addEventListener('load', () => {
+            /***********************************/
+            document.getElementById('mainTitle').addEventListener('click', () => {
+                store.loadAll()
+                history.pushState({page: 'home'}, 'Home')
+                console.log(history.state.page)
+            })
+            document.getElementById('cartIcon').addEventListener('click', () => {
+                store.loadCart()
+                history.pushState({page: 'cart'}, 'Cart')
+                console.log(history.state.page)
+            })
+            var menu = document.getElementById('dropdownContent')
+            for (let i = 0; i < menu.children.length; i++) {
+                menu.children[i].addEventListener('click', () => {
+                    store.loadCategory(`category${i}`)
+                    history.pushState({page: 'category', category: `category${i}`}, `Category${i}`)
+                    console.log(history.state.page)
+                })
+            }
+            var searchBar = document.getElementById('searchBar')
+            searchBar.addEventListener('change', () => {
+                const pattern = searchBar.value
+                store.loadSearch(pattern)
+                history.pushState({page: 'search', pattern: pattern}, 'Search')
+                console.log(history.state.page)
+            })
+            document.getElementById('menuIcon').addEventListener('click', () => {
+                store.displayDropdown()
+            })
+            var dropdownContent = document.getElementById('dropdownContent')
+            dropdownContent.addEventListener('click', () => {
+                dropdownContent.className = 'dropdownContentOff'
+            })
+            /***********************************/
+            if (history.state == null) {
+                store.loadAll()
+                history.pushState({page: 'home'}, 'Home')
+            }
+            else {
+                switch (history.state.page) {
+                    case 'cart':
+                        store.loadCart()
+                        break
+                    case 'home':
+                        store.loadAll()
+                        break
+                    case 'category':
+                        store.loadCategory(history.state.category)
+                        break
+                    case 'search':
+                        store.loadSearch(history.state.pattern)
+                        document.getElementById('searchBar').value = history.state.pattern
+                        break
+                }
+            }
+            console.log(history.state.page)
+        })
+        window.addEventListener('popstate', () => {
+            if (history.state != null) {
+                switch (history.state.page) {
+                    case 'cart':
+                        store.loadCart()
+                        break
+                    case 'home':
+                        store.loadAll()
+                        break
+                    case 'category':
+                        store.loadCategory(history.state.category)
+                        break
+                    case 'search':
+                        store.loadSearch(history.state.pattern)
+                        document.getElementById('searchBar').value = history.state.pattern
+                        break
+                }
+                console.log(history.state.page) 
+            }
+            else {
+                history.go(-1)
+            }
+        })
     }
 }
 /*
@@ -297,7 +400,41 @@ function BuildCartHeader(props) {
         <div id='cartHead'>
             <h2>Total ${props.totalPrice}</h2>
             {props.totalQuantity == 1 && <a href = '/checkout'><button type='button'>Proceed to Checkout {'('+props.totalQuantity+' item)'}</button></a>}
-            {props.totalQuantity != 1 && <button type='button'>Proceed to Checkout {'('+props.totalQuantity+' items)'}</button>}
+            {props.totalQuantity != 1 && <a href = '/checkout'><button type='button'>Proceed to Checkout {'('+props.totalQuantity+' items)'}</button></a>}
+        </div>
+    )
+}
+function BuildCheckout(props) {
+    const roots = props.rows.map((row) =>    
+    <div key={row.id} className="product" id={row.id}>
+        {/*product image source*/}
+        <img alt={row.image_path} src={row.image_path}/>
+        {/*wrapper for non-image content of a store item*/}
+        <div className="productText">
+            {/*products title heading*/}
+            <h2>{row.title}</h2>
+            {/*product price*/}
+            <h2>${row.price}</h2>
+            {/*product stock*/}
+            {row.stock > 0 && <p>In Stock ({row.stock})</p>}
+            {row.stock == 0 && <p>Out of Stock</p>}
+            {/*product description*/}
+            <p>{row.descr}</p>
+            {/*quantity display*/}
+            <input id={row.id + 'q'} className="cartQuantity" type="number" name="quantity" value={cart.getItemQuantity(row.id)} disabled/>
+        </div>
+    </div>)
+    return (
+        <div className='products'>
+            {roots}
+        </div>
+    )
+}
+function BuildCheckoutHeader(props) {
+    return (
+        <div>
+            <img src="images/back_arrow.png" id="backIcon"></img>
+            <h1 id='mainTitle'>{'Checkout' + props.totalPrice + '' + props.totalQuantity}</h1>
         </div>
     )
 }
