@@ -69,12 +69,64 @@ function BuildCheckout() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Cart": () => (/* binding */ Cart),
-/* harmony export */   "Store": () => (/* binding */ Store)
+/* harmony export */   "Store": () => (/* binding */ Store),
+/* harmony export */   "Cart": () => (/* binding */ Cart)
 /* harmony export */ });
 /* harmony import */ var _utility_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utility.js */ "./utility.js");
 
 var db = new _utility_js__WEBPACK_IMPORTED_MODULE_0__.DB();
+class Store {
+  constructor() {
+    if (location.pathname == '/') {
+      if (history.state == null) {
+        history.pushState({
+          name: 'home'
+        }, 'Home');
+      }
+    }
+  }
+
+  loadAll() {
+    ReactDOM.render(React.createElement("h1", null, "All Products"), document.getElementById('productHead'));
+    db.readTable(rows => {
+      const storeItems = React.createElement(BuildStore, {
+        rows: rows
+      });
+      ReactDOM.render(storeItems, document.getElementById('mainView'));
+    });
+    document.getElementById('searchBar').value = '';
+  }
+
+  loadSearch(pattern) {
+    ReactDOM.render(React.createElement("h1", null, "Search Results for \"", pattern, "\""), document.getElementById('productHead'));
+    db.readSearchData(pattern, rows => {
+      const storeItems = React.createElement(BuildStore, {
+        rows: rows
+      });
+      ReactDOM.render(storeItems, document.getElementById('mainView'));
+    });
+  }
+
+  loadCategory(category) {
+    ReactDOM.render(React.createElement("h1", null, category), document.getElementById('productHead'));
+    db.readRows('category', `'${category}'`, rows => {
+      const storeItems = React.createElement(BuildStore, {
+        rows: rows
+      });
+      ReactDOM.render(storeItems, document.getElementById('mainView'));
+    });
+    document.getElementById('searchBar').value = '';
+  }
+
+  displayDropdown() {
+    if (document.getElementById('dropdownContent').className == 'dropdownContentOn') {
+      document.getElementById('dropdownContent').className = 'dropdownContentOff';
+    } else {
+      document.getElementById('dropdownContent').className = 'dropdownContentOn';
+    }
+  }
+
+}
 class Cart {
   constructor() {
     if (localStorage.getItem('cart') == null) {
@@ -273,58 +325,6 @@ class Cart {
 
 }
 var cart = new Cart();
-class Store {
-  constructor() {
-    if (location.pathname == '/') {
-      if (history.state == null) {
-        history.pushState({
-          name: 'home'
-        }, 'Home');
-      }
-    }
-  }
-
-  loadAll() {
-    ReactDOM.render(React.createElement("h1", null, "All Products"), document.getElementById('productHead'));
-    db.readTable(rows => {
-      const storeItems = React.createElement(BuildStore, {
-        rows: rows
-      });
-      ReactDOM.render(storeItems, document.getElementById('mainView'));
-    });
-    document.getElementById('searchBar').value = '';
-  }
-
-  loadSearch(pattern) {
-    ReactDOM.render(React.createElement("h1", null, "Search Results for \"", pattern, "\""), document.getElementById('productHead'));
-    db.readSearchData(pattern, rows => {
-      const storeItems = React.createElement(BuildStore, {
-        rows: rows
-      });
-      ReactDOM.render(storeItems, document.getElementById('mainView'));
-    });
-  }
-
-  loadCategory(category) {
-    ReactDOM.render(React.createElement("h1", null, category), document.getElementById('productHead'));
-    db.readRows('category', `'${category}'`, rows => {
-      const storeItems = React.createElement(BuildStore, {
-        rows: rows
-      });
-      ReactDOM.render(storeItems, document.getElementById('mainView'));
-    });
-    document.getElementById('searchBar').value = '';
-  }
-
-  displayDropdown() {
-    if (document.getElementById('dropdownContent').className == 'dropdownContentOn') {
-      document.getElementById('dropdownContent').className = 'dropdownContentOff';
-    } else {
-      document.getElementById('dropdownContent').className = 'dropdownContentOn';
-    }
-  }
-
-}
 
 function BuildStore(props) {
   const roots = props.rows.map(row => React.createElement("div", {
@@ -403,38 +403,6 @@ function BuildCartHeader(props) {
   }, React.createElement("button", {
     type: "button"
   }, "Proceed to Checkout ", '(' + props.totalQuantity + ' items)')));
-}
-
-function BuildCheckout(props) {
-  const roots = props.rows.map(row => React.createElement("div", {
-    key: row.id,
-    className: "product",
-    id: row.id
-  }, React.createElement("img", {
-    alt: row.image_path,
-    src: row.image_path
-  }), React.createElement("div", {
-    className: "productText"
-  }, React.createElement("h2", null, row.title), React.createElement("h2", null, "$", row.price), row.stock > 0 && React.createElement("p", null, "In Stock (", row.stock, ")"), row.stock == 0 && React.createElement("p", null, "Out of Stock"), React.createElement("p", null, row.descr), React.createElement("input", {
-    id: row.id + 'q',
-    className: "cartQuantity",
-    type: "number",
-    name: "quantity",
-    value: cart.getItemQuantity(row.id),
-    disabled: true
-  }))));
-  return React.createElement("div", {
-    className: "products"
-  }, roots);
-}
-
-function BuildCheckoutHeader(props) {
-  return React.createElement("div", null, React.createElement("img", {
-    src: "images/back_arrow.png",
-    id: "backIcon"
-  }), React.createElement("h1", {
-    id: "mainTitle"
-  }, 'Checkout' + props.totalPrice + '' + props.totalQuantity));
 }
 
 

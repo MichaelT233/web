@@ -4,6 +4,52 @@ import {DB} from './utility.js'
 var db = new DB()
 /*
 class:
+    main store page functionality
+*/
+export class Store {
+    constructor() {
+        if (location.pathname == '/') {
+            if (history.state == null) {
+                history.pushState({name: 'home'}, 'Home')
+            }
+        }
+    }
+    // get data for all products and render on page
+    loadAll() {
+        ReactDOM.render(<h1>All Products</h1>, document.getElementById('productHead'))
+        db.readTable((rows) => {
+            const storeItems = <BuildStore rows={rows}/>
+            ReactDOM.render(storeItems, document.getElementById('mainView'))
+        })
+        document.getElementById('searchBar').value = ''
+    }
+    // load products from search bar query
+    loadSearch(pattern) {
+        ReactDOM.render(<h1>Search Results for "{pattern}"</h1>, document.getElementById('productHead'))
+        db.readSearchData(pattern, (rows) => {
+            const storeItems = <BuildStore rows={rows}/>
+            ReactDOM.render(storeItems, document.getElementById('mainView'))
+        })
+    }
+    loadCategory(category) {
+        ReactDOM.render(<h1>{category}</h1>, document.getElementById('productHead'))
+        db.readRows('category', `'${category}'`, (rows) => {
+            const storeItems = <BuildStore rows={rows}/>
+            ReactDOM.render(storeItems, document.getElementById('mainView'))
+        })
+        document.getElementById('searchBar').value = ''
+    }
+    displayDropdown() {
+        if (document.getElementById('dropdownContent').className == 'dropdownContentOn') {
+            document.getElementById('dropdownContent').className = 'dropdownContentOff'
+        }
+        else {
+            document.getElementById('dropdownContent').className = 'dropdownContentOn'
+        }
+    }
+}
+/*
+class:
     shopping cart page functionality
     cross-page data storage (localStorage)
         cart is formatted as 2D array(table) [[id, quantity], [id, quantity], [id, quantity]]
@@ -186,52 +232,6 @@ export class Cart {
     }
 }
 var cart = new Cart()
-/*
-class:
-    main store page functionality
-*/
-export class Store {
-    constructor() {
-        if (location.pathname == '/') {
-            if (history.state == null) {
-                history.pushState({name: 'home'}, 'Home')
-            }
-        }
-    }
-    // get data for all products and render on page
-    loadAll() {
-        ReactDOM.render(<h1>All Products</h1>, document.getElementById('productHead'))
-        db.readTable((rows) => {
-            const storeItems = <BuildStore rows={rows}/>
-            ReactDOM.render(storeItems, document.getElementById('mainView'))
-        })
-        document.getElementById('searchBar').value = ''
-    }
-    // load products from search bar query
-    loadSearch(pattern) {
-        ReactDOM.render(<h1>Search Results for "{pattern}"</h1>, document.getElementById('productHead'))
-        db.readSearchData(pattern, (rows) => {
-            const storeItems = <BuildStore rows={rows}/>
-            ReactDOM.render(storeItems, document.getElementById('mainView'))
-        })
-    }
-    loadCategory(category) {
-        ReactDOM.render(<h1>{category}</h1>, document.getElementById('productHead'))
-        db.readRows('category', `'${category}'`, (rows) => {
-            const storeItems = <BuildStore rows={rows}/>
-            ReactDOM.render(storeItems, document.getElementById('mainView'))
-        })
-        document.getElementById('searchBar').value = ''
-    }
-    displayDropdown() {
-        if (document.getElementById('dropdownContent').className == 'dropdownContentOn') {
-            document.getElementById('dropdownContent').className = 'dropdownContentOff'
-        }
-        else {
-            document.getElementById('dropdownContent').className = 'dropdownContentOn'
-        }
-    }
-}
 // react component: build main store page items
 function BuildStore(props) {
     const roots = props.rows.map((row) =>    
@@ -305,40 +305,6 @@ function BuildCartHeader(props) {
             <h2>Total ${props.totalPrice}</h2>
             {props.totalQuantity == 1 && <a href = '/checkout'><button type='button'>Proceed to Checkout {'('+props.totalQuantity+' item)'}</button></a>}
             {props.totalQuantity != 1 && <a href = '/checkout'><button type='button'>Proceed to Checkout {'('+props.totalQuantity+' items)'}</button></a>}
-        </div>
-    )
-}
-function BuildCheckout(props) {
-    const roots = props.rows.map((row) =>    
-    <div key={row.id} className="product" id={row.id}>
-        {/*product image source*/}
-        <img alt={row.image_path} src={row.image_path}/>
-        {/*wrapper for non-image content of a store item*/}
-        <div className="productText">
-            {/*products title heading*/}
-            <h2>{row.title}</h2>
-            {/*product price*/}
-            <h2>${row.price}</h2>
-            {/*product stock*/}
-            {row.stock > 0 && <p>In Stock ({row.stock})</p>}
-            {row.stock == 0 && <p>Out of Stock</p>}
-            {/*product description*/}
-            <p>{row.descr}</p>
-            {/*quantity display*/}
-            <input id={row.id + 'q'} className="cartQuantity" type="number" name="quantity" value={cart.getItemQuantity(row.id)} disabled/>
-        </div>
-    </div>)
-    return (
-        <div className='products'>
-            {roots}
-        </div>
-    )
-}
-function BuildCheckoutHeader(props) {
-    return (
-        <div>
-            <img src="images/back_arrow.png" id="backIcon"></img>
-            <h1 id='mainTitle'>{'Checkout' + props.totalPrice + '' + props.totalQuantity}</h1>
         </div>
     )
 }
