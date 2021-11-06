@@ -2,6 +2,65 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./checkout.jsx":
+/*!**********************!*\
+  !*** ./checkout.jsx ***!
+  \**********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Checkout": () => (/* binding */ Checkout)
+/* harmony export */ });
+class Checkout {
+  load() {
+    const checkout = React.createElement(BuildCheckout, null);
+    ReactDOM.render(React.createElement("h1", null, "Enter your Information"), document.getElementById('productHead'));
+    ReactDOM.render(checkout, document.getElementById('mainView'));
+  }
+
+}
+
+function BuildCheckout() {
+  return React.createElement("div", {
+    id: "form"
+  }, React.createElement("form", {
+    action: "/checkout-data",
+    method: "POST"
+  }, React.createElement("div", null, React.createElement("label", {
+    htmlFor: "firstName"
+  }, "First Name: "), React.createElement("input", {
+    type: "text",
+    id: "firstName"
+  })), React.createElement("div", null, React.createElement("label", {
+    htmlFor: "lastName"
+  }, "Last Name: "), React.createElement("input", {
+    type: "text",
+    id: "lastName"
+  })), React.createElement("div", null, React.createElement("label", {
+    htmlFor: "address"
+  }, "Address: "), React.createElement("input", {
+    type: "text",
+    id: "address"
+  })), React.createElement("div", null, React.createElement("label", {
+    htmlFor: "city"
+  }, "City: "), React.createElement("input", {
+    type: "text",
+    id: "city"
+  })), React.createElement("div", null, React.createElement("label", {
+    htmlFor: "state"
+  }, "State: "), React.createElement("input", {
+    type: "text",
+    id: "state"
+  })), React.createElement("input", {
+    type: "submit",
+    value: "Submit"
+  })));
+}
+
+
+/***/ }),
+
 /***/ "./store.jsx":
 /*!*******************!*\
   !*** ./store.jsx ***!
@@ -10,213 +69,12 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Cart": () => (/* binding */ Cart),
 /* harmony export */   "Store": () => (/* binding */ Store)
 /* harmony export */ });
 /* harmony import */ var _utility_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utility.js */ "./utility.js");
 
-class Store {
-  loadAll() {
-    ReactDOM.render(React.createElement("h1", null, "All Products"), document.getElementById('productHead'));
-    db.readTable(rows => {
-      const storeItems = React.createElement(BuildStore, {
-        rows: rows
-      });
-      ReactDOM.render(storeItems, document.getElementById('mainView'));
-    });
-    document.getElementById('searchBar').value = '';
-  }
-
-  loadSearch(pattern) {
-    ReactDOM.render(React.createElement("h1", null, "Search Results for \"", pattern, "\""), document.getElementById('productHead'));
-    db.readSearchData(pattern, rows => {
-      const storeItems = React.createElement(BuildStore, {
-        rows: rows
-      });
-      ReactDOM.render(storeItems, document.getElementById('mainView'));
-    });
-  }
-
-  loadCategory(category) {
-    ReactDOM.render(React.createElement("h1", null, category), document.getElementById('productHead'));
-    db.readRows('category', `'${category}'`, rows => {
-      const storeItems = React.createElement(BuildStore, {
-        rows: rows
-      });
-      ReactDOM.render(storeItems, document.getElementById('mainView'));
-    });
-    document.getElementById('searchBar').value = '';
-  }
-
-  loadCart() {
-    if (cart.getItemCount() != 0) {
-      db.readCartData(rows => {
-        const cartItems = React.createElement(BuildCart, {
-          rows: rows
-        });
-        ReactDOM.render(cartItems, document.getElementById('mainView'));
-        var totalPrice = 0.0;
-
-        for (const row of rows) {
-          totalPrice += Number(row.price) * cart.getItemQuantity(row.id);
-        }
-
-        totalPrice = totalPrice.toFixed(2);
-        const head = React.createElement(BuildCartHeader, {
-          totalPrice: totalPrice,
-          totalQuantity: cart.getTotalCount()
-        });
-        ReactDOM.render(head, document.getElementById('productHead'));
-      });
-      document.getElementById('searchBar').value = '';
-    } else {
-      this.clear();
-      document.getElementById('searchBar').value = '';
-    }
-  }
-
-  loadCheckout() {
-    this.clear();
-
-    if (cart.getItemCount() != 0) {
-      db.readCartData(rows => {
-        const checkoutItems = React.createElement(BuildCheckout, {
-          rows: rows
-        });
-        ReactDOM.render(checkoutItems, document.getElementById('mainView'));
-        var totalPrice = 0.0;
-
-        for (const row of rows) {
-          totalPrice += Number(row.price) * cart.getItemQuantity(row.id);
-        }
-
-        totalPrice = totalPrice.toFixed(2);
-        const head = React.createElement(BuildCheckoutHeader, {
-          totalPrice: totalPrice,
-          totalQuantity: cart.getTotalCount()
-        });
-        ReactDOM.render(head, document.getElementById('productHead'));
-      });
-    }
-  }
-
-  clear() {
-    ReactDOM.render(React.createElement("div", null), document.getElementById('productHead'));
-    ReactDOM.render(React.createElement("div", null), document.getElementById('mainView'));
-  }
-
-  displayDropdown() {
-    if (document.getElementById('dropdownContent').className == 'dropdownContentOn') {
-      document.getElementById('dropdownContent').className = 'dropdownContentOff';
-    } else {
-      document.getElementById('dropdownContent').className = 'dropdownContentOn';
-    }
-  }
-
-  sideEffect() {
-    window.addEventListener('load', () => {
-      document.getElementById('mainTitle').addEventListener('click', () => {
-        store.loadAll();
-        history.pushState({
-          page: 'home'
-        }, 'Home');
-        console.log(history.state.page);
-      });
-      document.getElementById('cartIcon').addEventListener('click', () => {
-        store.loadCart();
-        history.pushState({
-          page: 'cart'
-        }, 'Cart');
-        console.log(history.state.page);
-      });
-      var menu = document.getElementById('dropdownContent');
-
-      for (let i = 0; i < menu.children.length; i++) {
-        menu.children[i].addEventListener('click', () => {
-          store.loadCategory(`category${i}`);
-          history.pushState({
-            page: 'category',
-            category: `category${i}`
-          }, `Category${i}`);
-          console.log(history.state.page);
-        });
-      }
-
-      var searchBar = document.getElementById('searchBar');
-      searchBar.addEventListener('change', () => {
-        const pattern = searchBar.value;
-        store.loadSearch(pattern);
-        history.pushState({
-          page: 'search',
-          pattern: pattern
-        }, 'Search');
-        console.log(history.state.page);
-      });
-      document.getElementById('menuIcon').addEventListener('click', () => {
-        store.displayDropdown();
-      });
-      var dropdownContent = document.getElementById('dropdownContent');
-      dropdownContent.addEventListener('click', () => {
-        dropdownContent.className = 'dropdownContentOff';
-      });
-
-      if (history.state == null) {
-        store.loadAll();
-        history.pushState({
-          page: 'home'
-        }, 'Home');
-      } else {
-        switch (history.state.page) {
-          case 'cart':
-            store.loadCart();
-            break;
-
-          case 'home':
-            store.loadAll();
-            break;
-
-          case 'category':
-            store.loadCategory(history.state.category);
-            break;
-
-          case 'search':
-            store.loadSearch(history.state.pattern);
-            document.getElementById('searchBar').value = history.state.pattern;
-            break;
-        }
-      }
-
-      console.log(history.state.page);
-    });
-    window.addEventListener('popstate', () => {
-      if (history.state != null) {
-        switch (history.state.page) {
-          case 'cart':
-            store.loadCart();
-            break;
-
-          case 'home':
-            store.loadAll();
-            break;
-
-          case 'category':
-            store.loadCategory(history.state.category);
-            break;
-
-          case 'search':
-            store.loadSearch(history.state.pattern);
-            document.getElementById('searchBar').value = history.state.pattern;
-            break;
-        }
-
-        console.log(history.state.page);
-      } else {
-        history.go(-1);
-      }
-    });
-  }
-
-}
-
+var db = new _utility_js__WEBPACK_IMPORTED_MODULE_0__.DB();
 class Cart {
   constructor() {
     if (localStorage.getItem('cart') == null) {
@@ -322,7 +180,7 @@ class Cart {
         table.splice(table.indexOf(row), 1);
         this.overwrite(table);
         this.addItemCount(-1);
-        store.loadCart();
+        this.load();
         console.log(localStorage);
         return;
       }
@@ -343,7 +201,7 @@ class Cart {
             quantity = Number(row[1]) + 1;
             row[1] = `${quantity}`;
             this.overwrite(table);
-            store.loadCart();
+            this.load();
             console.log(localStorage);
             return;
           }
@@ -370,18 +228,99 @@ class Cart {
           table.splice(table.indexOf(row), 1);
           this.overwrite(table);
           this.addItemCount(-1);
-          store.loadCart();
+          this.load();
           console.log(localStorage);
           return;
         } else {
           quantity = Number(row[1]) - 1;
           row[1] = `${quantity}`;
           this.overwrite(table);
-          store.loadCart();
+          this.load();
           console.log(localStorage);
           return;
         }
       }
+    }
+  }
+
+  load() {
+    if (this.getItemCount() != 0) {
+      db.readCartData(rows => {
+        const cartItems = React.createElement(BuildCart, {
+          rows: rows
+        });
+        ReactDOM.render(cartItems, document.getElementById('mainView'));
+        var totalPrice = 0.0;
+
+        for (const row of rows) {
+          totalPrice += Number(row.price) * this.getItemQuantity(row.id);
+        }
+
+        totalPrice = totalPrice.toFixed(2);
+        const head = React.createElement(BuildCartHeader, {
+          totalPrice: totalPrice,
+          totalQuantity: this.getTotalCount()
+        });
+        ReactDOM.render(head, document.getElementById('productHead'));
+      });
+      document.getElementById('searchBar').value = '';
+    } else {
+      ReactDOM.render(React.createElement("div", null), document.getElementById('productHead'));
+      ReactDOM.render(React.createElement("div", null), document.getElementById('mainView'));
+      document.getElementById('searchBar').value = '';
+    }
+  }
+
+}
+var cart = new Cart();
+class Store {
+  constructor() {
+    if (location.pathname == '/') {
+      if (history.state == null) {
+        history.pushState({
+          name: 'home'
+        }, 'Home');
+      }
+    }
+  }
+
+  loadAll() {
+    ReactDOM.render(React.createElement("h1", null, "All Products"), document.getElementById('productHead'));
+    db.readTable(rows => {
+      const storeItems = React.createElement(BuildStore, {
+        rows: rows
+      });
+      ReactDOM.render(storeItems, document.getElementById('mainView'));
+    });
+    document.getElementById('searchBar').value = '';
+  }
+
+  loadSearch(pattern) {
+    ReactDOM.render(React.createElement("h1", null, "Search Results for \"", pattern, "\""), document.getElementById('productHead'));
+    db.readSearchData(pattern, rows => {
+      const storeItems = React.createElement(BuildStore, {
+        rows: rows
+      });
+      ReactDOM.render(storeItems, document.getElementById('mainView'));
+    });
+  }
+
+  loadCategory(category) {
+    ReactDOM.render(React.createElement("h1", null, category), document.getElementById('productHead'));
+    db.readRows('category', `'${category}'`, rows => {
+      const storeItems = React.createElement(BuildStore, {
+        rows: rows
+      });
+      ReactDOM.render(storeItems, document.getElementById('mainView'));
+    });
+    document.getElementById('searchBar').value = '';
+  }
+
+  displayDropdown() {
+    if (document.getElementById('dropdownContent').className == 'dropdownContentOn') {
+      document.getElementById('dropdownContent').className = 'dropdownContentOff';
+    } else {
+      document.getElementById('dropdownContent').className = 'dropdownContentOn';
     }
   }
 
@@ -498,10 +437,6 @@ function BuildCheckoutHeader(props) {
   }, 'Checkout' + props.totalPrice + '' + props.totalQuantity));
 }
 
-var db = new _utility_js__WEBPACK_IMPORTED_MODULE_0__.DB();
-var cart = new Cart();
-var store = new Store();
-
 
 /***/ }),
 
@@ -609,14 +544,111 @@ var __webpack_exports__ = {};
   \**********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_jsx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./store.jsx */ "./store.jsx");
+/* harmony import */ var _checkout_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./checkout.jsx */ "./checkout.jsx");
 
+
+var cart = new _store_jsx__WEBPACK_IMPORTED_MODULE_0__.Cart();
 var store = new _store_jsx__WEBPACK_IMPORTED_MODULE_0__.Store();
+var checkout = new _checkout_jsx__WEBPACK_IMPORTED_MODULE_1__.Checkout();
 
-switch (location.pathname) {
-  case '/':
-    store.sideEffect();
-    break;
+class StateController {
+  setPathState() {
+    switch (location.pathname) {
+      case '/':
+        window.addEventListener('load', () => {
+          document.getElementById('mainTitle').addEventListener('click', () => {
+            store.loadAll();
+            history.pushState({
+              name: 'home'
+            }, 'Home');
+            console.log(history.state.name);
+          });
+          document.getElementById('cartIcon').addEventListener('click', () => {
+            cart.load();
+            history.pushState({
+              name: 'cart'
+            }, 'Cart');
+            console.log(history.state.name);
+          });
+          var menu = document.getElementById('dropdownContent');
+
+          for (let i = 0; i < menu.children.length; i++) {
+            menu.children[i].addEventListener('click', () => {
+              store.loadCategory(`category${i}`);
+              history.pushState({
+                name: 'category',
+                category: `category${i}`
+              }, `Category${i}`);
+              console.log(history.state.name);
+            });
+          }
+
+          var searchBar = document.getElementById('searchBar');
+          searchBar.addEventListener('change', () => {
+            const pattern = searchBar.value;
+            store.loadSearch(pattern);
+            history.pushState({
+              name: 'search',
+              pattern: pattern
+            }, 'Search');
+            console.log(history.state.name);
+          });
+          document.getElementById('menuIcon').addEventListener('click', () => {
+            store.displayDropdown();
+          });
+          var dropdownContent = document.getElementById('dropdownContent');
+          dropdownContent.addEventListener('click', () => {
+            dropdownContent.className = 'dropdownContentOff';
+          });
+          this.setStoreState();
+          console.log(history.state.name);
+        });
+        window.addEventListener('popstate', () => {
+          if (history.state != null) {
+            this.setStoreState();
+            console.log(history.state.name);
+          } else {
+            history.go(-1);
+          }
+        });
+        break;
+
+      case '/checkout':
+        window.addEventListener('load', () => {
+          checkout.load();
+          document.getElementById('backIcon').addEventListener('click', () => {
+            history.go(-1);
+          });
+        });
+        break;
+    }
+  }
+
+  setStoreState() {
+    switch (history.state.name) {
+      case 'home':
+        store.loadAll();
+        break;
+
+      case 'category':
+        store.loadCategory(history.state.category);
+        break;
+
+      case 'cart':
+        cart.load();
+        break;
+
+      case 'search':
+        store.loadSearch(history.state.pattern);
+        document.getElementById('searchBar').value = history.state.pattern;
+        break;
+    }
+  }
+
 }
+
+var control = new StateController();
+control.setPathState();
 
 })();
 

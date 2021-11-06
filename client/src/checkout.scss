@@ -1,7 +1,27 @@
+#checkHeader {
+    height: 7em;
+}
+#checkHeadSpace {
+    height: 8em;
+}
+#backIcon {
+    height: 6.5em;
+    /*parent is div fit to width, % cannot be used for horizontal spacing here*/
+    margin-left: 1em;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
 #form {
     text-align: center;
     margin-bottom: 1em;
     div {
         margin: 1em 0 1em 0;
+    }
+    input {
+        font-size: 3em;
+    }
+    label {
+        font-size: 3em;
     }
 }

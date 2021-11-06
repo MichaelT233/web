@@ -1,179 +1,14 @@
-// client modules
-
-// import utility functions
+// store and cart classes along with their react components
+// import database api
 import {DB} from './utility.js'
-
-/*
-class:
-    main store page functionality
-*/
-export class Store {
-    // get data for all products and render on page
-    loadAll() {
-        ReactDOM.render(<h1>All Products</h1>, document.getElementById('productHead'))
-        db.readTable((rows) => {
-            const storeItems = <BuildStore rows={rows}/>
-            ReactDOM.render(storeItems, document.getElementById('mainView'))
-        })
-        document.getElementById('searchBar').value = ''
-    }
-    // load products from search bar query
-    loadSearch(pattern) {
-        ReactDOM.render(<h1>Search Results for "{pattern}"</h1>, document.getElementById('productHead'))
-        db.readSearchData(pattern, (rows) => {
-            const storeItems = <BuildStore rows={rows}/>
-            ReactDOM.render(storeItems, document.getElementById('mainView'))
-        })
-    }
-    loadCategory(category) {
-        ReactDOM.render(<h1>{category}</h1>, document.getElementById('productHead'))
-        db.readRows('category', `'${category}'`, (rows) => {
-            const storeItems = <BuildStore rows={rows}/>
-            ReactDOM.render(storeItems, document.getElementById('mainView'))
-        })
-        document.getElementById('searchBar').value = ''
-    }
-    // load product data for cart items
-    loadCart() {
-        if (cart.getItemCount() != 0) {
-            db.readCartData((rows) => {
-                const cartItems = <BuildCart rows={rows}/>
-                ReactDOM.render(cartItems, document.getElementById('mainView'))
-                var totalPrice = 0.0
-                for (const row of rows) {
-                    totalPrice += Number(row.price) * cart.getItemQuantity(row.id)
-                }
-                totalPrice = totalPrice.toFixed(2)
-                const head = <BuildCartHeader totalPrice={totalPrice} totalQuantity={cart.getTotalCount()}/>
-                ReactDOM.render(head, document.getElementById('productHead'))
-            })
-            document.getElementById('searchBar').value = ''
-        }
-        else {
-            this.clear()
-            document.getElementById('searchBar').value = ''
-        }
-    }
-    loadCheckout() {
-        this.clear()
-        if (cart.getItemCount() != 0) {
-            db.readCartData((rows) => {
-                const checkoutItems = <BuildCheckout rows={rows}/>
-                ReactDOM.render(checkoutItems, document.getElementById('mainView'))
-                var totalPrice = 0.0
-                for (const row of rows) {
-                    totalPrice += Number(row.price) * cart.getItemQuantity(row.id)
-                }
-                totalPrice = totalPrice.toFixed(2)
-                const head = <BuildCheckoutHeader totalPrice={totalPrice} totalQuantity={cart.getTotalCount()}/>
-                ReactDOM.render(head, document.getElementById('productHead'))
-            })
-        }
-    }
-    // overwrite store
-    clear() {
-        ReactDOM.render(<div></div>, document.getElementById('productHead'))
-        ReactDOM.render(<div></div>, document.getElementById('mainView'))
-    }
-    displayDropdown() {
-        if (document.getElementById('dropdownContent').className == 'dropdownContentOn') {
-            document.getElementById('dropdownContent').className = 'dropdownContentOff'
-        }
-        else {
-            document.getElementById('dropdownContent').className = 'dropdownContentOn'
-        }
-    }
-    sideEffect() {
-        window.addEventListener('load', () => {
-            /***********************************/
-            document.getElementById('mainTitle').addEventListener('click', () => {
-                store.loadAll()
-                history.pushState({page: 'home'}, 'Home')
-                console.log(history.state.page)
-            })
-            document.getElementById('cartIcon').addEventListener('click', () => {
-                store.loadCart()
-                history.pushState({page: 'cart'}, 'Cart')
-                console.log(history.state.page)
-            })
-            var menu = document.getElementById('dropdownContent')
-            for (let i = 0; i < menu.children.length; i++) {
-                menu.children[i].addEventListener('click', () => {
-                    store.loadCategory(`category${i}`)
-                    history.pushState({page: 'category', category: `category${i}`}, `Category${i}`)
-                    console.log(history.state.page)
-                })
-            }
-            var searchBar = document.getElementById('searchBar')
-            searchBar.addEventListener('change', () => {
-                const pattern = searchBar.value
-                store.loadSearch(pattern)
-                history.pushState({page: 'search', pattern: pattern}, 'Search')
-                console.log(history.state.page)
-            })
-            document.getElementById('menuIcon').addEventListener('click', () => {
-                store.displayDropdown()
-            })
-            var dropdownContent = document.getElementById('dropdownContent')
-            dropdownContent.addEventListener('click', () => {
-                dropdownContent.className = 'dropdownContentOff'
-            })
-            /***********************************/
-            if (history.state == null) {
-                store.loadAll()
-                history.pushState({page: 'home'}, 'Home')
-            }
-            else {
-                switch (history.state.page) {
-                    case 'cart':
-                        store.loadCart()
-                        break
-                    case 'home':
-                        store.loadAll()
-                        break
-                    case 'category':
-                        store.loadCategory(history.state.category)
-                        break
-                    case 'search':
-                        store.loadSearch(history.state.pattern)
-                        document.getElementById('searchBar').value = history.state.pattern
-                        break
-                }
-            }
-            console.log(history.state.page)
-        })
-        window.addEventListener('popstate', () => {
-            if (history.state != null) {
-                switch (history.state.page) {
-                    case 'cart':
-                        store.loadCart()
-                        break
-                    case 'home':
-                        store.loadAll()
-                        break
-                    case 'category':
-                        store.loadCategory(history.state.category)
-                        break
-                    case 'search':
-                        store.loadSearch(history.state.pattern)
-                        document.getElementById('searchBar').value = history.state.pattern
-                        break
-                }
-                console.log(history.state.page) 
-            }
-            else {
-                history.go(-1)
-            }
-        })
-    }
-}
+var db = new DB()
 /*
 class:
     shopping cart page functionality
     cross-page data storage (localStorage)
         cart is formatted as 2D array(table) [[id, quantity], [id, quantity], [id, quantity]]
 */
-class Cart {
+export class Cart {
     constructor() {
         if (localStorage.getItem('cart') == null) {
             localStorage.setItem('cart', '[]')
@@ -269,7 +104,7 @@ class Cart {
                 table.splice(table.indexOf(row), 1)
                 this.overwrite(table)
                 this.addItemCount(-1)
-                store.loadCart()
+                this.load()
                 console.log(localStorage)
                 return
             }
@@ -288,7 +123,7 @@ class Cart {
                         quantity = Number(row[1]) + 1
                         row[1] = `${quantity}`
                         this.overwrite(table)
-                        store.loadCart()
+                        this.load()
                         console.log(localStorage)
                         return
                     }
@@ -312,7 +147,7 @@ class Cart {
                     table.splice(table.indexOf(row), 1)
                     this.overwrite(table)
                     this.addItemCount(-1)
-                    store.loadCart()
+                    this.load()
                     console.log(localStorage)
                     return
                 }
@@ -320,11 +155,80 @@ class Cart {
                     quantity = Number(row[1]) - 1
                     row[1] = `${quantity}`
                     this.overwrite(table)
-                    store.loadCart()
+                    this.load()
                     console.log(localStorage)
                     return
                 }
             }
+        }
+    }
+    // load product data for cart items
+    load() {
+        if (this.getItemCount() != 0) {
+            db.readCartData((rows) => {
+                const cartItems = <BuildCart rows={rows}/>
+                ReactDOM.render(cartItems, document.getElementById('mainView'))
+                var totalPrice = 0.0
+                for (const row of rows) {
+                    totalPrice += Number(row.price) * this.getItemQuantity(row.id)
+                }
+                totalPrice = totalPrice.toFixed(2)
+                const head = <BuildCartHeader totalPrice={totalPrice} totalQuantity={this.getTotalCount()}/>
+                ReactDOM.render(head, document.getElementById('productHead'))
+            })
+            document.getElementById('searchBar').value = ''
+        }
+        else {
+            ReactDOM.render(<div></div>, document.getElementById('productHead'))
+            ReactDOM.render(<div></div>, document.getElementById('mainView'))
+            document.getElementById('searchBar').value = ''
+        }
+    }
+}
+var cart = new Cart()
+/*
+class:
+    main store page functionality
+*/
+export class Store {
+    constructor() {
+        if (location.pathname == '/') {
+            if (history.state == null) {
+                history.pushState({name: 'home'}, 'Home')
+            }
+        }
+    }
+    // get data for all products and render on page
+    loadAll() {
+        ReactDOM.render(<h1>All Products</h1>, document.getElementById('productHead'))
+        db.readTable((rows) => {
+            const storeItems = <BuildStore rows={rows}/>
+            ReactDOM.render(storeItems, document.getElementById('mainView'))
+        })
+        document.getElementById('searchBar').value = ''
+    }
+    // load products from search bar query
+    loadSearch(pattern) {
+        ReactDOM.render(<h1>Search Results for "{pattern}"</h1>, document.getElementById('productHead'))
+        db.readSearchData(pattern, (rows) => {
+            const storeItems = <BuildStore rows={rows}/>
+            ReactDOM.render(storeItems, document.getElementById('mainView'))
+        })
+    }
+    loadCategory(category) {
+        ReactDOM.render(<h1>{category}</h1>, document.getElementById('productHead'))
+        db.readRows('category', `'${category}'`, (rows) => {
+            const storeItems = <BuildStore rows={rows}/>
+            ReactDOM.render(storeItems, document.getElementById('mainView'))
+        })
+        document.getElementById('searchBar').value = ''
+    }
+    displayDropdown() {
+        if (document.getElementById('dropdownContent').className == 'dropdownContentOn') {
+            document.getElementById('dropdownContent').className = 'dropdownContentOff'
+        }
+        else {
+            document.getElementById('dropdownContent').className = 'dropdownContentOn'
         }
     }
 }
@@ -438,8 +342,3 @@ function BuildCheckoutHeader(props) {
         </div>
     )
 }
-
-// object initializations are not hoisted (DB could be at top)
-var db = new DB()
-var cart = new Cart()
-var store = new Store()
