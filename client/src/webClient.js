@@ -1,10 +1,10 @@
-// import classes
-import {Store, Cart} from './store.jsx'
+// web client
+import {Store} from './store.jsx'
 import {Checkout} from './checkout.jsx'
-var cart = new Cart()
+// initialize state objects
 var store = new Store()
 var checkout = new Checkout()
-
+// head controller class
 class Controller {
     constructor() {
         if (localStorage.getItem('state') == null) {
@@ -12,17 +12,17 @@ class Controller {
         }
     }
     state = {
-        dom: localStorage.getItem('state'),
+        behavior: localStorage.getItem('state'),
         ui: history.state.name
     }
     instructionTable = {
-        dom: [
-            {input: '/', state: 'start', instruction: ()=>this.writeDOM('store'), newState: 'store'},
-            {input: '/', state: 'store', instruction: ()=>this.writeDOM('store'), newState: 'store'},
-            {input: '/', state: 'checkout', instruction: ()=>this.writeDOM('store'), newState: 'store'},
+        behavior: [
+            {input: '/', state: 'start', instruction: ()=>this.writeBehavior('store'), newState: 'store'},
+            {input: '/', state: 'store', instruction: ()=>this.writeBehavior('store'), newState: 'store'},
+            {input: '/', state: 'checkout', instruction: ()=>this.writeBehavior('store'), newState: 'store'},
             {input: '/checkout', state: 'start', instruction: ()=>location.pathname='/', newState: 'store'},
-            {input: '/checkout', state: 'store', instruction: ()=>this.writeDOM('checkout'), newState: 'checkout'},
-            {input: '/checkout', state: 'checkout', instruction: ()=>this.writeDOM('checkout'), newState: 'checkout'},
+            {input: '/checkout', state: 'store', instruction: ()=>this.writeBehavior('checkout'), newState: 'checkout'},
+            {input: '/checkout', state: 'checkout', instruction: ()=>this.writeBehavior('checkout'), newState: 'checkout'},
         ],
         ui: [
             {input: 'clickTitle', state: 'home', instruction: ()=>this.writeUI('home'), newState: 'home'},
@@ -42,7 +42,7 @@ class Controller {
             {input: 'search', state: 'search', instruction: (params)=>this.writeUI('search', params), newState: 'search'},
             {input: 'search', state: 'category', instruction: (params)=>this.writeUI('search', params), newState: 'search'},
             {input: 'popstate', state: 'home', instruction: ()=>store.loadAll(), newState: 'home'},
-            {input: 'popstate', state: 'cart', instruction: ()=>cart.load(), newState: 'cart'},
+            {input: 'popstate', state: 'cart', instruction: ()=>store.cart.load(), newState: 'cart'},
             {input: 'popstate', state: 'search', instruction: ()=>{store.loadSearch(history.state.pattern);document.getElementById('searchBar').value=history.state.pattern}, newState: 'search'},
             {input: 'popstate', state: 'category', instruction: ()=>store.loadCategory(history.state.category), newState: 'category'}
         ]
@@ -55,7 +55,7 @@ class Controller {
             if (input == row.input && this.state[layer] == row.state) {
                 console.log(row.instruction)
                 row.instruction(params)
-                if (layer == 'dom') {
+                if (layer == 'behavior') {
                     localStorage.setItem('state', row.newState)
                 }
                 this.state[layer] = row.newState
@@ -63,7 +63,7 @@ class Controller {
             }
         }
     }
-    writeDOM(state) {
+    writeBehavior(state) {
         switch (state) {
             case 'store':
                 window.addEventListener('load', () => {
@@ -115,7 +115,7 @@ class Controller {
         }
     }
     writeUI(pageState, params) {
-        switch (this.state.dom) {
+        switch (this.state.behavior) {
             case 'store':
                 switch (pageState) {
                     case 'home':
@@ -127,7 +127,7 @@ class Controller {
                         history.pushState({name: 'category', category: `category${params}`}, `Category${params}`)
                         break
                     case 'cart':
-                        cart.load()
+                        store.cart.load()
                         history.pushState({name: 'cart'}, 'Cart')
                         break
                     case 'search':
@@ -138,6 +138,9 @@ class Controller {
                 break
         }
     }
+    // db access object is used directly within state objects because of the data's async nature
 }
-var controller = new Controller()
-controller.controlLayer('dom', location.pathname)
+// initialize web client
+var webClient = new Controller()
+// write client behavior to DOM based on url path
+webClient.controlLayer('behavior', location.pathname)

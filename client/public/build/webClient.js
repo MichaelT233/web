@@ -69,8 +69,7 @@ function BuildCheckout() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Store": () => (/* binding */ Store),
-/* harmony export */   "Cart": () => (/* binding */ Cart)
+/* harmony export */   "Store": () => (/* binding */ Store)
 /* harmony export */ });
 /* harmony import */ var _utility_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utility.js */ "./utility.js");
 
@@ -83,6 +82,12 @@ class Store {
           name: 'home'
         }, 'Home');
       }
+    }
+
+    if (localStorage.getItem('cart') == null) {
+      localStorage.setItem('cart', '[]');
+      localStorage.setItem('itemCount', '0');
+      localStorage.setItem('totalCount', '0');
     }
   }
 
@@ -126,131 +131,156 @@ class Store {
     }
   }
 
-}
-class Cart {
-  constructor() {
-    if (localStorage.getItem('cart') == null) {
-      localStorage.setItem('cart', '[]');
-      localStorage.setItem('itemCount', '0');
-      localStorage.setItem('totalCount', '0');
-    }
-  }
+  cart = {
+    getItemCount() {
+      return Number(localStorage.getItem('itemCount'));
+    },
 
-  getItemCount() {
-    return Number(localStorage.getItem('itemCount'));
-  }
+    getTotalCount() {
+      return Number(localStorage.getItem('totalCount'));
+    },
 
-  getTotalCount() {
-    return Number(localStorage.getItem('totalCount'));
-  }
+    getTable() {
+      return JSON.parse(localStorage.getItem('cart'));
+    },
 
-  getTable() {
-    return JSON.parse(localStorage.getItem('cart'));
-  }
-
-  getItemQuantity(id) {
-    var table = this.getTable();
-
-    for (const row of table) {
-      if (row[0] == id) {
-        return Number(row[1]);
-      }
-    }
-  }
-
-  overwrite(table) {
-    localStorage.setItem('cart', JSON.stringify(table));
-  }
-
-  addItemCount(value) {
-    var itemCount = Number(localStorage.getItem('itemCount')) + value;
-    localStorage.setItem('itemCount', itemCount);
-  }
-
-  addTotalCount(value) {
-    var totalCount = Number(localStorage.getItem('totalCount')) + value;
-    localStorage.setItem('totalCount', totalCount);
-  }
-
-  addItem(id) {
-    db.readRows('id', `'${id}'`, rows => {
-      const stock = rows[0].stock;
+    getItemQuantity(id) {
       var table = this.getTable();
-      var quantity = Number(document.getElementById(id + 'q').value);
 
       for (const row of table) {
         if (row[0] == id) {
-          console.log(stock);
-          var total = Number(row[1]) + quantity;
-
-          if (total <= stock) {
-            this.addTotalCount(quantity);
-            quantity += Number(row[1]);
-            row[1] = `${quantity}`;
-            this.overwrite(table);
-            console.log(localStorage);
-            return;
-          } else if (Number(row[1]) == stock) {
-            console.log(localStorage);
-            return;
-          } else if (total > stock) {
-            this.addTotalCount(stock - row[1]);
-            row[1] = `${stock}`;
-            this.overwrite(table);
-            console.log(localStorage);
-            return;
-          }
+          return Number(row[1]);
         }
       }
+    },
 
-      if (quantity <= stock) {
-        this.addTotalCount(quantity);
-        table.push([id, quantity]);
-        this.overwrite(table);
-        this.addItemCount(1);
-        console.log(localStorage);
-        return;
-      } else if (quantity > stock) {
-        this.addTotalCount(stock);
-        table.push([id, stock]);
-        this.overwrite(table);
-        this.addItemCount(1);
-        console.log(localStorage);
-        return;
-      }
+    overwrite(table) {
+      localStorage.setItem('cart', JSON.stringify(table));
+    },
 
-      console.log(localStorage);
-    });
-  }
+    addItemCount(value) {
+      var itemCount = Number(localStorage.getItem('itemCount')) + value;
+      localStorage.setItem('itemCount', itemCount);
+    },
 
-  deleteItem(id) {
-    var table = this.getTable();
+    addTotalCount(value) {
+      var totalCount = Number(localStorage.getItem('totalCount')) + value;
+      localStorage.setItem('totalCount', totalCount);
+    },
 
-    for (const row of table) {
-      if (row[0] == id) {
-        this.addTotalCount(-Number(row[1]));
-        table.splice(table.indexOf(row), 1);
-        this.overwrite(table);
-        this.addItemCount(-1);
-        this.load();
-        console.log(localStorage);
-        return;
-      }
-    }
-  }
-
-  incItem(id) {
-    db.readRows('id', `'${id}'`, rows => {
-      const stock = rows[0].stock;
-
-      if (this.getItemQuantity(id) < stock) {
-        this.addTotalCount(1);
-        var quantity = 0;
+    addItem(id) {
+      db.readRows('id', `'${id}'`, rows => {
+        const stock = rows[0].stock;
         var table = this.getTable();
+        var quantity = Number(document.getElementById(id + 'q').value);
 
         for (const row of table) {
           if (row[0] == id) {
-            quantity = Number(row[1]) + 1;
+            console.log(stock);
+            var total = Number(row[1]) + quantity;
+
+            if (total <= stock) {
+              this.addTotalCount(quantity);
+              quantity += Number(row[1]);
+              row[1] = `${quantity}`;
+              this.overwrite(table);
+              console.log(localStorage);
+              return;
+            } else if (Number(row[1]) == stock) {
+              console.log(localStorage);
+              return;
+            } else if (total > stock) {
+              this.addTotalCount(stock - row[1]);
+              row[1] = `${stock}`;
+              this.overwrite(table);
+              console.log(localStorage);
+              return;
+            }
+          }
+        }
+
+        if (quantity <= stock) {
+          this.addTotalCount(quantity);
+          table.push([id, quantity]);
+          this.overwrite(table);
+          this.addItemCount(1);
+          console.log(localStorage);
+          return;
+        } else if (quantity > stock) {
+          this.addTotalCount(stock);
+          table.push([id, stock]);
+          this.overwrite(table);
+          this.addItemCount(1);
+          console.log(localStorage);
+          return;
+        }
+
+        console.log(localStorage);
+      });
+    },
+
+    deleteItem(id) {
+      var table = this.getTable();
+
+      for (const row of table) {
+        if (row[0] == id) {
+          this.addTotalCount(-Number(row[1]));
+          table.splice(table.indexOf(row), 1);
+          this.overwrite(table);
+          this.addItemCount(-1);
+          this.load();
+          console.log(localStorage);
+          return;
+        }
+      }
+    },
+
+    incItem(id) {
+      db.readRows('id', `'${id}'`, rows => {
+        const stock = rows[0].stock;
+
+        if (this.getItemQuantity(id) < stock) {
+          this.addTotalCount(1);
+          var quantity = 0;
+          var table = this.getTable();
+
+          for (const row of table) {
+            if (row[0] == id) {
+              quantity = Number(row[1]) + 1;
+              row[1] = `${quantity}`;
+              this.overwrite(table);
+              this.load();
+              console.log(localStorage);
+              return;
+            }
+          }
+        }
+
+        console.log(localStorage);
+      });
+    },
+
+    decItem(id) {
+      if (this.getItemQuantity(id) == 0) {
+        console.log(localStorage);
+        return;
+      }
+
+      this.addTotalCount(-1);
+      var quantity = 0;
+      var table = this.getTable();
+
+      for (const row of table) {
+        if (row[0] == id) {
+          if (row[1] == 1) {
+            table.splice(table.indexOf(row), 1);
+            this.overwrite(table);
+            this.addItemCount(-1);
+            this.load();
+            console.log(localStorage);
+            return;
+          } else {
+            quantity = Number(row[1]) - 1;
             row[1] = `${quantity}`;
             this.overwrite(table);
             this.load();
@@ -259,72 +289,39 @@ class Cart {
           }
         }
       }
+    },
 
-      console.log(localStorage);
-    });
-  }
+    load() {
+      if (this.getItemCount() != 0) {
+        db.readCartData(rows => {
+          const cartItems = React.createElement(BuildCart, {
+            rows: rows
+          });
+          ReactDOM.render(cartItems, document.getElementById('mainView'));
+          var totalPrice = 0.0;
 
-  decItem(id) {
-    if (this.getItemQuantity(id) == 0) {
-      console.log(localStorage);
-      return;
-    }
+          for (const row of rows) {
+            totalPrice += Number(row.price) * this.getItemQuantity(row.id);
+          }
 
-    this.addTotalCount(-1);
-    var quantity = 0;
-    var table = this.getTable();
-
-    for (const row of table) {
-      if (row[0] == id) {
-        if (row[1] == 1) {
-          table.splice(table.indexOf(row), 1);
-          this.overwrite(table);
-          this.addItemCount(-1);
-          this.load();
-          console.log(localStorage);
-          return;
-        } else {
-          quantity = Number(row[1]) - 1;
-          row[1] = `${quantity}`;
-          this.overwrite(table);
-          this.load();
-          console.log(localStorage);
-          return;
-        }
+          totalPrice = totalPrice.toFixed(2);
+          const head = React.createElement(BuildCartHeader, {
+            totalPrice: totalPrice,
+            totalQuantity: this.getTotalCount()
+          });
+          ReactDOM.render(head, document.getElementById('productHead'));
+        });
+        document.getElementById('searchBar').value = '';
+      } else {
+        ReactDOM.render(React.createElement("div", null), document.getElementById('productHead'));
+        ReactDOM.render(React.createElement("div", null), document.getElementById('mainView'));
+        document.getElementById('searchBar').value = '';
       }
     }
-  }
 
-  load() {
-    if (this.getItemCount() != 0) {
-      db.readCartData(rows => {
-        const cartItems = React.createElement(BuildCart, {
-          rows: rows
-        });
-        ReactDOM.render(cartItems, document.getElementById('mainView'));
-        var totalPrice = 0.0;
-
-        for (const row of rows) {
-          totalPrice += Number(row.price) * this.getItemQuantity(row.id);
-        }
-
-        totalPrice = totalPrice.toFixed(2);
-        const head = React.createElement(BuildCartHeader, {
-          totalPrice: totalPrice,
-          totalQuantity: this.getTotalCount()
-        });
-        ReactDOM.render(head, document.getElementById('productHead'));
-      });
-      document.getElementById('searchBar').value = '';
-    } else {
-      ReactDOM.render(React.createElement("div", null), document.getElementById('productHead'));
-      ReactDOM.render(React.createElement("div", null), document.getElementById('mainView'));
-      document.getElementById('searchBar').value = '';
-    }
-  }
-
+  };
 }
-var cart = new Cart();
+var store = new Store();
 
 function BuildStore(props) {
   const roots = props.rows.map(row => React.createElement("div", {
@@ -347,7 +344,7 @@ function BuildStore(props) {
   }), React.createElement("button", {
     className: "addCart",
     type: "button",
-    onClick: () => cart.addItem(row.id)
+    onClick: () => store.cart.addItem(row.id)
   }, "Add to Cart"))));
   return React.createElement("div", {
     className: "products"
@@ -369,22 +366,22 @@ function BuildCart(props) {
   }, "Qty: "), React.createElement("button", {
     className: "updateCart",
     type: "button",
-    onClick: () => cart.decItem(row.id)
+    onClick: () => store.cart.decItem(row.id)
   }, "-"), React.createElement("input", {
     id: row.id + 'q',
     className: "cartQuantity",
     type: "number",
     name: "quantity",
-    value: cart.getItemQuantity(row.id),
+    value: store.cart.getItemQuantity(row.id),
     disabled: true
   }), React.createElement("button", {
     className: "updateCart",
     type: "button",
-    onClick: () => cart.incItem(row.id)
+    onClick: () => store.cart.incItem(row.id)
   }, "+"), React.createElement("button", {
     className: "removeCart",
     type: "button",
-    onClick: () => cart.deleteItem(row.id)
+    onClick: () => store.cart.deleteItem(row.id)
   }, "Delete"))));
   return React.createElement("div", {
     className: "products"
@@ -515,7 +512,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _checkout_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./checkout.jsx */ "./checkout.jsx");
 
 
-var cart = new _store_jsx__WEBPACK_IMPORTED_MODULE_0__.Cart();
 var store = new _store_jsx__WEBPACK_IMPORTED_MODULE_0__.Store();
 var checkout = new _checkout_jsx__WEBPACK_IMPORTED_MODULE_1__.Checkout();
 
@@ -527,24 +523,24 @@ class Controller {
   }
 
   state = {
-    dom: localStorage.getItem('state'),
+    behavior: localStorage.getItem('state'),
     ui: history.state.name
   };
   instructionTable = {
-    dom: [{
+    behavior: [{
       input: '/',
       state: 'start',
-      instruction: () => this.writeDOM('store'),
+      instruction: () => this.writeBehavior('store'),
       newState: 'store'
     }, {
       input: '/',
       state: 'store',
-      instruction: () => this.writeDOM('store'),
+      instruction: () => this.writeBehavior('store'),
       newState: 'store'
     }, {
       input: '/',
       state: 'checkout',
-      instruction: () => this.writeDOM('store'),
+      instruction: () => this.writeBehavior('store'),
       newState: 'store'
     }, {
       input: '/checkout',
@@ -554,12 +550,12 @@ class Controller {
     }, {
       input: '/checkout',
       state: 'store',
-      instruction: () => this.writeDOM('checkout'),
+      instruction: () => this.writeBehavior('checkout'),
       newState: 'checkout'
     }, {
       input: '/checkout',
       state: 'checkout',
-      instruction: () => this.writeDOM('checkout'),
+      instruction: () => this.writeBehavior('checkout'),
       newState: 'checkout'
     }],
     ui: [{
@@ -650,7 +646,7 @@ class Controller {
     }, {
       input: 'popstate',
       state: 'cart',
-      instruction: () => cart.load(),
+      instruction: () => store.cart.load(),
       newState: 'cart'
     }, {
       input: 'popstate',
@@ -678,7 +674,7 @@ class Controller {
         console.log(row.instruction);
         row.instruction(params);
 
-        if (layer == 'dom') {
+        if (layer == 'behavior') {
           localStorage.setItem('state', row.newState);
         }
 
@@ -688,7 +684,7 @@ class Controller {
     }
   }
 
-  writeDOM(state) {
+  writeBehavior(state) {
     switch (state) {
       case 'store':
         window.addEventListener('load', () => {
@@ -741,7 +737,7 @@ class Controller {
   }
 
   writeUI(pageState, params) {
-    switch (this.state.dom) {
+    switch (this.state.behavior) {
       case 'store':
         switch (pageState) {
           case 'home':
@@ -760,7 +756,7 @@ class Controller {
             break;
 
           case 'cart':
-            cart.load();
+            store.cart.load();
             history.pushState({
               name: 'cart'
             }, 'Cart');
@@ -781,8 +777,8 @@ class Controller {
 
 }
 
-var controller = new Controller();
-controller.controlLayer('dom', location.pathname);
+var webClient = new Controller();
+webClient.controlLayer('behavior', location.pathname);
 
 })();
 
