@@ -5,6 +5,14 @@ export class Checkout {
         ReactDOM.render(<h1>Enter your Information</h1>, document.getElementById('productHead'))
         ReactDOM.render(checkout, document.getElementById('mainView'))
     }
+    setBehavior() {
+        window.addEventListener('load', () => {
+            this.load()
+            document.getElementById('backIcon').addEventListener('click', () => {
+                history.go(-1)
+            })
+        })
+    }
 }
 function BuildCheckout() {
     return (

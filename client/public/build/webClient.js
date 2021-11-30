@@ -19,6 +19,15 @@ class Checkout {
     ReactDOM.render(checkout, document.getElementById('mainView'));
   }
 
+  setBehavior() {
+    window.addEventListener('load', () => {
+      this.load();
+      document.getElementById('backIcon').addEventListener('click', () => {
+        history.go(-1);
+      });
+    });
+  }
+
 }
 
 function BuildCheckout() {
@@ -73,14 +82,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _utility_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utility.js */ "./utility.js");
 
-var db = new _utility_js__WEBPACK_IMPORTED_MODULE_0__.DB();
+var module = new _utility_js__WEBPACK_IMPORTED_MODULE_0__.Module('store', 'home');
 class Store {
   constructor() {
     if (location.pathname == '/') {
       if (history.state == null) {
         history.pushState({
-          name: 'home'
-        }, 'Home');
+          store: {
+            state: 'home',
+            category: null,
+            pattern: null
+          }
+        }, 'Store');
       }
     }
 
@@ -93,7 +106,7 @@ class Store {
 
   loadAll() {
     ReactDOM.render(React.createElement("h1", null, "All Products"), document.getElementById('productHead'));
-    db.readTable(rows => {
+    module.db.readTable(rows => {
       const storeItems = React.createElement(BuildStore, {
         rows: rows
       });
@@ -104,7 +117,7 @@ class Store {
 
   loadSearch(pattern) {
     ReactDOM.render(React.createElement("h1", null, "Search Results for \"", pattern, "\""), document.getElementById('productHead'));
-    db.readSearchData(pattern, rows => {
+    module.db.readSearchData(pattern, rows => {
       const storeItems = React.createElement(BuildStore, {
         rows: rows
       });
@@ -114,7 +127,7 @@ class Store {
 
   loadCategory(category) {
     ReactDOM.render(React.createElement("h1", null, category), document.getElementById('productHead'));
-    db.readRows('category', `'${category}'`, rows => {
+    module.db.readRows('category', `'${category}'`, rows => {
       const storeItems = React.createElement(BuildStore, {
         rows: rows
       });
@@ -129,6 +142,84 @@ class Store {
     } else {
       document.getElementById('dropdownContent').className = 'dropdownContentOn';
     }
+  }
+
+  renderState() {
+    switch (history.state.store.state) {
+      case 'home':
+        store.loadAll();
+        break;
+
+      case 'cart':
+        store.cart.load();
+        break;
+
+      case 'search':
+        store.loadSearch(history.state.store.pattern);
+        document.getElementById('searchBar').value = history.state.store.pattern;
+        break;
+
+      case 'category':
+        store.loadCategory(history.state.store.category);
+        break;
+    }
+  }
+
+  setBehavior() {
+    window.addEventListener('load', () => {
+      document.getElementById('mainTitle').addEventListener('click', () => {
+        this.loadAll();
+        history.pushState({
+          store: {
+            state: 'home'
+          }
+        }, 'Store');
+      });
+      document.getElementById('cartIcon').addEventListener('click', () => {
+        this.cart.load();
+        history.pushState({
+          store: {
+            state: 'cart'
+          }
+        }, 'Store');
+      });
+      var menu = document.getElementById('dropdownContent');
+
+      for (let i = 0; i < menu.children.length; i++) {
+        menu.children[i].addEventListener('click', () => {
+          this.loadCategory(`category${i}`);
+          history.pushState({
+            store: {
+              state: 'category',
+              category: `category${i}`
+            }
+          }, 'Store');
+        });
+      }
+
+      var searchBar = document.getElementById('searchBar');
+      searchBar.addEventListener('change', () => {
+        const pattern = searchBar.value;
+        this.loadSearch(pattern);
+        history.pushState({
+          store: {
+            state: 'search',
+            pattern: pattern
+          }
+        }, 'Store');
+      });
+      document.getElementById('menuIcon').addEventListener('click', () => {
+        this.displayDropdown();
+      });
+      var dropdownContent = document.getElementById('dropdownContent');
+      dropdownContent.addEventListener('click', () => {
+        dropdownContent.className = 'dropdownContentOff';
+      });
+      this.renderState();
+      window.addEventListener('popstate', () => {
+        this.renderState();
+      });
+    });
   }
 
   cart = {
@@ -169,7 +260,7 @@ class Store {
     },
 
     addItem(id) {
-      db.readRows('id', `'${id}'`, rows => {
+      module.db.readRows('id', `'${id}'`, rows => {
         const stock = rows[0].stock;
         var table = this.getTable();
         var quantity = Number(document.getElementById(id + 'q').value);
@@ -236,7 +327,7 @@ class Store {
     },
 
     incItem(id) {
-      db.readRows('id', `'${id}'`, rows => {
+      module.db.readRows('id', `'${id}'`, rows => {
         const stock = rows[0].stock;
 
         if (this.getItemQuantity(id) < stock) {
@@ -293,7 +384,7 @@ class Store {
 
     load() {
       if (this.getItemCount() != 0) {
-        db.readCartData(rows => {
+        module.db.readCartData(rows => {
           const cartItems = React.createElement(BuildCart, {
             rows: rows
           });
@@ -413,7 +504,8 @@ function BuildCartHeader(props) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "DB": () => (/* binding */ DB)
+/* harmony export */   "DB": () => (/* binding */ DB),
+/* harmony export */   "Module": () => (/* binding */ Module)
 /* harmony export */ });
 class DB {
   readDB(url, callback) {
@@ -423,9 +515,7 @@ class DB {
   }
 
   readRows(column, field, callback) {
-    this.readDB(`product-data?column=${column}&field=${field}`, rows => {
-      callback(rows);
-    });
+    this.readDB(`product-data?column=${column}&field=${field}`, callback);
   }
 
   readTable(callback) {
@@ -436,10 +526,46 @@ class DB {
     this.readDB('cart-data?cart=' + localStorage.getItem('cart'), callback);
   }
 
-  readSearchData(exp, callback) {
-    this.readDB('search?column=title&field=' + exp, callback);
+  readSearchData(pattern, callback) {
+    this.readDB('search?column=title&field=' + pattern, callback);
   }
 
+}
+class Module {
+  constructor(name, startState) {
+    this.name = name;
+    this.state = startState;
+  }
+
+  setState(state) {
+    this.state = state;
+    history.state[this.name].state = state;
+  }
+
+  db = {
+    readDB(url, callback) {
+      fetch(url).then(response => response.json()).then(data => {
+        callback(data);
+      });
+    },
+
+    readRows(column, field, callback) {
+      this.readDB(`product-data?column=${column}&field=${field}`, callback);
+    },
+
+    readTable(callback) {
+      this.readDB('product-data', callback);
+    },
+
+    readCartData(callback) {
+      this.readDB('cart-data?cart=' + localStorage.getItem('cart'), callback);
+    },
+
+    readSearchData(pattern, callback) {
+      this.readDB('search?column=title&field=' + pattern, callback);
+    }
+
+  };
 }
 
 
@@ -512,273 +638,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _checkout_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./checkout.jsx */ "./checkout.jsx");
 
 
+
+if (localStorage.getItem('state') == null) {
+  localStorage.setItem('state', 'start');
+}
+
+var core = {
+  state: localStorage.getItem('state'),
+  input: location.pathname,
+
+  setState(state) {
+    this.state = state;
+    localStorage.setItem('state', state);
+  },
+
+  loadModule(module) {
+    module.setBehavior();
+  }
+
+};
+console.log(core);
 var store = new _store_jsx__WEBPACK_IMPORTED_MODULE_0__.Store();
 var checkout = new _checkout_jsx__WEBPACK_IMPORTED_MODULE_1__.Checkout();
 
-class Controller {
-  constructor() {
-    if (localStorage.getItem('state') == null) {
-      localStorage.setItem('state', 'start');
-    }
-  }
-
-  state = {
-    behavior: localStorage.getItem('state'),
-    ui: history.state.name
-  };
-  instructionTable = {
-    behavior: [{
-      input: '/',
-      state: 'start',
-      instruction: () => this.writeBehavior('store'),
-      newState: 'store'
-    }, {
-      input: '/',
-      state: 'store',
-      instruction: () => this.writeBehavior('store'),
-      newState: 'store'
-    }, {
-      input: '/',
-      state: 'checkout',
-      instruction: () => this.writeBehavior('store'),
-      newState: 'store'
-    }, {
-      input: '/checkout',
-      state: 'start',
-      instruction: () => location.pathname = '/',
-      newState: 'store'
-    }, {
-      input: '/checkout',
-      state: 'store',
-      instruction: () => this.writeBehavior('checkout'),
-      newState: 'checkout'
-    }, {
-      input: '/checkout',
-      state: 'checkout',
-      instruction: () => this.writeBehavior('checkout'),
-      newState: 'checkout'
-    }],
-    ui: [{
-      input: 'clickTitle',
-      state: 'home',
-      instruction: () => this.writeUI('home'),
-      newState: 'home'
-    }, {
-      input: 'clickTitle',
-      state: 'cart',
-      instruction: () => this.writeUI('home'),
-      newState: 'home'
-    }, {
-      input: 'clickTitle',
-      state: 'search',
-      instruction: () => this.writeUI('home'),
-      newState: 'home'
-    }, {
-      input: 'clickTitle',
-      state: 'category',
-      instruction: () => this.writeUI('home'),
-      newState: 'home'
-    }, {
-      input: 'clickCart',
-      state: 'home',
-      instruction: () => this.writeUI('cart'),
-      newState: 'cart'
-    }, {
-      input: 'clickCart',
-      state: 'cart',
-      instruction: () => this.writeUI('cart'),
-      newState: 'cart'
-    }, {
-      input: 'clickCart',
-      state: 'search',
-      instruction: () => this.writeUI('cart'),
-      newState: 'cart'
-    }, {
-      input: 'clickCart',
-      state: 'category',
-      instruction: () => this.writeUI('cart'),
-      newState: 'cart'
-    }, {
-      input: 'clickCategory',
-      state: 'home',
-      instruction: params => this.writeUI('category', params),
-      newState: 'category'
-    }, {
-      input: 'clickCategory',
-      state: 'cart',
-      instruction: params => this.writeUI('category', params),
-      newState: 'category'
-    }, {
-      input: 'clickCategory',
-      state: 'search',
-      instruction: params => this.writeUI('category', params),
-      newState: 'category'
-    }, {
-      input: 'clickCategory',
-      state: 'category',
-      instruction: params => this.writeUI('category', params),
-      newState: 'category'
-    }, {
-      input: 'search',
-      state: 'home',
-      instruction: params => this.writeUI('search', params),
-      newState: 'search'
-    }, {
-      input: 'search',
-      state: 'cart',
-      instruction: params => this.writeUI('search', params),
-      newState: 'search'
-    }, {
-      input: 'search',
-      state: 'search',
-      instruction: params => this.writeUI('search', params),
-      newState: 'search'
-    }, {
-      input: 'search',
-      state: 'category',
-      instruction: params => this.writeUI('search', params),
-      newState: 'search'
-    }, {
-      input: 'popstate',
-      state: 'home',
-      instruction: () => store.loadAll(),
-      newState: 'home'
-    }, {
-      input: 'popstate',
-      state: 'cart',
-      instruction: () => store.cart.load(),
-      newState: 'cart'
-    }, {
-      input: 'popstate',
-      state: 'search',
-      instruction: () => {
-        store.loadSearch(history.state.pattern);
-        document.getElementById('searchBar').value = history.state.pattern;
-      },
-      newState: 'search'
-    }, {
-      input: 'popstate',
-      state: 'category',
-      instruction: () => store.loadCategory(history.state.category),
-      newState: 'category'
-    }]
-  };
-
-  controlLayer(layer, input, params) {
-    if (layer == 'ui') {
-      this.state.ui = history.state.name;
-    }
-
-    for (const row of this.instructionTable[layer]) {
-      if (input == row.input && this.state[layer] == row.state) {
-        console.log(row.instruction);
-        row.instruction(params);
-
-        if (layer == 'behavior') {
-          localStorage.setItem('state', row.newState);
-        }
-
-        this.state[layer] = row.newState;
-        return;
-      }
-    }
-  }
-
-  writeBehavior(state) {
-    switch (state) {
-      case 'store':
-        window.addEventListener('load', () => {
-          document.getElementById('mainTitle').addEventListener('click', () => {
-            this.controlLayer('ui', 'clickTitle');
-          });
-          document.getElementById('cartIcon').addEventListener('click', () => {
-            this.controlLayer('ui', 'clickCart');
-          });
-          var menu = document.getElementById('dropdownContent');
-
-          for (let i = 0; i < menu.children.length; i++) {
-            menu.children[i].addEventListener('click', () => {
-              this.controlLayer('ui', 'clickCategory', i);
-            });
-          }
-
-          var searchBar = document.getElementById('searchBar');
-          searchBar.addEventListener('change', () => {
-            const pattern = searchBar.value;
-            this.controlLayer('ui', 'search', pattern);
-          });
-          document.getElementById('menuIcon').addEventListener('click', () => {
-            store.displayDropdown();
-          });
-          var dropdownContent = document.getElementById('dropdownContent');
-          dropdownContent.addEventListener('click', () => {
-            dropdownContent.className = 'dropdownContentOff';
-          });
-          this.controlLayer('ui', 'popstate');
-        });
-        window.addEventListener('popstate', () => {
-          if (history.state != null) {
-            this.controlLayer('ui', 'popstate');
-          } else {
-            history.go(-1);
-          }
-        });
-        break;
-
-      case 'checkout':
-        window.addEventListener('load', () => {
-          checkout.load();
-          document.getElementById('backIcon').addEventListener('click', () => {
-            history.go(-1);
-          });
-        });
-        break;
-    }
-  }
-
-  writeUI(pageState, params) {
-    switch (this.state.behavior) {
-      case 'store':
-        switch (pageState) {
-          case 'home':
-            store.loadAll();
-            history.pushState({
-              name: 'home'
-            }, 'Home');
-            break;
-
-          case 'category':
-            store.loadCategory(`category${params}`);
-            history.pushState({
-              name: 'category',
-              category: `category${params}`
-            }, `Category${params}`);
-            break;
-
-          case 'cart':
-            store.cart.load();
-            history.pushState({
-              name: 'cart'
-            }, 'Cart');
-            break;
-
-          case 'search':
-            store.loadSearch(params);
-            history.pushState({
-              name: 'search',
-              pattern: params
-            }, 'Search');
-            break;
-        }
-
-        break;
-    }
-  }
-
+if (core.input == '/') {
+  core.loadModule(store);
+  core.setState('store');
 }
 
-var webClient = new Controller();
-webClient.controlLayer('behavior', location.pathname);
+if (core.input == '/checkout' && core.state != 'start') {
+  core.loadModule(checkout);
+  core.setState('checkout');
+} else if (core.input == '/checkout' && core.state == 'start') {
+  core.setState('store');
+  location.pathname = '/';
+}
 
 })();
 

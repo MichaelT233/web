@@ -1,7 +1,7 @@
 // store and cart classes along with their react components
 // import database api
-import {DB} from './utility.js'
-var db = new DB()
+import {Module} from './utility.js'
+var module = new Module('store', 'home')
 /*
 class:
     main store page functionality
@@ -10,7 +10,7 @@ export class Store {
     constructor() {
         if (location.pathname == '/') {
             if (history.state == null) {
-                history.pushState({name: 'home'}, 'Home')
+                history.pushState({store: {state: 'home', category: null, pattern: null}}, 'Store')
             }
         }
         if (localStorage.getItem('cart') == null) {
@@ -22,7 +22,7 @@ export class Store {
     // get data for all products and render on page
     loadAll() {
         ReactDOM.render(<h1>All Products</h1>, document.getElementById('productHead'))
-        db.readTable((rows) => {
+        module.db.readTable((rows) => {
             const storeItems = <BuildStore rows={rows}/>
             ReactDOM.render(storeItems, document.getElementById('mainView'))
         })
@@ -31,14 +31,14 @@ export class Store {
     // load products from search bar query
     loadSearch(pattern) {
         ReactDOM.render(<h1>Search Results for "{pattern}"</h1>, document.getElementById('productHead'))
-        db.readSearchData(pattern, (rows) => {
+        module.db.readSearchData(pattern, (rows) => {
             const storeItems = <BuildStore rows={rows}/>
             ReactDOM.render(storeItems, document.getElementById('mainView'))
         })
     }
     loadCategory(category) {
         ReactDOM.render(<h1>{category}</h1>, document.getElementById('productHead'))
-        db.readRows('category', `'${category}'`, (rows) => {
+        module.db.readRows('category', `'${category}'`, (rows) => {
             const storeItems = <BuildStore rows={rows}/>
             ReactDOM.render(storeItems, document.getElementById('mainView'))
         })
@@ -51,6 +51,62 @@ export class Store {
         else {
             document.getElementById('dropdownContent').className = 'dropdownContentOn'
         }
+    }
+    renderState() {
+        switch (history.state.store.state) {
+            case 'home':
+                store.loadAll()
+                break
+            case 'cart':
+                store.cart.load()
+                break
+            case 'search':
+                store.loadSearch(history.state.store.pattern)
+                document.getElementById('searchBar').value=history.state.store.pattern
+                break
+            case 'category':
+                store.loadCategory(history.state.store.category)
+                break
+        }
+    }
+    setBehavior() {
+        window.addEventListener('load', ()=>{
+            /***********************************/
+            document.getElementById('mainTitle').addEventListener('click', () => {
+                this.loadAll()
+                history.pushState({store: {state: 'home'}}, 'Store')
+            })
+            document.getElementById('cartIcon').addEventListener('click', () => {
+                this.cart.load()
+                history.pushState({store: {state: 'cart'}}, 'Store')
+            })
+            var menu = document.getElementById('dropdownContent')
+            for (let i = 0; i < menu.children.length; i++) {
+                menu.children[i].addEventListener('click', () => {
+                    this.loadCategory(`category${i}`)
+                    history.pushState({store: {state: 'category', category: `category${i}`}}, 'Store')
+                })
+            }
+            var searchBar = document.getElementById('searchBar')
+            searchBar.addEventListener('change', () => {
+                const pattern = searchBar.value
+                this.loadSearch(pattern)
+                history.pushState({store: {state: 'search', pattern: pattern}}, 'Store')
+            })
+            document.getElementById('menuIcon').addEventListener('click', () => {
+                this.displayDropdown()
+            })
+            var dropdownContent = document.getElementById('dropdownContent')
+            dropdownContent.addEventListener('click', () => {
+                dropdownContent.className = 'dropdownContentOff'
+            })
+            this.renderState()
+            /***********************************/
+            window.addEventListener('popstate', () => {
+                this.renderState()
+            })
+            /***********************************/
+        })
     }
     /*
     object:
@@ -89,7 +145,7 @@ export class Store {
         },
         // add item and it's quantity to cart table
         addItem(id) {
-            db.readRows('id', `'${id}'`, (rows) => {
+            module.db.readRows('id', `'${id}'`, (rows) => {
                 const stock = rows[0].stock 
                 var table = this.getTable()
                 // access item quantity, convention for DOM id is product id ending with q
@@ -155,7 +211,7 @@ export class Store {
         },
         // increment an item's quantity
         incItem(id) {
-            db.readRows('id', `'${id}'`, (rows) => {
+            module.db.readRows('id', `'${id}'`, (rows) => {
                 const stock = rows[0].stock
                 if (this.getItemQuantity(id) < stock) {
                     this.addTotalCount(1)
@@ -208,7 +264,7 @@ export class Store {
         // load product data for cart items
         load() {
             if (this.getItemCount() != 0) {
-                db.readCartData((rows) => {
+                module.db.readCartData((rows) => {
                     const cartItems = <BuildCart rows={rows}/>
                     ReactDOM.render(cartItems, document.getElementById('mainView'))
                     var totalPrice = 0.0
