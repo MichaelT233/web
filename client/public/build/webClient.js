@@ -87,7 +87,15 @@ class Store {
   constructor() {
     if (location.pathname == '/') {
       if (history.state == null) {
-        history.pushState({
+        history.replaceState({
+          store: {
+            state: 'home',
+            category: null,
+            pattern: null
+          }
+        }, 'Store');
+      } else if ('store' in history.state == false) {
+        history.replaceState({
           store: {
             state: 'home',
             category: null,
@@ -504,33 +512,8 @@ function BuildCartHeader(props) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "DB": () => (/* binding */ DB),
 /* harmony export */   "Module": () => (/* binding */ Module)
 /* harmony export */ });
-class DB {
-  readDB(url, callback) {
-    fetch(url).then(response => response.json()).then(data => {
-      callback(data);
-    });
-  }
-
-  readRows(column, field, callback) {
-    this.readDB(`product-data?column=${column}&field=${field}`, callback);
-  }
-
-  readTable(callback) {
-    this.readDB('product-data', callback);
-  }
-
-  readCartData(callback) {
-    this.readDB('cart-data?cart=' + localStorage.getItem('cart'), callback);
-  }
-
-  readSearchData(pattern, callback) {
-    this.readDB('search?column=title&field=' + pattern, callback);
-  }
-
-}
 class Module {
   constructor(name, startState) {
     this.name = name;

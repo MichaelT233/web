@@ -9,8 +9,11 @@ class:
 export class Store {
     constructor() {
         if (location.pathname == '/') {
-            if (history.state == null) {
-                history.pushState({store: {state: 'home', category: null, pattern: null}}, 'Store')
+            if(history.state == null) {
+                history.replaceState({store: {state: 'home', category: null, pattern: null}}, 'Store')
+            }
+            else if ('store' in history.state == false) {
+                history.replaceState({store: {state: 'home', category: null, pattern: null}}, 'Store')
             }
         }
         if (localStorage.getItem('cart') == null) {
