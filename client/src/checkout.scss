@@ -16,7 +16,8 @@
     text-align: center;
     margin-bottom: 1em;
     div {
-        margin: 1em 0 1em 0;
+        text-align: left;
+        margin: 1em 0 1em 10%;
     }
     input {
         font-size: 3em;
@@ -24,4 +25,8 @@
     label {
         font-size: 3em;
     }
+    h2 {
+        text-align: left;
+        font-size: 3.4em;
+        margin-left: 6%;    }
 }

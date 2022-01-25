@@ -128,7 +128,7 @@ header {
 
 /*product*/
 /***********************************/
-#productHead {
+#productHead, #cartHead {
     @include blackBorder();
     text-align: center;
     margin-bottom: 1em;
