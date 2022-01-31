@@ -1,0 +1,67 @@
+<!--membership page -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<title>prototype</title>
+    	<link rel='stylesheet' href='build/style.css'>
+    	<script crossorigin src='https://unpkg.com/react@17/umd/react.development.js'></script>
+    	<script crossorigin src='https://unpkg.com/react-dom@17/umd/react-dom.development.js'></script>
+    	<script src='build/webClient.js'></script>
+  	</head>
+	<body>
+  		<header>
+            <div id="dropdown">
+                <img src="images/menu_bar.png" id="menuIcon">
+                <div id="dropdownContent" class="dropdownContentOff">
+                    <h2 class="dropdownItem">About</h2>
+                    <h2 class="dropdownItem">Contact</h2>
+                    <h2 class="dropdownItem">Participants</h2>
+                    <h2 class="dropdownItem"><a href = 'https://github.com/MichaelT233/web'>Membership</a></h2>
+                    <h2 class="dropdownItem">FAQs</h2>
+                </div>
+            </div>
+            <img src="images/main_logo.jpg" id="logoIcon">
+            <img src="images/cart.png" id="cartIcon">
+    	</header>
+        <div id="headSpace"></div>
+        <div id='form'>
+            <form action='/checkout-data' method='POST'>
+                <h2>Shipping address</h2>
+                <div>
+                    <label htmlFor='firstName'>First name</label>
+                    <input type='text' id='firstName'/>
+                </div>
+                <div>
+                    <label htmlFor='lastName'>Last name</label>
+                    <input type='text' id='lastName'/>
+                </div>
+                <div>
+                    <label htmlFor='address'>Address</label>
+                    <input type='text' id='address'/>
+                </div>
+                <div>
+                    <label htmlFor='city'>City</label>
+                    <input type='text' id='city'/>
+                </div>
+                <div>
+                    <label htmlFor='state'>State</label>
+                    <input type='text' id='state'/>
+                </div>
+                <h2>Payment method</h2>
+                <div>
+                    <label htmlFor='cardNumber'>Card number</label>
+                    <input type='text' id='cardNumber'/>
+                </div>
+                <div>
+                    <label htmlFor='cvc'>CVC</label>
+                    <input type='text' id='ccv'/>
+                </div>
+                <button>Place your order</button>
+            </form>
+        </div>
+    	<footer>
+      		<p>Author: MT</p>
+    	</footer>
+	</body>
+</html>

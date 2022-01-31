@@ -1,7 +1,7 @@
 /*Main Stylesheet*/
 
 /***********************************/
-$primaryColor: orangered;
+$primaryColor: white;
 /*vertical space taken by floating header*/
 $headerSpace: 14em;
 @mixin blackBorder {
@@ -65,7 +65,7 @@ header {
     text-align: left;
     background-color: $primaryColor;
     @include blackBorder();
-    margin-top: 6em;
+    margin-top: 7em;
     h2 {
         display: block;
         font-size: 4em;
@@ -88,17 +88,31 @@ header {
     height: 6.5em;
     /*parent is div fit to width, % cannot be used for horizontal spacing here*/
     margin-left: 1em;
+    margin-top: 1em;
     position: absolute;
     left: 0;
     top: 0;
 }
-#backIcon {
-    height: 6.5em;
-    /*parent is div fit to width, % cannot be used for horizontal spacing here*/
-    margin-left: 1em;
-    position: absolute;
-    left: 0;
-    top: 0;
+#logoIcon {
+    margin-top: 0.5em;
+    height: 12em;
+}
+#test {
+    text-align: center;
+}
+#testImage {
+    width: 75%;
+}
+#testText {
+    font-size: 1.1em;
+}
+#testButton {
+    margin: 1em 0 1em 0;
+    background-color: peachpuff;
+    font-size: 3em;
+    text-align: center;
+    height: 2em;
+    width: 50%;
 }
 /*cart icon*/
 #cartIcon {
@@ -107,107 +121,10 @@ header {
     top: 0;
     display: inline;
     height: 6em;
-    margin: 0.1em 0.9% 0 0;
-}
-/*search bar*/
-#searchBar {
-    font-size: 3em;
-    position: absolute;
-    height: 1.8em;
-    right: 0;
-    bottom: 0;
-    width: 90%;
-    margin: 0 5% 0.4em 5%;
-    z-index: -1;
-    touch-action: none;
+    margin: 1em 0.9% 0 0;
 }
 #headSpace {
     height: $headerSpace + 1em;
-}
-/***********************************/
-
-/*product*/
-/***********************************/
-#productHead, #cartHead {
-    @include blackBorder();
-    text-align: center;
-    margin-bottom: 1em;
-    h1 {
-        font-size: 3.4em;
-    }
-    h2 {
-        text-align: left;
-        font-size: 3.4em;
-        margin-left: 6%;
-    }
-    button {
-        background-color: $primaryColor;
-        font-size: 3em;
-        text-align: center;
-        width: 80%;
-        margin-bottom: 1em;
-    }
-}
-/*root div for products*/
-.products {
-    display: block;
-    text-align: center;
-}
-/*individual product*/
-.product {
-    display: inline-block;
-    @include blackBorder();
-    width: 96%;
-    margin-bottom: 1em;
-    h2 {
-        font-size: 3.6em;
-        margin: 1em 0;
-    }
-    p {
-        margin: 0 0 1em 0;
-        font-size: 2em;
-    }
-    label {
-        font-size: 3em;
-    }
-    input {
-        font-size: 3em;
-        width: 15%;
-        text-align: center;
-        touch-action: none;
-    }
-    button {
-        margin-top: 1.2em;
-        background-color: $primaryColor;
-        font-size: 3em;
-        text-align: center;
-    }
-    img {
-        height: 42em;
-        width: 39%;
-        display: inline;
-        margin: 0.25em 0.6% 0 0.6%;
-    }
-}
-.addCart {
-    margin-left: 10%;
-}
-.updateCart {
-    width: 12%;
-}
-.removeCart {
-    margin-left: 10%;
-}
-.cartQuantity {
-    width: 12%;
-}
-.productText {
-    display: inline-block;
-    vertical-align: top;
-    text-align: left;
-    width: 57%;
-    padding-top: 1em;
-    padding-left: 2%;
 }
 /***********************************/
 
@@ -227,6 +144,41 @@ footer {
     }
     a {
         text-decoration: underline;
+    }
+}
+/***********************************/
+
+/*checkout form*/
+/***********************************/
+#form {
+    text-align: center;
+    margin-bottom: 1em;
+    div {
+        text-align: left;
+        margin: 1em 0 1em 10%;
+    }
+    input {
+        display: block;
+        font-size: 3.6em;
+        border-color: black;
+    }
+    label {
+        display: block;
+        font-size: 3.6em;
+        font-weight: bold;    
+    }
+    h2 {
+        text-align: left;
+        font-size: 4em;
+        margin-left: 6%;    
+    }
+    button {
+        margin: 1em 0 1em 0;
+        background-color: peachpuff;
+        font-size: 3em;
+        text-align: center;
+        height: 2em;
+        width: 50%;
     }
 }
 /***********************************/
