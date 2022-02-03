@@ -16,5 +16,13 @@ window.addEventListener('load', ()=>{
     dropdownContent.addEventListener('click', () => {
         dropdownContent.className = 'dropdownContentOff'
     })
+    document.getElementById('content').addEventListener('click', () => {
+        dropdownContent.className = 'dropdownContentOff'
+    })
+    var qSelect = document.getElementById('qSelect')
+    qSelect.addEventListener('click', () => {
+        qSelect.select()
+    })
+    qSelect.oninput = () => {document.getElementById('total').innerHTML = document.getElementById('qSelect').value + "x"}
     /***********************************/
 })

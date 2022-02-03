@@ -1,5 +1,5 @@
 # dockerfile config for building node web server image
-FROM node:14
+FROM node:16
 WORKDIR /home/wallace/webServer
 COPY package*.json ./
 RUN npm install

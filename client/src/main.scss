@@ -1,22 +1,20 @@
 /*Main Stylesheet*/
 
 /***********************************/
-$primaryColor: white;
+$primaryColor: rgb(36, 36, 36);
+$fontColor: white;
 /*vertical space taken by floating header*/
 $headerSpace: 14em;
-@mixin blackBorder {
-    border-style: solid;
-    border-color: black;
-    border-width: thin;
+@mixin whiteBorder {
+    border-style: ridge;
+    border-width: thick;
     box-sizing: border-box;
+    border-color: white;
 }
 /***********************************/
 
 /*global*/
 /***********************************/
-html {
-    min-height: 100%;
-}
 body {
     margin: 0;
 }
@@ -41,15 +39,16 @@ header {
     /*fixed height so exact top margin can be used by element below*/
     height: $headerSpace;
     width: 100%;
-    @include blackBorder();
+    @include whiteBorder();
     text-align: center;
     h1 {
-        font-size: 4.2em;
-        padding-top: 0.2em;
-        margin: 0;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        color: $primaryColor;
+        font-size: 5em;
+        margin: 0 0 0 20%;
+        text-align: center;
         display: inline-block;
     }
+    background-color: peachpuff;
 }
 /*dropdown menu*/
 #dropdown {
@@ -64,16 +63,21 @@ header {
     width: 100%;
     text-align: left;
     background-color: $primaryColor;
-    @include blackBorder();
-    margin-top: 7em;
+    @include whiteBorder();
+    border-bottom-style: none;
+    margin-top: 9.2em;
     h2 {
+        color: $fontColor;
         display: block;
         font-size: 4em;
         /*em used for horizontal spacing in special case where the width required is greater than it's parent (>%100)*/
         padding: 0.6em 5em 0.6em 0;
         width: 100%;
         margin: 0;
-        @include blackBorder();
+        @include whiteBorder();
+        border-left-style: none;
+        border-right-style: none;
+        border-top-style: none;
     }
     z-index: 1;
 }
@@ -85,34 +89,18 @@ header {
 }
 /*dropdown menu icon*/
 #menuIcon {
-    height: 6.5em;
+    height: 7em;
     /*parent is div fit to width, % cannot be used for horizontal spacing here*/
-    margin-left: 1em;
-    margin-top: 1em;
+    margin-left: 2em;
+    margin-top: 3.1em;
     position: absolute;
     left: 0;
     top: 0;
 }
 #logoIcon {
-    margin-top: 0.5em;
+    margin: 0.5em 2em 0 0;
     height: 12em;
-}
-#test {
-    text-align: center;
-}
-#testImage {
-    width: 75%;
-}
-#testText {
-    font-size: 1.1em;
-}
-#testButton {
-    margin: 1em 0 1em 0;
-    background-color: peachpuff;
-    font-size: 3em;
-    text-align: center;
-    height: 2em;
-    width: 50%;
+    float: right;
 }
 /*cart icon*/
 #cartIcon {
@@ -124,7 +112,7 @@ header {
     margin: 1em 0.9% 0 0;
 }
 #headSpace {
-    height: $headerSpace + 1em;
+    height: $headerSpace;
 }
 /***********************************/
 
@@ -137,8 +125,9 @@ footer {
     width: 100%;
     padding-bottom: 0.8em;
     background-color: $primaryColor;
-    @include blackBorder();
+    @include whiteBorder();
     p {
+        color: $fontColor;
         margin: 0;
         font-size: 2.3em;
     }
@@ -148,37 +137,162 @@ footer {
 }
 /***********************************/
 
+#content {
+    background-color: $primaryColor;
+}
+#test {
+    padding: 4em 0 4em 0;
+    text-align: center;
+    p {
+        font-size: 1.7em;
+        margin: 0;
+        color: $fontColor;
+        padding: 4em 1% 4em 1%;
+    }
+    img {
+        height: 35em;
+    }
+}
+#testButton {
+    background-color: peachpuff;
+    font-size: 3.6em;
+    text-align: center;
+    height: 2em;
+    width: 60%;
+    @include whiteBorder();
+    border-radius: 20px;
+}
+#faq {
+    padding: 4em 0 2em 0;
+    div {
+        margin: 0 5% 4em 5%;
+        @include whiteBorder();
+        border-radius: 20px;
+        h2 {
+            color: $fontColor;
+            text-align: left;
+            font-size: 4em;
+            margin-left: 3%;    
+        }
+        p{
+            font-size: 1.7em;
+            margin: 0 0 0 3%;
+            color: $fontColor;
+        }
+    }
+}
+#participants {
+    padding: 4em 0 2em 0;
+    div {
+        margin: 0 5% 4em 5%;
+        @include whiteBorder();
+        border-radius: 20px;
+        h2 {
+            color: $fontColor;
+            text-align: left;
+            font-size: 4em;
+            margin-left: 3%;    
+        }
+        p{
+            font-size: 1.7em;
+            margin: 0 0 0 3%;
+            color: $fontColor;
+        }
+        img {
+            height: 25em;
+            margin-left: 3%;
+        }
+    }
+}
+
 /*checkout form*/
 /***********************************/
 #form {
-    text-align: center;
-    margin-bottom: 1em;
-    div {
+    padding-top: 4em;
+    input, select {
         text-align: left;
-        margin: 1em 0 1em 10%;
-    }
-    input {
+        margin: 0 0 1em 5%;
         display: block;
         font-size: 3.6em;
-        border-color: black;
+        @include whiteBorder();
+        border-radius: 20px;
+        background-color: white;
     }
     label {
+        color: $fontColor;
+        margin: 0 0 0 5%;
+        text-align: left;
         display: block;
         font-size: 3.6em;
-        font-weight: bold;    
+    }
+    h1 {
+        color: $fontColor;
+        text-align: center;
+        font-size: 5em;
+        margin: 0 10% 1em 10%;
     }
     h2 {
+        color: $fontColor;
         text-align: left;
         font-size: 4em;
-        margin-left: 6%;    
+        margin-left: 3%;    
     }
+    #shipping {
+        margin: 0 5% 4em 5%;
+        @include whiteBorder();
+        border-radius: 20px;
+    }
+    #payment {
+        margin: 0 5% 4em 5%;
+        @include whiteBorder();
+        border-radius: 20px;
+    }
+    #quantity {
+        margin: 0 5% 4em 5%;
+        @include whiteBorder();
+        border-radius: 20px;
+        label {
+            margin: 0 0 0 3%;
+            text-align: left;
+            display: block;
+            font-size: 4em;
+        }
+        input {
+            text-align: left;
+            font-size: 3.6em;
+            margin: 0 0 0 5%;
+            width: 20%;
+            @include whiteBorder();
+            border-radius: 20px;
+            touch-action: none;
+            display: inline-block;
+        }
+        #total {
+            font-size: 3.6em;
+            margin: 0 0 1em 5%;
+            font-weight: normal;
+        }
+    }
+}
+#contact {
+    margin: 0 5% 4em 5%;
+    @include whiteBorder();
+    border-radius: 20px;
+}
+#info {
+    height: 10em;
+}
+#order {
+    text-align: center;
+    padding-bottom: 4em;
     button {
-        margin: 1em 0 1em 0;
         background-color: peachpuff;
-        font-size: 3em;
+        font-size: 3.6em;
         text-align: center;
         height: 2em;
         width: 50%;
+        @include whiteBorder();
+        border-radius: 20px;
     }
 }
 /***********************************/
