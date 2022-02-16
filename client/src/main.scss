@@ -17,22 +17,19 @@ $headerSpace: 14em;
 /***********************************/
 body {
     margin: 0;
+    height: 100%;
+    font-family: helvetica;
 }
 /*remove blue highlighting from hyperlinks*/
 a {
     color: inherit;
     text-decoration: none;
 }
-/*primary div between header and footer*/
-#mainView {
-    display: block;
-}
 /***********************************/
 
 /*floating header*/
 /***********************************/
 header {
-    position: fixed;
     top:0;
     left:0;
     background-color: $primaryColor;
@@ -44,7 +41,7 @@ header {
     h1 {
         color: $primaryColor;
         font-size: 5em;
-        margin: 0 0 0 20%;
+        margin: 0;
         text-align: center;
         display: inline-block;
     }
@@ -52,20 +49,22 @@ header {
 }
 /*dropdown menu*/
 #dropdown {
-    position: absolute;
+    position: fixed;
     left: 0;
     display: inline-block;
-    height: 3.8em;
+    height: 100%;
 }
 /*content within dropdown menu*/
 #dropdownContent {
     /*hidden while mouse is not hovering over element*/
+    animation-duration: 0.1s;
+    animation-name: slideout;
     width: 100%;
+    height: 100%;
     text-align: left;
     background-color: $primaryColor;
     @include whiteBorder();
     border-bottom-style: none;
-    margin-top: 9.2em;
     h2 {
         color: $fontColor;
         display: block;
@@ -79,7 +78,39 @@ header {
         border-right-style: none;
         border-top-style: none;
     }
+    #close {
+        height: $headerSpace;
+        width: 100%;
+        margin: 0;
+        @include whiteBorder();
+        border-left-style: none;
+        border-right-style: none;
+        border-top-style: none;
+        img {
+            height: 9em;
+            float: right;
+            margin: 2em 8% 0 ;        
+        }
+    }
+    #end {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        @include whiteBorder();
+        border-left-style: none;
+        border-right-style: none;
+        border-top-style: none;
+        background-color: $primaryColor;
+    }
     z-index: 1;
+}
+@keyframes slideout {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
 }
 .dropdownContentOn {
     display: block;
@@ -93,9 +124,7 @@ header {
     /*parent is div fit to width, % cannot be used for horizontal spacing here*/
     margin-left: 2em;
     margin-top: 3.1em;
-    position: absolute;
-    left: 0;
-    top: 0;
+    float: left;
 }
 #logoIcon {
     margin: 0.5em 2em 0 0;
@@ -110,9 +139,6 @@ header {
     display: inline;
     height: 6em;
     margin: 1em 0.9% 0 0;
-}
-#headSpace {
-    height: $headerSpace;
 }
 /***********************************/
 

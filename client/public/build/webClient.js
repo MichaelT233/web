@@ -4,10 +4,16 @@ var __webpack_exports__ = {};
   !*** ./webClient.js ***!
   \**********************/
 function displayDropdown() {
-  if (document.getElementById('dropdownContent').className == 'dropdownContentOn') {
-    document.getElementById('dropdownContent').className = 'dropdownContentOff';
+  var dropdownContent = document.getElementById('dropdownContent');
+
+  if (dropdownContent.className == 'dropdownContentOn') {
+    dropdownContent.style.animationName = 'slidein';
+    dropdownContent.className = 'dropdownContentOff';
+    document.getElementById('menuIcon').style.display = 'block';
   } else {
-    document.getElementById('dropdownContent').className = 'dropdownContentOn';
+    dropdownContent.style.animationName = 'slideout';
+    dropdownContent.className = 'dropdownContentOn';
+    document.getElementById('menuIcon').style.display = 'none';
   }
 }
 
@@ -15,21 +21,20 @@ window.addEventListener('load', () => {
   document.getElementById('menuIcon').addEventListener('click', () => {
     displayDropdown();
   });
-  var dropdownContent = document.getElementById('dropdownContent');
-  dropdownContent.addEventListener('click', () => {
-    dropdownContent.className = 'dropdownContentOff';
-  });
-  document.getElementById('content').addEventListener('click', () => {
-    dropdownContent.className = 'dropdownContentOff';
-  });
-  var qSelect = document.getElementById('qSelect');
-  qSelect.addEventListener('click', () => {
-    qSelect.select();
+  document.getElementById('closeIcon').addEventListener('click', () => {
+    displayDropdown();
   });
 
-  qSelect.oninput = () => {
-    document.getElementById('total').innerHTML = document.getElementById('qSelect').value + "x";
-  };
+  if (location.pathname == '/membership') {
+    var qSelect = document.getElementById('qSelect');
+    qSelect.addEventListener('click', () => {
+      qSelect.select();
+    });
+
+    qSelect.oninput = () => {
+      document.getElementById('total').innerHTML = document.getElementById('qSelect').value + "x";
+    };
+  }
 });
 
 /******/ })()
