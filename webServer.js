@@ -27,9 +27,9 @@ app.get('/', (req, res) => {
         res.send(data)
     })
 })
-app.get('/membership', (req, res) => {
+app.get('/cart', (req, res) => {
     // read and serve html file
-    fs.readFile('client/doc/membership.html', 'utf8' , (err, data) => {
+    fs.readFile('client/doc/cart.html', 'utf8' , (err, data) => {
         if (err) {
             console.error(err)
             return
@@ -38,9 +38,9 @@ app.get('/membership', (req, res) => {
         res.send(data)
     })
 })
-app.get('/contact', (req, res) => {
+app.get('/checkout', (req, res) => {
     // read and serve html file
-    fs.readFile('client/doc/contact.html', 'utf8' , (err, data) => {
+    fs.readFile('client/doc/checkout.html', 'utf8' , (err, data) => {
         if (err) {
             console.error(err)
             return
@@ -49,9 +49,9 @@ app.get('/contact', (req, res) => {
         res.send(data)
     })
 })
-app.get('/faq', (req, res) => {
+app.get('/checkoutfinal', (req, res) => {
     // read and serve html file
-    fs.readFile('client/doc/faq.html', 'utf8' , (err, data) => {
+    fs.readFile('client/doc/checkoutFinal.html', 'utf8' , (err, data) => {
         if (err) {
             console.error(err)
             return
@@ -60,9 +60,20 @@ app.get('/faq', (req, res) => {
         res.send(data)
     })
 })
-app.get('/participants', (req, res) => {
+app.get('/product', (req, res) => {
     // read and serve html file
-    fs.readFile('client/doc/participants.html', 'utf8' , (err, data) => {
+    fs.readFile('client/doc/product.html', 'utf8' , (err, data) => {
+        if (err) {
+            console.error(err)
+            return
+        }
+        res.type('html')
+        res.send(data)
+    })
+})
+app.get('/about', (req, res) => {
+    // read and serve html file
+    fs.readFile('client/doc/about.html', 'utf8' , (err, data) => {
         if (err) {
             console.error(err)
             return
