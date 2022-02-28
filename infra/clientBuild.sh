@@ -17,7 +17,7 @@ function buildJS {
 # transpile styleDev.scss into plain css and save in dist folder (omitting source map file creation and comments (compressed))
 function buildCSS {
     cat ./client/src/*.scss >> bundle.scss
-    npx sass --style=compressed --no-source-map ./bundle.scss ./client/public/build/style.css
+    npx sass --style=compressed --no-source-map ./bundle.scss ./client/public/css/style.css
     rm bundle.scss
     echo 'sass transpile complete'
 }
