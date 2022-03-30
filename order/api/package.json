@@ -1,0 +1,13 @@
+{
+    "name": "express-cart-api",
+    "version": "1.0.0",
+    "dependencies": {
+        "express": "^4.17.2",
+        "mongodb": "^4.4.1"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.13",
+        "@types/node": "^17.0.21",
+        "typescript": "^4.6.2"
+    }
+}
