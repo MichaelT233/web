@@ -2,4 +2,6 @@
 /*/*/node_modules
 /*/main.js
 /*/*/main.js
+/*/*.js
+/*/*/*.js
 /server/public/js
