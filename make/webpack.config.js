@@ -4,12 +4,10 @@ module.exports = {
     mode: 'development',
     devtool: false,
     entry: {
-        cartFrontend: '../cart/cart-frontend.js',
-        productFrontend: '../product/product-frontend.js',
-        checkoutFrontend: '../checkout/checkout-frontend.js'
+        productFrontend: '../product/fe/main.js'
     },
     output: {
         path: path.resolve(__dirname, '../server/public/js'),
-        filename: 'bundle.js',
+        filename: 'productBundle.js',
     },
 }
