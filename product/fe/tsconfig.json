@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "sourceMap": false,
+      "jsx": "react"
+    },
+    "files": [
+        "fe-factory.tsx",
+        "main.ts"
+    ]
+}
+  
