@@ -9,7 +9,7 @@ VALUES
     ('0002', 14, 'Toys', 'Classic Stacking Ring Toy, Baby Learning Game', 16.89, FALSE, '/img/product/stackingrings.jpg'),
     ('0003', 0, 'Toys', 'Newton''s Cradle, Pendulum Balance Art', 25.14, FALSE, '/img/product/newtonscradle.jpg'),
     ('0004', 28, 'Toys', 'Inflatable Flamingo Pool Float, Swim Party Toy', 31.43, TRUE, '/img/product/poolfloat.jpg'),
-    ('0005', 142, 'Toys', 'Reversible Octopus Plushie, Happy + Angry', 5.14, TRUE, '/img/product/octopustoy.jpg'),
+    ('0005', 142, 'Toys', 'Reversible Octopus Plushie, Happy or Angry', 5.14, TRUE, '/img/product/octopustoy.jpg'),
     ('0006', 98, 'Toys', 'Assorted Rubber Ducks With Bathtub, Bath Time Toy', 10.21, FALSE, '/img/product/rubberducks.jpg'),
     ('0007', 0, 'Toys', 'Soft Stuffed Bear With Bowtie Toy', 24.96, FALSE, '/img/product/teddybear.jpg'),
     ('0008', 4, 'Toys', 'Classic World Pull Along Walking Toys, Wooden Pull Dog Toy for Baby Toddler', 25.09, TRUE, '/img/product/pulldogtoy.jpg'),
