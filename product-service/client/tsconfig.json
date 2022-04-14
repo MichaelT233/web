@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "sourceMap": false,
+      "jsx": "react"
+    },
+    "files": [
+        "./api/restClient.ts",
+        "./state/selector.ts",
+        "./state/sliceReducer.ts",
+        "./ui/component.tsx"
+    ]
+}
+  

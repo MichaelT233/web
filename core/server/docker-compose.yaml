@@ -1,0 +1,69 @@
+version: "3.9"
+services:
+  # web server
+  #===============================#
+  web-server:
+    image: web-server:latest
+    ports: 
+      - "80:80"
+      #- "443:443"
+    depends_on:
+      - product-server
+      #- cart-server
+    restart: unless-stopped
+  #===============================#
+  # message broker
+  #===============================#
+  #message-broker:
+  #  image: rabbitmq:latest
+  #  expose:
+  #    - "5672"
+  #  restart: unless-stopped
+  #  environment:
+  #    - RABBITMQ_DEFAULT_USER=mqu
+  #    - RABBITMQ_DEFAULT_PASS=mqp
+  #===============================#
+  # product service
+  #===============================#
+  product-server:
+    image: product-server:latest
+    expose: 
+      - "80"
+    depends_on:
+  #    - message-broker
+      - product-database
+    restart: unless-stopped
+  product-database:
+    image: postgres:latest
+    expose:
+      - "5432"
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=7sfEkfYS5WyNNE2P
+      - POSTGRES_USER=adapter
+      - POSTGRES_DB=products
+  #  volumes:
+  #    - product-db-store:/var/lib/postgresql/data
+  #===============================#
+  # cart service
+  #===============================#
+  #cart-server:
+  #  image: cart-server:latest
+  #  expose: 
+  #    - "80"
+  #  depends_on:
+  #  #  - message-broker
+  #    - cart-database
+  #  restart: unless-stopped
+  #cart-database:
+  #  image: mongo:latest
+  #  expose:
+  #    - "27017"
+  #  environment:
+  #    - MONGO_INITDB_ROOT_USERNAME=testu
+  #    - MONGO_INITDB_ROOT_PASSWORD=testpw
+  #    - MONGO_INITDB_DATABASE=cart
+  #  restart: unless-stopped
+  #===============================#
+#volumes:
+#  product-db-store:

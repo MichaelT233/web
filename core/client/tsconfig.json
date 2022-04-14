@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "sourceMap": false,
+      "jsx": "react"
+    },
+    "files": [
+        "./app-shell/shell.tsx",
+        "./state-container/store.ts",
+        "main.ts"
+    ]
+}
+  

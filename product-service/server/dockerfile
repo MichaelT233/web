@@ -1,0 +1,6 @@
+FROM node
+WORKDIR /usr/src/product-server
+COPY package*.json ./
+RUN npm install
+COPY . .
+CMD ["node", "api/restServer.js"]
