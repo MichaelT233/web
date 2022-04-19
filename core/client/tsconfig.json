@@ -7,9 +7,9 @@
       "jsx": "react"
     },
     "files": [
-        "./app-shell/shell.tsx",
+        "./ui-shell/shell.tsx",
         "./state-container/store.ts",
-        "main.ts"
+        "./ui-shell/init.ts"
     ]
 }
   
