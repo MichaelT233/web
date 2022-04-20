@@ -8,8 +8,8 @@
     },
     "files": [
         "./ui-shell/shell.tsx",
-        "./state-container/store.ts",
-        "./ui-shell/init.ts"
+        "./router/router.ts",
+        "init.ts"
     ]
 }
   
