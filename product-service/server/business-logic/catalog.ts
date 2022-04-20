@@ -16,7 +16,7 @@ export class Catalog {
         return data;
     }
     async provideSearch(text: string): Promise<any[]> {
-        const data = await database.getCategory(text);
+        const data = await database.getSearch(text);
         return data;
     }
 }

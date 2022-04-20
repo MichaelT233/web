@@ -4,7 +4,7 @@ import { Catalog } from "../business-logic/catalog";
 const server = express();
 const catalog = new Catalog();
 
-server.get("/product", (req, res) => {
+server.get("/item", (req, res) => {
     (async () => {
         const result = await catalog.provideProduct(req.query.id as string);
         res.type("json");
