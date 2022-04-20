@@ -1,4 +1,4 @@
-import { databaseAdapter } from '../db/databaseAdapter'
+import { databaseAdapter } from '../database/databaseAdapter'
 
 const database = new databaseAdapter();
 
