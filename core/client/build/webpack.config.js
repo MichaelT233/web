@@ -3,11 +3,9 @@ const path = require('path')
 module.exports = {
     mode: 'development',
     devtool: false,
-    entry: {
-        productFrontend: 'main.js'
-    },
+    entry: '../init.js',
     output: {
-        path: path.resolve(__dirname, '../server/public/js'),
-        filename: 'productBundle.js',
+        path: path.resolve(__dirname, '../../server/gateway/public/js'),
+        filename: 'client.js',
     },
 }

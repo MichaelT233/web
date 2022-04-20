@@ -1,9 +1,9 @@
 version: "3.9"
 services:
-  # web server
+  # gateway
   #===============================#
-  web-server:
-    image: web-server:latest
+  gateway:
+    image: gateway:latest
     ports: 
       - "80:80"
       #- "443:443"

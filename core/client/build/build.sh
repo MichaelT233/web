@@ -1,6 +1,8 @@
 #!/bin/bash
+cd ..
 npx tsc
+cd build
 npx webpack
-cd ../server
-docker build . -t web-server:latest
+cd ../../server/gateway
+docker build . -t gateway:latest
 docker-compose up -d
