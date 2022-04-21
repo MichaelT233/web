@@ -1,5 +1,8 @@
+/*/node_modules
 /*/*/node_modules
 /*/*/*/node_modules
+/*/*.js
+/*/*/*.js
 /*/*/*/*.js
-!/*/*/*/webpack.config.js
-core/server/gateway/public/js
+!client/webpack.config.js
+server/core/gateway/public/js

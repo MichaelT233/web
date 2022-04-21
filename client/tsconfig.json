@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "sourceMap": false,
+      "jsx": "react",
+      "esModuleInterop": true
+    },
+    "files": [
+        "init.tsx",
+        "core/router/router.tsx",
+        "core/ui-shell/shell.tsx",
+        "product-client/api/restClient.ts",
+        "product-client/ui/component.tsx"
+    ]
+}
+  

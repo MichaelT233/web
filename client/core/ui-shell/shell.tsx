@@ -1,5 +1,5 @@
 import * as React from "react";
-function Header() {
+export function Header() {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
@@ -23,22 +23,27 @@ function Header() {
                             Categories
                             </div>
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><div className="dropdown-item" onClick={()=>store.dispatch({type:"clickCategory", params:["featured", "TRUE"]})}>Featured</div></li>
+                                <li><div className="dropdown-item" onClick={()=>console.log("test")}>Featured</div></li>
                                 <li><hr className="dropdown-divider"/></li>
-                                <li><div className="dropdown-item" onClick={()=>store.dispatch({type:"clickCategory", params:["category", "Home Decor"]})}>Home Decor</div></li>
+                                <li><div className="dropdown-item" onClick={()=>console.log("test")}>Home Decor</div></li>
                                 <li><hr className="dropdown-divider"/></li>
-                                <li><div className="dropdown-item" onClick={()=>store.dispatch({type:"clickCategory", params:["category", "Beauty"]})}>Beauty</div></li>
+                                <li><div className="dropdown-item" onClick={()=>console.log("test")}>Beauty</div></li>
                                 <li><hr className="dropdown-divider"/></li>
-                                <li><div className="dropdown-item" onClick={()=>store.dispatch({type:"clickCategory", params:["category", "Toys"]})}>Toys</div></li>
+                                <li><div className="dropdown-item" onClick={()=>console.log("test")}>Toys</div></li>
                             </ul>
                         </li>
                     </ul>
                     <form className="d-flex">
                         <input id="searchBar" className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                        <button className="btn btn-outline-dark" type="button" onClick={()=>store.dispatch({type:"search",params:["title", (document.getElementById("searchBar") as HTMLInputElement).value]})}>Search</button>
+                        <button className="btn btn-outline-dark" type="button" onClick={()=>console.log("test")}>Search</button>
                     </form>
                 </div>
             </div>
         </nav>
+    );
+}
+export function Footer() {
+    return (
+        <div>test</div>
     );
 }
