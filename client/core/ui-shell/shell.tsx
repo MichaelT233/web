@@ -28,7 +28,7 @@ export function Header() {
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <Link to="/"><li><div className="dropdown-item">Featured</div></li></Link>
                                 <li><hr className="dropdown-divider"/></li>
-                                <Link to="/category/HomeDecor"><li><div className="dropdown-item">Home Decor</div></li></Link>
+                                <Link to="/category/Home Decor"><li><div className="dropdown-item">Home Decor</div></li></Link>
                                 <li><hr className="dropdown-divider"/></li>
                                 <Link to="/category/Beauty"><li><div className="dropdown-item">Beauty</div></li></Link>
                                 <li><hr className="dropdown-divider"/></li>
