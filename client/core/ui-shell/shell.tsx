@@ -1,5 +1,8 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
 export function Header() {
+    let navigate = useNavigate();
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
@@ -23,19 +26,19 @@ export function Header() {
                             Categories
                             </div>
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><div className="dropdown-item" onClick={()=>console.log("test")}>Featured</div></li>
+                                <Link to="/"><li><div className="dropdown-item">Featured</div></li></Link>
                                 <li><hr className="dropdown-divider"/></li>
-                                <li><div className="dropdown-item" onClick={()=>console.log("test")}>Home Decor</div></li>
+                                <Link to="/category/HomeDecor"><li><div className="dropdown-item">Home Decor</div></li></Link>
                                 <li><hr className="dropdown-divider"/></li>
-                                <li><div className="dropdown-item" onClick={()=>console.log("test")}>Beauty</div></li>
+                                <Link to="/category/Beauty"><li><div className="dropdown-item">Beauty</div></li></Link>
                                 <li><hr className="dropdown-divider"/></li>
-                                <li><div className="dropdown-item" onClick={()=>console.log("test")}>Toys</div></li>
+                                <Link to="/category/Toys"><li><div className="dropdown-item">Toys</div></li></Link>
                             </ul>
                         </li>
                     </ul>
                     <form className="d-flex">
                         <input id="searchBar" className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                        <button className="btn btn-outline-dark" type="button" onClick={()=>console.log("test")}>Search</button>
+                        <button onClick={()=>navigate(`/search/${(document.getElementById("searchBar") as HTMLInputElement).value}`)} className="btn btn-outline-dark" type="button">Search</button>
                     </form>
                 </div>
             </div>

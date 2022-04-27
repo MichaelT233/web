@@ -1,24 +1,15 @@
-import React from "react";
-//import { Link, useParams } from "react-router-dom";
-import { useQuery, QueryClient, QueryClientProvider } from "react-query";
-import { getProduct } from "../api/restClient"
+import React, {useEffect, useState} from "react";
+import { Link, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { RestClient } from "../api/restClient"
 
+const restClient = new RestClient(); 
 
-const queryClient = new QueryClient();
-
-export function Test() {
-    return (
-        <QueryClientProvider client={queryClient}>
-            <Product/>
-        </QueryClientProvider>
-    );
-}
-
-export function Product() {
-    //let { id } = useParams();
-    const { isLoading, error, data } = useQuery('productData', ()=>getProduct("0019"))
+export function Item() {
+    let { id } = useParams();
+    const { isLoading, error, data } = useQuery(id, ()=>restClient.getProduct(id))
     if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error</div>;;
+    if (error) return <div>Error</div>;
     return(
         <div className="container-fluid">
             <div className="row border-bottom border-muted">
@@ -45,10 +36,34 @@ export function Product() {
         </div>
     );
 }
+export function Category() {
+    let { category } = useParams();
+    const { isLoading, error, data } = useQuery(category, ()=>restClient.getCategory(category));
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error</div>;
+    return (
+        <Listing {...data} />
+    );
+}
+export function Featured() {
+    const { isLoading, error, data } = useQuery('featured', ()=>restClient.getFeatured());
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error</div>;
+    return (
+        <Listing {...data}/>
+    );
+}
+export function Search() {
+    let { text } = useParams();
+    const { isLoading, error, data } = useQuery(text, ()=>restClient.getSearch(text));
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error</div>;
+    return (
+        <Listing {...data}/>
+    );
+}
 
-/*
-export function Listing() {
-    let { query } = useParams();
+function Listing(props) {
     const entryCount = Object.keys(props).length;
     return (
         <div className="container-fluid">
@@ -75,13 +90,12 @@ export function Listing() {
         </div>
     );
 }
-
 function ListingEntry(props) {
     return (
-        <Link to={`product/${props.id}`}>
-            <div className="col-md border border-muted rounded m-1 d-flex align-items-center text-dark" onClick={()=>console.log("test")}>
+        <Link to={`/item/${props.id}`}>
+            <div className="col-md border border-muted rounded m-1 d-flex align-items-center text-dark">
                 <div className="d-flex align-items-center justify-content-center bg-light px-3" style={{height:"270px", width: "270px"}}>
-                    <img className="rounded img-fluid h-auto" src={props.imagePath} style={{width:"200px"}}/>
+                    <img className="rounded img-fluid h-auto" src={props.image_path} style={{width:"200px"}}/>
                 </div>
                 <div className="ms-3 w-50">
                     <h5>{props.title}</h5>
@@ -92,4 +106,3 @@ function ListingEntry(props) {
         </Link>
     );
 }
-*/

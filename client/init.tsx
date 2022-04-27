@@ -1,7 +1,7 @@
-import { Test } from "./product-client/ui/component";
+import { Router } from "./core/router/router";
 import React from "react";
 import * as ReactDOM from 'react-dom';
 
 window.onload = () => {
-    ReactDOM.render(<Test/>, document.getElementById('root'));
+    ReactDOM.render(<Router/>, document.getElementById('root'));
 }

@@ -4,21 +4,29 @@ import {
     Route,
 } from "react-router-dom";
 import React from "react";
-import { Header, Footer } from "../ui-shell/shell";
-import { Product} from "../../product-client/ui/component";
+import { Header, Footer } from "../ui-shell/shell"
+import * as Product from "../../product-client/ui/component";
+import { QueryClient, QueryClientProvider } from "react-query";
 
-function Router() {
+const queryClient = new QueryClient();
+
+export function Router() {
     return (
 		<BrowserRouter>
-			<div>
-				<Header/>
+			<QueryClientProvider client={queryClient}>
 				<div>
-					<Routes>
-						<Route path="product/:id" children={<Product />} />
-					</Routes>
+					<Header />
+					<div>
+						<Routes>
+							<Route path ="/" element={<Product.Featured />} />
+							<Route path="/category/:category" element={<Product.Category />} />
+							<Route path="/search/:text" element={<Product.Search />} />
+							<Route path="/item/:id" element={<Product.Item />} />
+						</Routes>
+					</div>
+					<Footer />
 				</div>
-				<Footer/>
-			</div>
+			</QueryClientProvider>
 		</BrowserRouter>
     );
 }
