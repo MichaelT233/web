@@ -55,15 +55,15 @@ services:
   #  #  - message-broker
   #    - cart-database
   #  restart: unless-stopped
-  #cart-database:
-  #  image: mongo:latest
-  #  expose:
-  #    - "27017"
-  #  environment:
-  #    - MONGO_INITDB_ROOT_USERNAME=testu
-  #    - MONGO_INITDB_ROOT_PASSWORD=testpw
-  #    - MONGO_INITDB_DATABASE=cart
-  #  restart: unless-stopped
+  cart-database:
+    image: mongo:latest
+    expose:
+      - "27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=adapter
+      - MONGO_INITDB_ROOT_PASSWORD=a9snJYSsDm8rSAHG
+      - MONGO_INITDB_DATABASE=order
+    restart: unless-stopped
   #===============================#
 #volumes:
 #  product-db-store:

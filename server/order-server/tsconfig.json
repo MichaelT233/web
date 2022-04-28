@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "sourceMap": false,
+    },
+    "files": [
+      "./api/restServer.ts",
+      "./business-logic/cart.ts",
+      "./database/databaseAdapter.ts"
+    ]
+}
