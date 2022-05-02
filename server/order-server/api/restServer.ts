@@ -4,46 +4,93 @@ import { Cart } from "../business-logic/cart";
 const server = express();
 const cart = new Cart();
 
-server.get("/create", (req, res) => {
+(async () => {
+    const init = await cart.init();
+    if (init == true) {
+        console.log("database initialized")
+    }
+    else {
+        console.log("database error")
+    }
+})();
+
+server.post("/create/:token", (req, res) => {
     (async () => {
-        const result = await cart.create(req.query.token as string, JSON.parse(req.query.entry as string));
+        const result = await cart.create(req.params.token);
         res.type("json");
-        res.send(result);
+        if (result == true) {
+            res.status(200).send({result: "success"});
+        }
+        else {
+            res.status(500).send({error: "server error"})
+        }
     })();
 });
-server.get("/add", (req, res) => {
+server.delete("/delete/:token", (req, res) => {
     (async () => {
-        const result = await cart.addItem(req.query.token as string, JSON.parse(req.query.entry as string));
+        const result = await cart.delete(req.params.token);
         res.type("json");
-        res.send(result);
+        if (result == true) {
+            res.status(200).send({result: "success"});
+        }
+        else {
+            res.status(500).send({error: "server error"})
+        }
     })();
 });
-server.get("/delete", (req, res) => {
+server.put("/additem/:token/:id/:quantity", (req, res) => {
     (async () => {
-        const result = await cart.deleteItem(req.query.token as string, req.query.id as string);
+        const result = await cart.addItem(req.params.token, req.params.id, parseInt(req.params.quantity));
         res.type("json");
-        res.send(result);
+        if (result == true) {
+            res.status(200).send({result: "success"});
+        }
+        else {
+            res.status(500).send({error: "server error"})
+        }    
     })();
 });
-server.get("/inc", (req, res) => {
+server.put("/deleteitem/:token/:id", (req, res) => {
     (async () => {
-        const result = await cart.incItem(req.query.token as string, req.query.id as string);
+        const result = await cart.deleteItem(req.params.token, req.params.id);
         res.type("json");
-        res.send(result);
+        if (result == true) {
+            res.status(200).send({result: "success"});
+        }
+        else {
+            res.status(500).send({error: "server error"})
+        }    
     })();
 });
-server.get("/dec", (req, res) => {
+server.put("/inc/:token/:id", (req, res) => {
     (async () => {
-        const result = await cart.decItem(req.query.token as string, req.query.id as string);
+        const result = await cart.incItem(req.params.token, req.params.id);
         res.type("json");
-        res.send(result);
+        if (result == true) {
+            res.status(200).send({result: "success"});
+        }
+        else {
+            res.status(500).send({error: "server error"})
+        }    
     })();
 });
-server.get("/read", (req, res) => {
+server.put("/dec/:token/:id", (req, res) => {
     (async () => {
-        const result = await cart.read(req.query.token as string);
+        const result = await cart.decItem(req.params.token, req.params.id);
         res.type("json");
-        res.send(result);
+        if (result == true) {
+            res.status(200).send({result: "success"});
+        }
+        else {
+            res.status(500).send({error: "server error"})
+        }    
+    })();
+});
+server.get("/read/:token", (req, res) => {
+    (async () => {
+        const result = await cart.read(req.params.token);
+        res.type("json");
+        res.send(result); 
     })();
 });
 
