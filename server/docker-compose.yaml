@@ -9,7 +9,7 @@ services:
       #- "443:443"
     depends_on:
       - product-server
-      #- cart-server
+      - order-server
     restart: unless-stopped
   #===============================#
   # message broker
@@ -47,15 +47,15 @@ services:
   #===============================#
   # cart service
   #===============================#
-  #cart-server:
-  #  image: cart-server:latest
-  #  expose: 
-  #    - "80"
-  #  depends_on:
-  #  #  - message-broker
-  #    - cart-database
-  #  restart: unless-stopped
-  cart-database:
+  order-server:
+    image: order-server:latest
+    expose: 
+      - "80"
+    depends_on:
+    #  - message-broker
+      - order-database
+    restart: unless-stopped
+  order-database:
     image: mongo:latest
     expose:
       - "27017"
