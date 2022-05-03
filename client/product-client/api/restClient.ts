@@ -13,7 +13,7 @@ type Props = {
 export class RestClient {
 	async getProduct(id: string) {
 		try {
-			const response = await axios.get(`/product/item?id=${id}`);
+			const response = await axios.get(`/product/item/${id}`);
 			const props: Props = response.data[0];
 			return props;
 		} 
@@ -23,7 +23,7 @@ export class RestClient {
 	}
 	async getCategory(category: string) {
 		try {
-			const response = await axios.get(`/product/category?category=${category}`);
+			const response = await axios.get(`/product/category/${category}`);
 			const props: Props = response.data;
 			return props;
 		} 
@@ -43,7 +43,7 @@ export class RestClient {
 	}
 	async getSearch(text: string) {
 		try {
-			const response = await axios.get(`/product/search?text=${text}`);
+			const response = await axios.get(`/product/search/${text}`);
 			const props: Props = response.data;
 			return props;
 		} 
