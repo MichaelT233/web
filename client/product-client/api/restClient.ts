@@ -65,7 +65,15 @@ export class ProductClient {
             }
             const list = idArray.join();
 			const response = await axios.get(`/product/many/${list}`);
-			return {products: response.data, quantities: quantityArray};
+            const result = [];
+            for (const product of response.data) {
+                for (const entry of cart.data.items) {
+                    if (entry.id == product.id) {
+                        result.push({product: product, quantity: entry.quantity});
+                    }
+                }
+            }
+			return result;
 		} 
 		catch (e) {
 			console.error(e);
