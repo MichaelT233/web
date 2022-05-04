@@ -8,7 +8,7 @@ const client = new ProductClient();
 export function Category() {
     let { category } = useParams();
     const { isLoading, error, data } = useQuery(category, ()=>client.getCategory(category));
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Spinner />;
     if (error) return <div>Error</div>;
     return (
         <CatalogListing data={data}/>
@@ -16,7 +16,7 @@ export function Category() {
 }
 export function Featured() {
     const { isLoading, error, data } = useQuery('featured', ()=>client.getFeatured());
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Spinner />;
     if (error) return <div>Error</div>;
     return (
         <CatalogListing data={data}/>
@@ -25,7 +25,7 @@ export function Featured() {
 export function Search() {
     let { text } = useParams();
     const { isLoading, error, data } = useQuery(text, ()=>client.getSearch(text));
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Spinner />;
     if (error) return <div>Error</div>;
     return (
         <CatalogListing data={data}/>
@@ -72,6 +72,15 @@ function CatalogEntry(props) {
                 <p>${data.price}</p>
                 <p>{data.stock} in stock</p>
                 <Link to={`/item/${data.id}`} className="btn btn-outline-dark" type="button">View</Link>
+            </div>
+        </div>
+    );
+}
+export function Spinner() {
+    return (
+        <div className="d-flex justify-content-center">
+            <div className="spinner-border text-dark my-5" role="status" style={{width: "200px", height: "200px"}}>
+                <span className="visually-hidden">Loading...</span>
             </div>
         </div>
     );

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useQuery, useQueryClient, useIsFetching, useMutation } from "react-query";
 import { OrderClient } from "../api/restClient.js"
 import { ProductClient } from "../../product-client/api/restClient.js"
+import { Spinner } from "../../product-client/ui/component.js"
 
 const orderClient = new OrderClient();
 const productClient = new ProductClient();
@@ -22,14 +23,14 @@ export function Item() {
         await orderClient.addItem("test", id, quantity);
         queryClient.refetchQueries(id);
     }
-    if (productLoad || add.isLoading) return <div>Loading...</div>;
+    if (productLoad || add.isLoading) return <Spinner />;
     if (productError || add.error) return <div>Error</div>;
     const data = productData;
     return(
         <div className="container-fluid">
             <div className="row border-bottom border-muted">
                 <div className="col-md d-flex align-items-center justify-content-center bg-light px-3 w-100 mt-1" style={{height: "400px"}}>    
-                    <img className="rounded img-fluid h-auto" src={data.image_path} style={{width:"200px"}}/>
+                    <img className="rounded img-fluid h-auto" src={data.image_path} style={{width:"300px"}}/>
                 </div>
                 <div className="col-md rounded d-flex align-items-center">
                     <div className="mt-1">
@@ -60,7 +61,7 @@ export function CartListing() {
     }
     const { isLoading, isFetching, error, data } = useQuery(token, ()=>productClient.getCartProducts(token));
     const del = useMutation((id: string)=>mutation(id));
-    if (isLoading || isFetching || del.isLoading ) return <div>Loading...</div>;
+    if (isLoading || isFetching || del.isLoading ) return <Spinner />;
     if (error || del.error) return <div>Error</div>;
     if (data == false) return <div>Cart is empty</div>
     const products = data.products;
