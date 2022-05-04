@@ -36,10 +36,10 @@ export function Header() {
                             </ul>
                         </li>
                     </ul>
-                    <form className="d-flex">
+                    <div className="d-flex">
                         <input id="searchBar" className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
                         <button onClick={()=>navigate(`/search/${(document.getElementById("searchBar") as HTMLInputElement).value}`)} className="btn btn-outline-dark" type="button">Search</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -47,6 +47,15 @@ export function Header() {
 }
 export function Footer() {
     return (
-        <div>test</div>
+        <div className="container">
+            <footer className="py-3 my-4">
+                <ul className="nav justify-content-center border-bottom pb-3 mb-3">
+                    <li className="nav-item"><a href="#" className="nav-link px-2 text-muted">Home</a></li>
+                    <li className="nav-item"><a href="#" className="nav-link px-2 text-muted">Contact</a></li>
+                    <li className="nav-item"><a href="#" className="nav-link px-2 text-muted">About</a></li>
+                </ul>
+                <p className="text-center text-muted">Michael Thiele</p>
+            </footer>
+        </div>
     );
 }
