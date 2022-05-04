@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export class RestClient {
+export class OrderClient {
 	async create(token: string) {
 		try {
 			const response = await axios.post(`/cart/create/${token}`);
@@ -14,21 +14,6 @@ export class RestClient {
 		try {
 			const response = await axios.delete(`/cart/delete/${token}`);
 			return response.status;
-		} 
-		catch (e) {
-			console.error(e);
-		}
-	}
-    async getProductData(token: string) {
-		try {
-            const cart = await this.read(token);
-            const idArray: string[] = [];
-            for (const entry of cart.items) {
-                idArray.push(`'${entry.id}'`);
-            }
-            const list = idArray.join();
-			const response = await axios.get(`/product/many/${list}`);
-			return response.data;
 		} 
 		catch (e) {
 			console.error(e);
