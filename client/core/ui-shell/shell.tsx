@@ -3,6 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 
 export function Header() {
     let navigate = useNavigate();
+    function getDomText() {
+        const text = (document.getElementById("searchBar") as HTMLInputElement).value;
+        return text;
+    }
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
@@ -38,7 +42,7 @@ export function Header() {
                     </ul>
                     <div className="d-flex">
                         <input id="searchBar" className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                        <button onClick={()=>navigate(`/search/${(document.getElementById("searchBar") as HTMLInputElement).value}`)} className="btn btn-outline-dark" type="button">Search</button>
+                        <button onClick={()=>navigate(`/search/${getDomText()}`)} className="btn btn-outline-dark" type="button">Search</button>
                     </div>
                 </div>
             </div>
