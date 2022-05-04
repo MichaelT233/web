@@ -144,7 +144,12 @@ export class Cart {
     }
     async read(token: string) {
         const current = await this.coll.findOne({ token: token });
-        return current;
+        if (current != null) {
+            if (current.items.length > 0) {
+                return current;
+            }
+        }
+        return false;
     }
     private async isInCart(token: string, id: string) {
         const current = await this.coll.findOne({ token: token });
