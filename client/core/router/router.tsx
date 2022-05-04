@@ -1,5 +1,5 @@
 import {
-    BrowserRouter,
+    HashRouter,
     Routes,
     Route,
 } from "react-router-dom";
@@ -13,7 +13,7 @@ const queryClient = new QueryClient();
 
 export function Router() {
     return (
-		<BrowserRouter>
+		<HashRouter>
 			<QueryClientProvider client={queryClient}>
 				<div>
 					<Header />
@@ -29,6 +29,6 @@ export function Router() {
 					<Footer />
 				</div>
 			</QueryClientProvider>
-		</BrowserRouter>
+		</HashRouter>
     );
 }
