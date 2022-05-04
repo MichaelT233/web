@@ -13,6 +13,7 @@
         "core/ui-shell/shell.tsx",
         "product-client/api/restClient.ts",
         "product-client/ui/component.tsx",
+        "order-client/ui/component.tsx",
         "order-client/api/restClient.ts"
     ]
 }
