@@ -10,7 +10,7 @@ type Props = {
 	image_path: string;
 }
 
-export class RestClient {
+export class ProductClient {
 	async getProduct(id: string) {
 		try {
 			const response = await axios.get(`/product/item/${id}`);
@@ -49,6 +49,26 @@ export class RestClient {
 		} 
 		catch (error) {
 			console.error(error);
+		}
+	}
+    async getCartProducts(token: string) {
+		try {
+            const cart = await axios.get(`/cart/read/${token}`);
+            if (cart.data.message == "empty") {
+                return false;
+            } 
+            const idArray: string[] = [];
+            const quantityArray: number[] = [];
+            for (const entry of cart.data.items) {
+                idArray.push(`'${entry.id}'`);
+                quantityArray.push(entry.quantity)
+            }
+            const list = idArray.join();
+			const response = await axios.get(`/product/many/${list}`);
+			return {products: response.data, quantities: quantityArray};
+		} 
+		catch (e) {
+			console.error(e);
 		}
 	}
 }
