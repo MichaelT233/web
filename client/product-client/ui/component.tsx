@@ -7,16 +7,16 @@ const client = new ProductClient();
 
 export function Category() {
     let { category } = useParams();
-    const { isLoading, error, data } = useQuery(category, ()=>client.getCategory(category));
-    if (isLoading) return <Spinner />;
+    const { isLoading, isFetching, error, data } = useQuery(category, ()=>client.getCategory(category));
+    if (isLoading || isFetching) return <Spinner />;
     if (error) return <div>Error</div>;
     return (
         <CatalogListing data={data}/>
     );
 }
 export function Featured() {
-    const { isLoading, error, data } = useQuery('featured', ()=>client.getFeatured());
-    if (isLoading) return <Spinner />;
+    const { isLoading, isFetching, error, data } = useQuery('featured', ()=>client.getFeatured());
+    if (isLoading || isFetching) return <Spinner />;
     if (error) return <div>Error</div>;
     return (
         <CatalogListing data={data}/>
@@ -24,8 +24,8 @@ export function Featured() {
 }
 export function Search() {
     let { text } = useParams();
-    const { isLoading, error, data } = useQuery(text, ()=>client.getSearch(text));
-    if (isLoading) return <Spinner />;
+    const { isLoading, isFetching, error, data } = useQuery(text, ()=>client.getSearch(text));
+    if (isLoading || isFetching) return <Spinner />;
     if (error) return <div>Error</div>;
     return (
         <CatalogListing data={data}/>
@@ -35,28 +35,36 @@ export function Search() {
 function CatalogListing(props) {
     const data = props.data;
     const entryCount = data.length;
+    const rows= [];
+    // if single product
+    if (entryCount == 1) {
+        rows.push([data[0]]);
+    }
+    // if multiple products
+    else {
+        var i = 0;
+        // iterate array
+        while (i  < (entryCount)) {
+            // if on last element
+            if (i == (entryCount - 1)) {
+                // insert single product and exit while loop;
+                rows.push([data[i]]);
+                break;
+            }
+            // insert current pair of products
+            rows.push([data[i], data[i + 1]])
+            // move index up by two
+            i += 2;
+        }
+    }
+    const listing = rows.map((row)=>
+        <div className="row" key={`row${row[0].id}`}>
+            {row.map((data)=><CatalogEntry data={data} key={data.id}/>)}
+        </div>
+    );
     return (
         <div className="container-fluid">
-            <div className="row">
-                <CatalogEntry data={data[0]}/>
-                {entryCount > 1 && <CatalogEntry data={data[1]}/>}
-            </div>
-            <div className="row">
-                {entryCount > 2 && <CatalogEntry data={data[2]}/>}
-                {entryCount > 3 && <CatalogEntry data={data[3]}/>}
-            </div>
-            <div className="row">
-                {entryCount > 4 && <CatalogEntry data={data[4]}/>}
-                {entryCount > 5 && <CatalogEntry data={data[5]}/>}
-            </div>
-            <div className="row">
-                {entryCount > 6 && <CatalogEntry data={data[6]}/>}
-                {entryCount > 7 && <CatalogEntry data={data[7]}/>}
-            </div>
-            <div className="row">
-                {entryCount > 8 && <CatalogEntry data={data[8]}/>}
-                {entryCount > 9 && <CatalogEntry data={data[9]}/>}
-            </div>
+            {listing}
         </div>
     );
 }
@@ -65,7 +73,7 @@ function CatalogEntry(props) {
     return (
         <div className="col-md border border-muted rounded m-1 d-flex align-items-center text-dark">
             <div className="d-flex align-items-center justify-content-center bg-light px-3" style={{height:"270px", width: "270px"}}>
-                <img className="rounded img-fluid h-auto" src={data.image_path} style={{width:"200px"}}/>
+                <img className="rounded" src={data.image_path} style={{height:"200px", width:"200px"}}/>
             </div>
             <div className="ms-3 w-50">
                 <h5>{data.title}</h5>
