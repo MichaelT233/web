@@ -16,7 +16,7 @@ export function Header() {
                             <div className="nav-link active" aria-current="page">Home</div>
                         </li>
                         <li className="nav-item">
-                            <div className="nav-link active">Cart</div>
+                            <Link to="/cart/test" className="nav-link active">Cart</Link>
                         </li>
                         <li className="nav-item">
                             <div className="nav-link active">About</div>
