@@ -77,7 +77,7 @@ function CatalogEntry(props) {
             </div>
             <div className="ms-3 w-50 h-100 position-relative">
                 <div className="d-flex flex-column align-items-start my-2">
-                    <h5>{data.title}</h5>
+                    <h6>{data.title}</h6>
                     <p>${data.price}</p>
                     <p>{data.stock} in stock</p>
                 </div>
