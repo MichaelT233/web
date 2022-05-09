@@ -71,15 +71,17 @@ function CatalogListing(props) {
 function CatalogEntry(props) {
     const data = props.data;
     return (
-        <div className="col-md border border-muted rounded m-1 d-flex align-items-center text-dark">
+        <div className="col-md border border-muted rounded mx-0 my-1 p-0 d-flex align-items-center text-dark">
             <div className="d-flex align-items-center justify-content-center bg-light px-3" style={{height:"270px", width: "270px"}}>
                 <img className="rounded" src={data.image_path} style={{height:"200px", width:"200px"}}/>
             </div>
-            <div className="ms-3 w-50">
-                <h5>{data.title}</h5>
-                <p>${data.price}</p>
-                <p>{data.stock} in stock</p>
-                <Link to={`/item/${data.id}`} className="btn btn-outline-dark" type="button">View</Link>
+            <div className="ms-3 w-50 h-100 position-relative">
+                <div className="d-flex flex-column align-items-start my-2">
+                    <h5>{data.title}</h5>
+                    <p>${data.price}</p>
+                    <p>{data.stock} in stock</p>
+                </div>
+                <Link to={`/item/${data.id}`} className="btn btn-outline-dark position-absolute bottom-0 start-0 mb-4" type="button">View</Link>
             </div>
         </div>
     );

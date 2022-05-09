@@ -53,7 +53,7 @@ export function Item() {
                             <label htmlFor="quantity" className="form-label">Quantity</label>
                             <input type="number" min="1" defaultValue="1" className="form-control" id="quantity" aria-describedby="quantity"/>
                         </div>
-                        <button className="btn btn-outline-dark" type="button" onClick={(quantity)=>add.mutate(getDomQuantity())}>Add to cart</button>
+                        <button className="btn btn-outline-dark mb-2" type="button" onClick={(quantity)=>add.mutate(getDomQuantity())}>Add to cart</button>
                     </form>
                 </div>
             </div>
@@ -111,7 +111,14 @@ export function CartListing() {
     return (
         <CountContext.Provider value={{token, del}}>
             <div className="container-fluid">
-                {listing}
+                <div className="row flex-row-reverse">
+                    <div className="col-md-3 p-0">
+                        <div className="border border-muted rounded position-relative mx-0 my-1 text-center">
+                            <Link to="/about" className="btn btn-outline-dark py-2 my-4 w-75 position absolute top-0" type="button">Proceed to checkout</Link>
+                        </div>
+                    </div>
+                    <div className="col-md">{listing}</div>
+                </div>
             </div>
         </CountContext.Provider>
     );
@@ -124,87 +131,19 @@ function CartEntry(props) {
         context.del.mutate(product.id);
     }
     return (
-        <div className="col-md border border-muted rounded m-1 d-flex align-items-center text-dark">
+        <div className="col-md border border-muted rounded mx-0 my-1 d-flex align-items-center text-dark">
             <div className="d-flex align-items-center justify-content-center bg-light px-3" style={{height:"270px", width: "270px"}}>
                 <img className="rounded" src={product.image_path} style={{width:"200px"}}/>
             </div>
-            <div className="ms-3 w-50">
-                <h5>{product.title}</h5>
-                <p>${product.price}</p>
-                <p>{product.stock} in stock</p>
-                <p>Quantity: {quantity}</p>
-                <button className="btn btn-outline-dark" type="button" onClick={handleClick}>Delete</button>
+            <div className="ms-3 w-50 h-100 position-relative">
+                <div className="d-flex flex-column align-items-start my-2">
+                    <h5>{product.title}</h5>
+                    <p>${product.price}</p>
+                    <p>{product.stock} in stock</p>
+                    <p>Quantity: {quantity}</p>
+                </div>
+                <button className="btn btn-outline-dark position-absolute bottom-0 start-0 mb-4" type="button" onClick={handleClick}>Delete</button>
             </div>
         </div>
     );
-}
-
-function CartBlah() {
-    <div className="row flex-row-reverse">
-        <div className="col-md-3 border border-muted rounded m-1 ms-0">
-            <h5 className="mt-1">Total</h5>
-            <a className="d-grid text-decoration-none" href="/checkout">
-                <button className="btn btn-outline-dark mb-2" type="button">Proceed to checkout</button>
-            </a>
-        </div>
-        <div className="col-md">
-            <div className="border border-muted rounded m-1">
-                <div className="d-flex align-items-center">
-                    <div className="d-flex align-items-center justify-content-center bg-light px-3 w-100" style={{height: "270px"}}>
-                        <img className="rounded img-fluid h-75" src="https://picsum.photos/100"/>
-                    </div>
-                    <div className="ms-3 d-inline-block">
-                        <h5>Title</h5>
-                        <p>Description, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                        <p>Price</p>
-                        <p>Stock</p>
-                    </div>
-                </div>
-                <div className=" mt-2 mb-4">
-                    <button className="btn btn-outline-dark ms-4" type="submit">--</button>
-                    <input type="number" min="1" value ="1" className="form-control d-inline-block text-center align-middle" id="quantity" aria-describedby="quantity" style={{width: "20%"}} disabled/>
-                    <button className="btn btn-outline-dark" type="submit">+</button>
-                    <button className="btn btn-outline-dark ms-4" type="submit">Delete</button>
-                </div>
-            </div>
-            <div className="border border-muted rounded m-1">
-                <div className="d-flex align-items-center">
-                    <div className="d-flex align-items-center justify-content-center bg-light px-3 w-100" style={{height: "270px"}}>
-                        <img className="rounded img-fluid h-75" src="https://picsum.photos/100"/>
-                    </div>
-                    <div className="ms-3 d-inline-block">
-                        <h5>Title</h5>
-                        <p>Description, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                        <p>Price</p>
-                        <p>Stock</p>
-                    </div>
-                </div>
-                <div className=" mt-2 mb-4">
-                    <button className="btn btn-outline-dark ms-4" type="submit">--</button>
-                    <input type="number" min="1" value ="1" className="form-control d-inline-block text-center align-middle" id="quantity" aria-describedby="quantity" style={{width: "20%"}} disabled/>
-                    <button className="btn btn-outline-dark" type="submit">+</button>
-                    <button className="btn btn-outline-dark ms-4" type="submit">Delete</button>
-                </div>
-            </div>
-            <div className="border border-muted rounded m-1">
-                <div className="d-flex align-items-center">
-                    <div className="d-flex align-items-center justify-content-center bg-light px-3 w-100" style={{height: "270px"}}>
-                        <img className="rounded img-fluid h-75" src="https://picsum.photos/100"/>
-                    </div>
-                    <div className="ms-3 d-inline-block">
-                        <h5>Title</h5>
-                        <p>Description, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                        <p>Price</p>
-                        <p>Stock</p>
-                    </div>
-                </div>
-                <div className=" mt-2 mb-4">
-                    <button className="btn btn-outline-dark ms-4" type="submit">--</button>
-                    <input type="number" min="1" value ="1" className="form-control d-inline-block text-center align-middle" id="quantity" aria-describedby="quantity" style={{width: "20%"}} disabled/>
-                    <button className="btn btn-outline-dark" type="submit">+</button>
-                    <button className="btn btn-outline-dark ms-4" type="submit">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
 }
