@@ -4,7 +4,7 @@ import {
     Route,
 } from "react-router-dom";
 import React from "react";
-import { Header, Footer } from "../ui-shell/shell"
+import * as Shell from "../ui-shell/shell"
 import * as Product from "../../product-client/ui/component";
 import * as Order from "../../order-client/ui/component";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -16,7 +16,7 @@ export function Router() {
 		<HashRouter>
 			<QueryClientProvider client={queryClient}>
 				<div>
-					<Header />
+					<Shell.Header />
 					<div>
 						<Routes>
 							<Route path ="/" element={<Product.Featured />} />
@@ -24,9 +24,11 @@ export function Router() {
 							<Route path="/search/:text" element={<Product.Search />} />
 							<Route path="/item/:id" element={<Order.Item />} />
                             <Route path="/cart/:token" element={<Order.CartListing />} />
+                            <Route path="/about" element={<Shell.About />} />
+                            <Route path="/contact" element={<Shell.Contact />} />
 						</Routes>
 					</div>
-					<Footer />
+					<Shell.Footer />
 				</div>
 			</QueryClientProvider>
 		</HashRouter>
