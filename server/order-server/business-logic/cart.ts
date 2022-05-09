@@ -84,7 +84,9 @@ export class Cart {
                 await this.coll.updateOne({ token: token }, { $push: { items: {id: id, quantity: quantity}} });
             }
             else {
-                return false;
+                const current = await this.getQuantity(token, id);
+                const next = current + quantity;
+                await this.coll.updateOne({ token: token, "items.id": id }, { $set: { "items.$.quantity": next } });
             }
         }
         catch(e) {
