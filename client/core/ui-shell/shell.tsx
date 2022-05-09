@@ -18,7 +18,7 @@ export function Header() {
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item"><Link to="/about" className="nav-link active">About</Link></li>
                         <li className="nav-item"><Link to="/contact" className="nav-link active">Contact</Link></li>
-                        <li className="nav-item"><Link to="/cart/test" className="nav-link active">Cart</Link></li>
+                        <li className="nav-item"><Link to="/cart" className="nav-link active">Cart</Link></li>
                         <li className="nav-item dropdown">
                             <div className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</div>
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">

@@ -1,29 +1,24 @@
 import express = require("express");
+var cookieParser = require('cookie-parser');
 import { Cart } from "../business-logic/cart";
 
 const server = express();
+server.use(cookieParser());
 const cart = new Cart();
 
 (async () => {
     const init = await cart.init();
     if (init == true) {
-        console.log("database initialized")
+        console.log("database initialized");
     }
     else {
-        console.log("database error")
-    }
-    const create = await cart.create("test");
-    if (create == true) {
-        console.log("test cart initialized")
-    }
-    else {
-        console.log("test cart error")
+        console.log("database error");
     }
 })();
 
-server.post("/create/:token", (req, res) => {
+server.post("/create", (req, res) => {
     (async () => {
-        const result = await cart.create(req.params.token);
+        const result = await cart.create(req.cookies.token);
         res.type("json");
         if (result == true) {
             res.send({result: "success"});
@@ -33,9 +28,9 @@ server.post("/create/:token", (req, res) => {
         }
     })();
 });
-server.delete("/delete/:token", (req, res) => {
+server.delete("/delete", (req, res) => {
     (async () => {
-        const result = await cart.delete(req.params.token);
+        const result = await cart.delete(req.cookies.token);
         res.type("json");
         if (result == true) {
             res.send({result: "success"});
@@ -45,9 +40,39 @@ server.delete("/delete/:token", (req, res) => {
         }
     })();
 });
-server.put("/additem/:token/:id/:quantity", (req, res) => {
+server.put("/additem/:id/:quantity", (req, res) => {
     (async () => {
-        const result = await cart.addItem(req.params.token, req.params.id, parseInt(req.params.quantity));
+        var result: boolean;
+        // if no cookies present
+        if (Object.keys(req.cookies).length == 0) {
+            const token = JSON.stringify(Math.random()).slice(2,19);
+            res.cookie("token", token);
+            const create = await cart.create(token);
+            if (create == true) {
+                console.log("new cart initialized, token: " + token);
+            }
+            else {
+                res.send({error: "server error"});
+            }
+            result = await cart.addItem(token, req.params.id, parseInt(req.params.quantity));
+        }
+        // if cookies are present
+        else {
+            result = await cart.addItem(req.cookies.token, req.params.id, parseInt(req.params.quantity));
+        }
+        // send result
+        res.type("json");
+        if (result == true) {
+            res.send({result: "success"});
+        }
+        else {
+            res.send({error: "server error"});
+        }
+    })();
+});
+server.put("/deleteitem/:id", (req, res) => {
+    (async () => {
+        const result = await cart.deleteItem(req.cookies.token, req.params.id);
         res.type("json");
         if (result == true) {
             res.send({result: "success"});
@@ -57,9 +82,9 @@ server.put("/additem/:token/:id/:quantity", (req, res) => {
         }    
     })();
 });
-server.put("/deleteitem/:token/:id", (req, res) => {
+server.put("/inc/:id", (req, res) => {
     (async () => {
-        const result = await cart.deleteItem(req.params.token, req.params.id);
+        const result = await cart.incItem(req.cookies.token, req.params.id);
         res.type("json");
         if (result == true) {
             res.send({result: "success"});
@@ -69,9 +94,9 @@ server.put("/deleteitem/:token/:id", (req, res) => {
         }    
     })();
 });
-server.put("/inc/:token/:id", (req, res) => {
+server.put("/dec/:id", (req, res) => {
     (async () => {
-        const result = await cart.incItem(req.params.token, req.params.id);
+        const result = await cart.decItem(req.cookies.token, req.params.id);
         res.type("json");
         if (result == true) {
             res.send({result: "success"});
@@ -81,21 +106,9 @@ server.put("/inc/:token/:id", (req, res) => {
         }    
     })();
 });
-server.put("/dec/:token/:id", (req, res) => {
+server.get("/read", (req, res) => {
     (async () => {
-        const result = await cart.decItem(req.params.token, req.params.id);
-        res.type("json");
-        if (result == true) {
-            res.send({result: "success"});
-        }
-        else {
-            res.send({error: "server error"})
-        }    
-    })();
-});
-server.get("/read/:token", (req, res) => {
-    (async () => {
-        const result = await cart.read(req.params.token);
+        const result = await cart.read(req.cookies.token);
         res.type("json");
         if (result == false) {
             res.send({message: "empty"});

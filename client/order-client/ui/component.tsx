@@ -20,7 +20,7 @@ export function Item() {
         return quantity;
     }
     async function mutation(quantity: number) {
-        const status = await orderClient.addItem("test", id, quantity);
+        const status = await orderClient.addItem(id, quantity);
         queryClient.refetchQueries(id);
         return status;
     }
@@ -30,7 +30,7 @@ export function Item() {
         return (
             <div className="my-5 text-center">
                 <h2 className="mb-3">Added to cart!</h2>
-                <Link to="/cart/test" className="btn btn-outline-dark" type="button">Go to cart</Link>
+                <Link to="/cart" className="btn btn-outline-dark" type="button">Go to cart</Link>
             </div>
         );
     }
@@ -61,13 +61,12 @@ export function Item() {
     );
 }
 export function CartListing() {
-    let { token } = useParams();
     const queryClient = useQueryClient();
     async function mutation(id: string) {
-        await orderClient.deleteItem(token, id);
-        queryClient.refetchQueries(token);
+        await orderClient.deleteItem(id);
+        queryClient.refetchQueries("cart");
     }
-    const { isLoading, isFetching, error, data } = useQuery(token, ()=>productClient.getCartProducts(token));
+    const { isLoading, isFetching, error, data } = useQuery("cart", ()=>productClient.getCartProducts());
     const del = useMutation((id: string)=>mutation(id));
     if (isLoading || isFetching || del.isLoading ) return <Spinner />;
     if (error || del.error) return <div>Error</div>;
@@ -109,7 +108,7 @@ export function CartListing() {
         </div>
     );
     return (
-        <CountContext.Provider value={{token, del}}>
+        <CountContext.Provider value={{del}}>
             <div className="container-fluid">
                 <div className="row flex-row-reverse">
                     <div className="col-md-3 p-0">

@@ -1,63 +1,63 @@
 import axios from "axios";
 
 export class OrderClient {
-	async create(token: string) {
+	async create() {
 		try {
-			const response = await axios.post(`/cart/create/${token}`);
+			const response = await axios.post(`/cart/create`);
 			return response.status;
 		} 
 		catch (e) {
 			console.error(e);
 		}
 	}
-	async delete(token: string) {
+	async delete() {
 		try {
-			const response = await axios.delete(`/cart/delete/${token}`);
+			const response = await axios.delete(`/cart/delete`);
 			return response.status;
 		} 
 		catch (e) {
 			console.error(e);
 		}
 	}
-	async addItem(token: string, id: string, quantity: number) {
+	async addItem(id: string, quantity: number) {
 		try {
-			const response = await axios.put(`/cart/additem/${token}/${id}/${quantity}`);
+			const response = await axios.put(`/cart/additem/${id}/${quantity}`);
 			return response.status;
 		} 
 		catch (e) {
 			console.error(e);
 		}
 	}
-	async deleteItem(token: string, id: string) {
+	async deleteItem(id: string) {
 		try {
-			const response = await axios.put(`/cart/deleteitem/${token}/${id}`);
+			const response = await axios.put(`/cart/deleteitem/${id}`);
 			return response.status;
 		} 
 		catch (e) {
 			console.error(e);
 		}
 	}
-    async inc(token: string, id: string) {
+    async inc(id: string) {
 		try {
-			const response = await axios.put(`/cart/inc/${token}/${id}`);
+			const response = await axios.put(`/cart/inc/${id}`);
 			return response.status;
 		} 
 		catch (e) {
 			console.error(e);
 		}
 	}
-    async dec(token: string, id: string) {
+    async dec(id: string) {
 		try {
-			const response = await axios.put(`/cart/dec/${token}/${id}`);
+			const response = await axios.put(`/cart/dec/${id}`);
 			return response.status;
 		} 
 		catch (e) {
 			console.error(e);
 		}
 	}
-    async read(token: string) {
+    async read() {
         try {
-			const response = await axios.get(`/cart/read/${token}`);
+			const response = await axios.get(`/cart/read`);
 			return response.data;
 		} 
 		catch (e) {

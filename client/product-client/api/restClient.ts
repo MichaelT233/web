@@ -51,9 +51,9 @@ export class ProductClient {
 			console.error(error);
 		}
 	}
-    async getCartProducts(token: string) {
+    async getCartProducts() {
 		try {
-            const cart = await axios.get(`/cart/read/${token}`);
+            const cart = await axios.get(`/cart/read`);
             if (cart.data.message == "empty") {
                 return false;
             } 

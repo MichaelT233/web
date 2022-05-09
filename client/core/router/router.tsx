@@ -23,7 +23,7 @@ export function Router() {
 							<Route path="/category/:category" element={<Product.Category />} />
 							<Route path="/search/:text" element={<Product.Search />} />
 							<Route path="/item/:id" element={<Order.Item />} />
-                            <Route path="/cart/:token" element={<Order.CartListing />} />
+                            <Route path="/cart" element={<Order.CartListing />} />
                             <Route path="/about" element={<Shell.About />} />
                             <Route path="/contact" element={<Shell.Contact />} />
 						</Routes>
