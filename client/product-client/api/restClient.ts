@@ -1,83 +1,91 @@
-import axios from "axios";
+// rest api client for product service
 
-type Props = {
-	id: string;
-	stock: number;
-	category: string;
-	title: string;
-	price: number;
-	featured: boolean;
-	image_path: string;
+import axios from "axios";
+import { Product } from "../../../server/product-server/business-logic/catalog.js"
+
+export type CartItem = {
+    product: Product;
+    quantity: number;
 }
 
 export class ProductClient {
-	async getProduct(id: string) {
+    // query product by id
+	async getProduct(id: string): Promise<Product> {
 		try {
 			const response = await axios.get(`/product/item/${id}`);
-			const props: Props = response.data[0];
-			return props;
+            return response.data.result[0];
 		} 
 		catch (error) {
 			console.error(error);
 		}
 	}
-	async getCategory(category: string) {
+    // query products by category
+	async getCategory(category: string): Promise<Product[]> {
 		try {
 			const response = await axios.get(`/product/category/${category}`);
-			const props: Props = response.data;
-			return props;
+			return response.data.result;
 		} 
 		catch (error) {
 			console.error(error);
 		}
 	}
-	async getFeatured() {
+    // query featured products
+	async getFeatured(): Promise<Product[]> {
 		try {
 			const response = await axios.get(`/product/featured`);
-			const props: Props = response.data;
-			return props;
+			return response.data.result;
 		} 
 		catch (error) {
 			console.error(error);
 		}
 	}
-	async getSearch(text: string) {
+    // query products by title containing search pattern
+	async getSearch(text: string): Promise<Product[]> {
 		try {
 			const response = await axios.get(`/product/search/${text}`);
-			const props: Props = response.data;
-			return props;
+			return response.data.result;
 		} 
 		catch (error) {
 			console.error(error);
 		}
 	}
-    async getCartProducts() {
+    // query products within cart
+    async getCartItems(): Promise<CartItem[]> {
 		try {
-            const cart = await axios.get(`/cart/read`);
-            if (cart.data.message == "empty") {
-                return false;
-            } 
-            const idArray: string[] = [];
-            const quantityArray: number[] = [];
-            for (const entry of cart.data.items) {
-                idArray.push(`'${entry.id}'`);
-                quantityArray.push(entry.quantity)
-            }
-            const list = idArray.join();
-			const response = await axios.get(`/product/many/${list}`);
-            const result = [];
-            for (const product of response.data) {
-                for (const entry of cart.data.items) {
-                    if (entry.id == product.id) {
-                        result.push({product: product, quantity: entry.quantity});
+            const cartResponse = await axios.get(`/cart/read`);
+            const cartResult = cartResponse.data.result;
+            if (cartResult !== null) {
+                const idArray: string[] = [];
+                const quantityArray: number[] = [];
+                for (const entry of cartResult.items) {
+                    idArray.push(`'${entry.id}'`);
+                    quantityArray.push(entry.quantity)
+                }
+                const list = idArray.join();
+                const productsResponse = await axios.get(`/product/many/${list}`);
+                const productResult = productsResponse.data.result;
+                if (productResult !== null) {
+                    const result: CartItem[] = [];
+                    for (const product of productResult) {
+                        for (const entry of cartResult.items) {
+                            if (entry.id == product.id) {
+                                const cartItem: CartItem = {product: product, quantity: entry.quantity};
+                                result.push(cartItem);
+                            }
+                        }
                     }
+                    return result;
+                }
+                else {
+                    return null;
                 }
             }
-			return result;
+            else {
+                return null;
+            }
 		} 
 		catch (e) {
 			console.error(e);
 		}
 	}
-}
-  
+}  

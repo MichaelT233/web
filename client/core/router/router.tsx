@@ -1,3 +1,5 @@
+// top level react component
+
 import {
     HashRouter,
     Routes,
@@ -11,7 +13,8 @@ import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient();
 
-export function Router() {
+// client side router for SPA, renders service level components within ui shell
+export function Router(): JSX.Element {
     return (
 		<HashRouter>
 			<QueryClientProvider client={queryClient}>

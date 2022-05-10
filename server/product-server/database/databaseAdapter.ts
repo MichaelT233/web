@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 
+// object that allows use of a connection to the postgresql (product) database
 const pool = new Pool({
     user: "adapter",
     host: "product-database",

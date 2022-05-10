@@ -1,8 +1,12 @@
+// ui shell components of SPA that wraps service level components
+
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-export function Header() {
+// header of SPA
+export function Header(): JSX.Element {
     let navigate = useNavigate();
+    // get text from search bar
     function getDomText() {
         const text = (document.getElementById("searchBar") as HTMLInputElement).value;
         return text;
@@ -41,7 +45,8 @@ export function Header() {
         </nav>
     );
 }
-export function Footer() {
+// footer of SPA
+export function Footer(): JSX.Element {
     return (
         <div className="container">
             <footer className="py-3 my-4">
@@ -54,12 +59,14 @@ export function Footer() {
         </div>
     );
 }
-export function About() {
+// about section
+export function About(): JSX.Element {
     return (
         <div>About</div>
     );
 }
-export function Contact() {
+// contact section
+export function Contact(): JSX.Element {
     return (
         <div>Contact</div>
     );

@@ -1,3 +1,5 @@
+// order database adapter connection test
+
 import { client } from "./databaseAdapter.js";
 
 async function test() {

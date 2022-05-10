@@ -1,3 +1,4 @@
+# order server rest api test
 baseUrl="http://localhost/cart";
 curl -X POST "${baseUrl}/create/test"
 printf "\n"

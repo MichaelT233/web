@@ -1,8 +1,21 @@
-import { client, Entry } from "../database/databaseAdapter";
+// class implementing the functionality of a shopping cart
+// commands return true/false based on the success/failure of the command
+// queries return null if the query fails
+
+import { client } from "../database/databaseAdapter";
+
+// cart entry object
+export type Entry = {
+    id: string;
+    quantity: number;
+}
 
 export class Cart {
+    // database adapter object
     db: typeof client.db;
+    // database collection
     coll: typeof client.db.collection;
+    // initialize the order database and cart collection
     async init(): Promise<boolean> {
         try {
             await client.connect();
@@ -10,48 +23,54 @@ export class Cart {
             this.db = database;
             const collection = database.collection("cart");
             this.coll = collection;
+            return true;
         }
         catch(e) {
             console.error(e);
             return false;
         }
-        return true;
     }
-    async resetDB() {
+    // drops the order database
+    async resetDB(): Promise<boolean> {
         try {
             await this.db.dropDatabase();
+            return true;
         }
         catch(e) {
             console.error(e)
             return false;
         }
-        return true;
     }
-    async resetColl() {
+    // drops the cart collection
+    async resetColl(): Promise<boolean> {
         try {
             await this.coll.drop();
+            return true;
         }
         catch(e) {
             console.error(e)
             return false;
         }
-        return true;
     }
-    async end() {
+    // closes database connection
+    async end(): Promise<boolean> {
         try {
             await client.close();
+            return true;
 
         }
         catch(e) {
             console.error(e);
             return false;
         }
-        return true;
     }
-    async create(token: string) {
+    // create a new cart document by token
+    async create(token: string): Promise<boolean> {
         try {
             if (await this.isInColl(token) == false) {
-                await this.coll.insertOne({ token: token, items: []});
+                const items: Entry[] = [];
+                await this.coll.insertOne({ token: token, items: items});
+                return true;
             }
             else {
                 return false;
@@ -61,12 +80,13 @@ export class Cart {
             console.error(e);
             return false;
         }
-        return true;
     }
-    async delete(token: string) {
+    // delete a cart document by token
+    async delete(token: string): Promise<boolean> {
         try {
             if (await this.isInColl(token) == true) {
                 await this.coll.deleteOne({ token: token });
+                return true;
             }
             else {
                 return false;
@@ -76,29 +96,37 @@ export class Cart {
             console.error(e);
             return false;
         }
-        return true;
     }
-    async addItem(token: string, id: string, quantity: number) {
+    // add an item to a cart by id
+    async addItem(token: string, id: string, quantity: number): Promise<boolean> {
         try {
             if (await this.isInCart(token, id) == false) {
-                await this.coll.updateOne({ token: token }, { $push: { items: {id: id, quantity: quantity}} });
+                const entry: Entry = {id: id, quantity: quantity};
+                await this.coll.updateOne({ token: token }, { $push: { items: entry} });
             }
             else {
                 const current = await this.getQuantity(token, id);
-                const next = current + quantity;
-                await this.coll.updateOne({ token: token, "items.id": id }, { $set: { "items.$.quantity": next } });
+                if (current != null) {
+                    const next: number = current + quantity;
+                    await this.coll.updateOne({ token: token, "items.id": id }, { $set: { "items.$.quantity": next } });
+                }
+                else {
+                    return false;
+                }
             }
+            return true;
         }
         catch(e) {
             console.error(e);
             return false;
         }
-        return true;
     }
-    async deleteItem(token: string, id: string) {
+    // delete an item from a cart by id
+    async deleteItem(token: string, id: string): Promise<boolean> {
         try {
             if (await this.isInCart(token, id) == true) {
                 await this.coll.updateOne({ token: token }, { $pull: { items: { id: id } } });
+                return true;
             }
             else {
                 return false;
@@ -108,14 +136,15 @@ export class Cart {
             console.error(e);
             return false;
         }
-        return true;
     }
-    async incItem(token: string, id: string) {
+    // increment an item's quantity within a cart
+    async incItem(token: string, id: string): Promise<boolean> {
         try {
             if (await this.isInCart(token, id) == true) {
                 const quantity = await this.getQuantity(token, id);
-                const next = quantity + 1;
+                const next: number = quantity + 1;
                 await this.coll.updateOne({ token: token, "items.id": id }, { $set: { "items.$.quantity": next } });
+                return true;
             }
             else {
                 return false;
@@ -125,14 +154,15 @@ export class Cart {
             console.error(e);
             return false;
         }
-        return true;
     }
-    async decItem(token: string, id: string) {
+    // decrement an item's quantity within a cart
+    async decItem(token: string, id: string): Promise<boolean> {
         try {
             if (await this.isInCart(token, id) == true) {
                 const quantity = await this.getQuantity(token, id);
-                const next = quantity - 1;
+                const next: number = quantity - 1;
                 await this.coll.updateOne({ token: token, "items.id": id }, { $set: { "items.$.quantity": next } });
+                return true;
             }
             else {
                 return false;
@@ -142,41 +172,67 @@ export class Cart {
             console.error(e);
             return false;
         }
-        return true;
     }
-    async read(token: string) {
-        const current = await this.coll.findOne({ token: token });
-        if (current != null) {
+    // read a cart's entries
+    async read(token: string): Promise<Entry[]> {
+        try {
+            const current = await this.coll.findOne({ token: token });
             if (current.items.length > 0) {
                 return current;
             }
-        }
-        return false;
-    }
-    private async isInCart(token: string, id: string) {
-        const current = await this.coll.findOne({ token: token });
-        for (const entry of current.items) {
-            if (entry.id == id) {
-                return true;
+            else {
+                return null;
             }
         }
-        return false;
+        catch(e) {
+            console.error(e);
+            return null;
+        }
     }
-    private async isInColl(token: string) {
-        const current = await this.coll.findOne({ token: token });
-        if (current != null) {
+    // check if an item is an a cart by id
+    private async isInCart(token: string, id: string): Promise<boolean> {
+        try {
+            const current = await this.coll.findOne({ token: token });
+            for (const entry of current.items) {
+                if (entry.id == id) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        catch(e) {
+            console.error(e);
+            return false;
+        }
+    }
+    // check if a cart is in the cart collection by token
+    private async isInColl(token: string): Promise<boolean> {
+        try {
+            const current = await this.coll.findOne({ token: token });
             if (current.token == token) {
                 return true;
             }
+            return false;
         }
-        return false;
+        catch(e) {
+            console.error(e);
+            return false;
+        }
     }
-    private async getQuantity(token: string, id: string) {
-        const current = await this.coll.findOne({ token: token });
-        for (const entry of current.items) {
-            if (entry.id == id) {
-                return entry.quantity;
+    // get the quantity of an item from a cart by id
+    private async getQuantity(token: string, id: string): Promise<number> {
+        try {
+            const current = await this.coll.findOne({ token: token });
+            for (const entry of current.items) {
+                if (entry.id == id) {
+                    return entry.quantity;
+                }
             }
+            return null;
+        }
+        catch(e) {
+            console.error(e);
+            return null;
         }
     }
 }

@@ -1,3 +1,4 @@
+# test script for the product service rest api routes
 baseUrl="http://localhost/product";
 curl "${baseUrl}/item/0000"
 printf "\n\n"

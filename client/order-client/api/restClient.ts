@@ -1,64 +1,74 @@
+// rest api client for order service
+
 import axios from "axios";
+import { Entry } from "../../../server/order-server/business-logic/cart.js";
 
 export class OrderClient {
-	async create() {
+    // create cart document
+	async create(): Promise<boolean> {
 		try {
 			const response = await axios.post(`/cart/create`);
-			return response.status;
+			return response.data.result;
 		} 
 		catch (e) {
 			console.error(e);
 		}
 	}
-	async delete() {
+    // delete cart document
+	async delete(): Promise<boolean> {
 		try {
 			const response = await axios.delete(`/cart/delete`);
-			return response.status;
+			return response.data.result;
 		} 
 		catch (e) {
 			console.error(e);
 		}
 	}
-	async addItem(id: string, quantity: number) {
+    // add item entry to cart
+	async addItem(id: string, quantity: number): Promise<boolean> {
 		try {
 			const response = await axios.put(`/cart/additem/${id}/${quantity}`);
-			return response.status;
+			return response.data.result;
 		} 
 		catch (e) {
 			console.error(e);
 		}
 	}
-	async deleteItem(id: string) {
+    // delete item entry from cart
+	async deleteItem(id: string): Promise<boolean> {
 		try {
 			const response = await axios.put(`/cart/deleteitem/${id}`);
-			return response.status;
+			return response.data.result;
 		} 
 		catch (e) {
 			console.error(e);
 		}
 	}
-    async inc(id: string) {
+    // increment item entry in cart
+    async inc(id: string): Promise<boolean> {
 		try {
 			const response = await axios.put(`/cart/inc/${id}`);
-			return response.status;
+			return response.data.result;
 		} 
 		catch (e) {
 			console.error(e);
 		}
 	}
-    async dec(id: string) {
+    // decrement item entry in cart
+    async dec(id: string): Promise<boolean> {
 		try {
 			const response = await axios.put(`/cart/dec/${id}`);
-			return response.status;
+			return response.data.result;
 		} 
 		catch (e) {
 			console.error(e);
 		}
 	}
-    async read() {
+    // read cart document
+    async read(): Promise<Entry[]> {
         try {
 			const response = await axios.get(`/cart/read`);
-			return response.data;
+			return response.data.result;
 		} 
 		catch (e) {
 			console.error(e);

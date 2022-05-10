@@ -1,3 +1,5 @@
+// block for testing order service rest api client
+
 import { RestClient } from "./restClient.js"
 
 const client = new RestClient();

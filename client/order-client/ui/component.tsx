@@ -1,32 +1,37 @@
+// react components for the order service
+
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery, useQueryClient, useIsFetching, useMutation, isError } from "react-query";
 import { OrderClient } from "../api/restClient.js"
 import { ProductClient } from "../../product-client/api/restClient.js"
 import { Spinner } from "../../product-client/ui/component.js"
+import { CartItem } from "../../product-client/api/restClient.js";
 
 const orderClient = new OrderClient();
 const productClient = new ProductClient();
 
-const CountContext = React.createContext(null);
+const CartContext = React.createContext(null);
 
-export function Item() {
+// individual product
+export function Item(): JSX.Element {
     let { id } = useParams();
     const { isLoading, isFetching, error, data} = useQuery(id, ()=>productClient.getProduct(id))
     const add = useMutation(mutation);
     const queryClient = useQueryClient();
-    function getDomQuantity() {
-        const quantity = Number((document.getElementById("quantity") as HTMLInputElement).value);
+    // get quantity from add to cart quantity selector
+    function getDomQuantity(): number {
+        const quantity: number = Number((document.getElementById("quantity") as HTMLInputElement).value);
         return quantity;
     }
-    async function mutation(quantity: number) {
-        const status = await orderClient.addItem(id, quantity);
+    async function mutation(quantity: number): Promise<boolean> {
+        const result = await orderClient.addItem(id, quantity);
         queryClient.refetchQueries(id);
-        return status;
+        return result;
     }
     if (isLoading || isFetching || add.isLoading) return <Spinner />;
-    if (error || add.error) return <div>Error</div>;
-    if (add.data == 200) {
+    if (error || data === null || add.data == false || add.error) return <div>Error</div>;
+    if (add.data == true) {
         return (
             <div className="my-5 text-center">
                 <h2 className="mb-3">Added to cart!</h2>
@@ -60,30 +65,32 @@ export function Item() {
         </div>
     );
 }
-export function CartListing() {
+
+// listing of cart products and their quantities
+export function CartListing(): JSX.Element {
     const queryClient = useQueryClient();
-    async function mutation(id: string) {
-        await orderClient.deleteItem(id);
+    async function mutation(id: string): Promise<boolean> {
+        const result = await orderClient.deleteItem(id);
         queryClient.refetchQueries("cart");
+        return result;
     }
-    const { isLoading, isFetching, error, data } = useQuery("cart", ()=>productClient.getCartProducts());
+    const { isLoading, isFetching, error, data } = useQuery("cart", ()=>productClient.getCartItems());
     const del = useMutation((id: string)=>mutation(id));
     if (isLoading || isFetching || del.isLoading ) return <Spinner />;
-    if (error || del.error) return <div>Error</div>;
-    if (data == false) {
+    if (error || del.error || del.data == false) return <div>Error</div>;
+    if (data === null) {
         return (
             <div className="my-5 text-center">
                 <h2 className="mb-3">Cart is empty!</h2>
             </div>
         );
     }
-    //const products = data.products;
-    //const quantities = data.quantities;
     const entryCount = data.length;
-    const rows= [];
+    const rows: CartItem[][] = [];
     // if single product
     if (entryCount == 1) {
-        rows.push([{product: data[0].product, quantity: data[0].quantity}]);
+        const singleRow: CartItem[] = [{product: data[0].product, quantity: data[0].quantity}];
+        rows.push(singleRow);
     }
     // if multiple products
     else {
@@ -93,22 +100,24 @@ export function CartListing() {
             // if on last element
             if (i == (entryCount - 1)) {
                 // insert single product and exit while loop;
-                rows.push([{product: data[i].product, quantity: data[i].quantity}]);
+                const singleRow: CartItem[] = [{product: data[i].product, quantity: data[i].quantity}];
+                rows.push(singleRow);
                 break;
             }
             // insert current pair of products
-            rows.push([{product: data[i].product, quantity: data[i].quantity}, {product: data[i+1].product, quantity: data[i+1].quantity}]);
+            const row: CartItem[] = [{product: data[i].product, quantity: data[i].quantity}, {product: data[i+1].product, quantity: data[i+1].quantity}]
+            rows.push(row);
             // move index up by two
             i += 2;
         }
     }
-    const listing = rows.map((row)=>
+    const listing = rows.map((row: CartItem[]): JSX.Element =>
         <div className="row" key={`row${row[0].product.id}`}>
-            {row.map((data)=><CartEntry data={data.product} quantity={data.quantity} key={data.product.id}/>)}
+            {row.map((cartItem: CartItem): JSX.Element => <CartEntry {...cartItem} key={cartItem.product.id}/>)}
         </div>
     );
     return (
-        <CountContext.Provider value={{del}}>
+        <CartContext.Provider value={{del}}>
             <div className="container-fluid">
                 <div className="row flex-row-reverse">
                     <div className="col-md-3 p-0">
@@ -119,13 +128,15 @@ export function CartListing() {
                     <div className="col-md">{listing}</div>
                 </div>
             </div>
-        </CountContext.Provider>
+        </CartContext.Provider>
     );
 }
-function CartEntry(props) {
-    const context = React.useContext(CountContext);
-    const product = props.data;
-    const quantity = props.quantity;
+
+// entry of cart listing
+function CartEntry(cartItem: CartItem): JSX.Element {
+    const context = React.useContext(CartContext);
+    const product = cartItem.product;
+    const quantity = cartItem.quantity;
     async function handleClick() {
         context.del.mutate(product.id);
     }

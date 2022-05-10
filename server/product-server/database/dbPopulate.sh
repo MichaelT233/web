@@ -1,3 +1,4 @@
+# single command for populating the product database once running in docker-compose
 docker exec server_product-database_1 psql -U adapter -d products -c \
 "CREATE TABLE products 
     (id varchar(4), stock integer, category varchar(50), title varchar(150), price decimal(5, 2), featured boolean, image_path varchar(50));
