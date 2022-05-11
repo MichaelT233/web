@@ -3,7 +3,7 @@ services:
   # gateway
   #===============================#
   gateway:
-    image: gateway:latest
+    image: michaelt23/web:gateway
     ports: 
       - "80:80"
       #- "443:443"
@@ -26,7 +26,7 @@ services:
   # product service
   #===============================#
   product-server:
-    image: product-server:latest
+    image: michaelt23/web:product-server
     expose: 
       - "80"
     depends_on:
@@ -48,7 +48,7 @@ services:
   # cart service
   #===============================#
   order-server:
-    image: order-server:latest
+    image: michaelt23/web:order-server
     expose: 
       - "80"
     depends_on:
