@@ -6,4 +6,4 @@
 /*/*/*.js
 /*/*/*/*.js
 !client/webpack.config.js
-server/core/gateway/public/js
+server/gateway/public/js
