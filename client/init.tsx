@@ -1,4 +1,4 @@
-import { Router } from "./core/router/router";
+import { Router } from "./shell/router/router";
 import React from "react";
 import * as ReactDOM from 'react-dom';
 

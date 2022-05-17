@@ -9,8 +9,8 @@
     },
     "files": [
         "init.tsx",
-        "core/router/router.tsx",
-        "core/ui-shell/shell.tsx",
+        "shell/router/router.tsx",
+        "shell/ui/component.tsx",
         "product-client/api/restClient.ts",
         "product-client/ui/component.tsx",
         "order-client/ui/component.tsx",
