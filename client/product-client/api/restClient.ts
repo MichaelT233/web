@@ -1,7 +1,17 @@
 // rest api client for product service
 
 import axios from "axios";
-import { Product } from "../../../server/product-server/business-logic/catalog.js"
+
+// product data object
+export type Product = {
+    id: string;
+    stock: number;
+    category: string;
+    title: string;
+    price: number;
+    featured: boolean;
+    image_path: string;
+}
 
 export type CartItem = {
     product: Product;

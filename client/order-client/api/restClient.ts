@@ -1,7 +1,12 @@
 // rest api client for order service
 
 import axios from "axios";
-import { Entry } from "../../../server/order-server/business-logic/cart.js";
+
+// cart entry object
+export type Entry = {
+    id: string;
+    quantity: number;
+}
 
 export class OrderClient {
     // create cart document

@@ -3,8 +3,7 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import { ProductClient } from "../api/restClient.js"
-import { Product } from "../../../server/product-server/business-logic/catalog.js"
+import { ProductClient, Product } from "../api/restClient.js"
 
 const client = new ProductClient(); 
 
