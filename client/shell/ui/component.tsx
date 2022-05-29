@@ -14,15 +14,13 @@ export function Header(): JSX.Element {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
-                <div className="navbar-brand">Michael Thiele</div>
+                <div className="navbar-brand">Brand</div>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li className="nav-item"><Link to="/about" className="nav-link active">About</Link></li>
-                        <li className="nav-item"><Link to="/contact" className="nav-link active">Contact</Link></li>
-                        <li className="nav-item"><Link to="/cart" className="nav-link active">Cart</Link></li>
+                        <li className="nav-item"><Link to="/" className="nav-link active">Home</Link></li>
                         <li className="nav-item dropdown">
                             <div className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</div>
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -35,6 +33,8 @@ export function Header(): JSX.Element {
                                 <li><div className="dropdown-item"><Link to="/category/Toys" className="nav-link active">Toys</Link></div></li>
                             </ul>
                         </li>
+                        <li className="nav-item"><Link to="/cart" className="nav-link active">Cart</Link></li>
+                        <li className="nav-item"><Link to="/about" className="nav-link active">About</Link></li>
                     </ul>
                     <div className="d-flex">
                         <input id="searchBar" className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
@@ -51,10 +51,10 @@ export function Footer(): JSX.Element {
         <div className="container-fluid">
             <footer className="py-3 my-4">
                 <ul className="nav justify-content-center border-bottom pb-3 mb-3">
+                    <li className="nav-item"><Link to="/" className="nav-link px-2 text-muted">Home</Link></li>
                     <li className="nav-item"><Link to="/about" className="nav-link px-2 text-muted">About</Link></li>
-                    <li className="nav-item"><Link to="/contact" className="nav-link px-2 text-muted">Contact</Link></li>
                 </ul>
-                <p className="text-center text-muted">Michael Thiele</p>
+                <p className="text-center text-muted">Brand, Inc</p>
             </footer>
         </div>
     );
@@ -78,15 +78,6 @@ export function About(): JSX.Element {
             Docker: Container runtime<br></br>
             Ubuntu: Operating system<br></br>
             AWS Lightsail: Virtual Private Server
-        </div>
-    );
-}
-// contact section
-export function Contact(): JSX.Element {
-    return (
-        <div className="container-fluid text-center">
-            <h5 className="py-4">Email me at</h5>
-            <h3 className="text-decoration-underline">michaelthiele673@gmail.com</h3>
         </div>
     );
 }

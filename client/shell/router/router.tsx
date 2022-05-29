@@ -28,7 +28,6 @@ export function Router(): JSX.Element {
 							<Route path="/item/:id" element={<Order.Item />} />
                             <Route path="/cart" element={<Order.CartListing />} />
                             <Route path="/about" element={<Shell.About />} />
-                            <Route path="/contact" element={<Shell.Contact />} />
 						</Routes>
 					</div>
 					<Shell.Footer />
