@@ -66,20 +66,18 @@ export function About(): JSX.Element {
             <a className="py-2" href="https://github.com/MichaelT233/web"><h2>GitHub</h2></a>
             <br></br>
             <h5>Purpose</h5>
-            Imitation e-commerce web application I built to learn and showcase my abilities
+            Hobby project
             <br></br><br></br>
-            <h5>Solution Stack</h5> 
-            PostgreSQL: Product database<br></br>
-            MongoDB: Shopping cart database<br></br>
-            Node.js: JavaScript runtime<br></br>
-            Express.js: RESTful services<br></br>
-            React: User interface<br></br>
-            Bootstrap: Styling<br></br>
+            <h5>Tech Stack</h5> 
+            Node.js: Server runtime<br></br>
+            Express.js: Web framework<br></br>
+            PostgreSQL and MongoDB: Databases<br></br>
+            NGINX: Web server<br></br>
             Axios: HTTP client<br></br>
-            NGINX: Application gateway<br></br>
-            Docker: Application platform<br></br>
+            React and Bootstrap: User interface<br></br>
+            Docker: Container runtime<br></br>
             Ubuntu: Operating system<br></br>
-            Amazon Web Services: Virtualization, server, storage, and networking
+            AWS Lightsail: Virtual Private Server
         </div>
     );
 }
